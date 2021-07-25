@@ -1,1 +1,159 @@
-# mamataxi
+# アプリ名
+
+ママさんタクシー
+
+## アプリの概要
+
+チャイルドシート付きタクシー予約アプリ。
+保育園に通園する子どもを持つ保護者が、
+日時・経由地を設定し、タクシー送迎を予約できる。
+
+## DB関連スクリプト
+
+データベース作成
+
+```sql
+
+CREATE DATABASE mama_taxi;
+CREATE USER mama_user IDENTIFIED BY '1234';
+GRANT ALL ON mama_taxi.* to mama_user;
+
+```
+
+テーブル作成(計10個)
+
+1. users
+2. areas
+3. adresses
+4. children
+5. reseaves
+6. drivers
+7. shifts
+8. schedules
+9. thoughts
+10. news
+
+```sql
+
+CREATE TABLE users (
+	user_id	INT	PRIMARY KEY AUTO_INCREMENT,
+	name VARCHAR(50) NOT NULL,
+	email VARCHAR(50) NOT NULL,
+	password VARCHAR(255) NOT NULL,
+	sex VARCHAR(25) NOT NULL,
+	birth DATE NOT NULL,
+	tel INT NOT NULL,
+	created_at DATETIME	DEFAULT CURRENT_TIMESTAMP,
+	updated_at DATETIME	DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+CREATE TABLE areas (
+	area_id	INT	PRIMARY KEY AUTO_INCREMENT,
+	name VARCHAR(50) NOT NULL,
+	area_code INT NOT NULL,
+	x_axis INT NOT NULL,
+	y_axis INT NOT NULL,
+	created_at DATETIME	DEFAULT CURRENT_TIMESTAMP,
+	updated_at DATETIME	DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+CREATE TABLE adresses (
+	adress_id INT PRIMARY KEY AUTO_INCREMENT,
+	user_id INT NOT NULL,
+	name VARCHAR(50) NOT NULL,
+	tel INT,
+	postal_code INT NOT NULL,
+	adress VARCHAR(255) NOT NULL,
+	area_code INT NOT NULL,
+	created_at DATETIME	DEFAULT CURRENT_TIMESTAMP,
+	updated_at DATETIME	DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+	CONSTRAINT fk_user_id FOREIGN KEY (user_id) REFERENCES users (user_id) ON DELETE RESTRICT ON UPDATE RESTRICT
+);
+
+CREATE TABLE children (
+	child_id INT PRIMARY KEY AUTO_INCREMENT,
+	user_id	INT NOT NULL,
+	name VARCHAR(50) NOT NULL,
+	sex VARCHAR(25) NOT NULL,
+	birth DATE NOT NULL,
+	adress_id INT NOT NULL,
+	created_at DATETIME	DEFAULT CURRENT_TIMESTAMP,
+	updated_at DATETIME	DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+CREATE TABLE reseaves (
+	reseave_id INT PRIMARY KEY AUTO_INCREMENT,
+	user_id	INT NOT NULL,
+	child_id INT NOT NULL,
+	departure_time	DATETIME NOT NULL,
+	destination_time	DATETIME NOT NULL,
+	departure_postal_code	INT NOT NULL,
+	destination_postal_code	INT NOT NULL,
+	waypoint_1_postal_code	INT,
+	waypoint_2_postal_code	INT,
+	departure_adress	VARCHAR(255) NOT NULL,
+	destination_adress	VARCHAR(255) NOT NULL,
+	waypoint_1_adress	VARCHAR(255),
+	waypoint_2_adress	VARCHAR(255),
+	departure_adress_code	INT NOT NULL,
+	destination_adress_code	INT NOT NULL,
+	waypoint_1_adress_code	INT,
+	waypoint_2_adress_code	INT,
+	created_at DATETIME	DEFAULT CURRENT_TIMESTAMP,
+	updated_at DATETIME	DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+CREATE TABLE drivers (
+	driver_id INT PRIMARY KEY AUTO_INCREMENT,
+	name VARCHAR(50) NOT NULL,
+	birth DATE NOT NULL,
+	sex	VARCHAR(25) NOT NULL,
+	hire_date DATE NOT NULL,
+	created_at DATETIME	DEFAULT CURRENT_TIMESTAMP,
+	updated_at DATETIME	DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+CREATE TABLE shifts (
+	shift_id INT PRIMARY KEY AUTO_INCREMENT,
+	driver_id INT NOT NULL,
+	commuting_time DATETIME NOT NULL,
+	leave_time DATETIME NOT NULL,
+	rest_time INT NOT NULL,
+	rest_timing	DATETIME NOT NULL,
+	created_at DATETIME	DEFAULT CURRENT_TIMESTAMP,
+	updated_at DATETIME	DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+CREATE TABLE schedules(
+	schedule_id INT PRIMARY KEY AUTO_INCREMENT,
+	driber_id INT NOT NULL,
+	reserve_id INT NOT NULL,
+	departure_time DATETIME NOT NULL,
+	destination_time DATETIME NOT NULL,
+	departure_adress_code INT NOT NULL,
+	destination_adress_code	INT NOT NULL,
+	created_at DATETIME	DEFAULT CURRENT_TIMESTAMP,
+	updated_at DATETIME	DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+CREATE TABLE thoughts(
+	id INT PRIMARY KEY AUTO_INCREMENT,
+	user_id	INT NOT NULL,
+	reserve_id INT NOT NULL,
+	heading	VARCHAR(255) NOT NULL,
+	text TEXT NOT NULL,
+	goods INT default 0,
+	created_at DATETIME	DEFAULT CURRENT_TIMESTAMP,
+	updated_at DATETIME	DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+CREATE TABLE news(
+	id INT PRIMARY KEY AUTO_INCREMENT,
+	category VARCHAR(50) NOT NULL,
+	heading	VARCHAR(255) NOT NULL,
+	text TEXT NOT NULL,
+	created_at DATETIME	DEFAULT CURRENT_TIMESTAMP,
+	updated_at DATETIME	DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+```
