@@ -42,6 +42,8 @@ GRANT ALL ON mama_taxi.* to mama_user;
 
 ```sql
 
+--ユーザー情報
+
 CREATE TABLE users (
 	id INT PRIMARY KEY AUTO_INCREMENT,
 	name VARCHAR(50) NOT NULL,
@@ -57,6 +59,8 @@ CREATE TABLE users (
 ```
 ```sql
 
+--地域情報
+
 CREATE TABLE areas (
 	id INT PRIMARY KEY AUTO_INCREMENT,
 	name VARCHAR(50) NOT NULL,
@@ -69,6 +73,8 @@ CREATE TABLE areas (
 
 ```
 ```sql
+
+--住所情報
 
 CREATE TABLE adresses (
 	id INT PRIMARY KEY AUTO_INCREMENT,
@@ -87,6 +93,8 @@ CREATE TABLE adresses (
 ```
 ```sql
 
+--子ども情報
+
 CREATE TABLE children (
 	id INT PRIMARY KEY AUTO_INCREMENT,
 	user_id INT NOT NULL,
@@ -102,6 +110,8 @@ CREATE TABLE children (
 
 ```
 ```sql
+
+--予約情報
 
 CREATE TABLE reseaves (
 	id INT PRIMARY KEY AUTO_INCREMENT,
@@ -132,6 +142,8 @@ CREATE TABLE reseaves (
 ```
 ```sql
 
+--予約-子ども情報
+
 CREATE TABLE reserve_children (
 	id INT PRIMARY KEY AUTO_INCREMENT,
 	reseave_id INT NOT NULL,
@@ -145,6 +157,8 @@ CREATE TABLE reserve_children (
 ```
 ```sql
 
+--運転手情報
+
 CREATE TABLE drivers (
 	id INT PRIMARY KEY AUTO_INCREMENT,
 	name VARCHAR(50) NOT NULL,
@@ -157,6 +171,8 @@ CREATE TABLE drivers (
 
 ```
 ```sql
+
+--勤務シフト情報
 
 CREATE TABLE shifts (
 	id INT PRIMARY KEY AUTO_INCREMENT,
@@ -173,6 +189,8 @@ CREATE TABLE shifts (
 ```
 ```sql
 
+--スケジュール情報
+
 CREATE TABLE schedules(
 	id INT PRIMARY KEY AUTO_INCREMENT,
 	driver_id INT NOT NULL,
@@ -185,6 +203,8 @@ CREATE TABLE schedules(
 
 ```
 ```sql
+
+--感想譲歩
 
 CREATE TABLE thoughts(
 	id INT PRIMARY KEY AUTO_INCREMENT,
@@ -201,6 +221,8 @@ CREATE TABLE thoughts(
 
 ```
 ```sql
+
+--カテゴリ情報
 
 CREATE TABLE categorys(
 	id INT PRIMARY KEY AUTO_INCREMENT,
@@ -222,6 +244,8 @@ INSERT INTO
 
 ```
 ```sql
+
+--ニュース情報
 
 CREATE TABLE news(
 	id INT PRIMARY KEY AUTO_INCREMENT,
