@@ -204,7 +204,7 @@ CREATE TABLE schedules(
 ```
 ```sql
 
---感想譲歩
+--感想情報
 
 CREATE TABLE thoughts(
     id INT PRIMARY KEY AUTO_INCREMENT,
