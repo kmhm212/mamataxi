@@ -1,0 +1,48 @@
+@charset "UTF-8";
+
+/* -------- 共通部分 ---------- */
+
+html {
+    font-size: 100%;
+}
+a {
+    text-decoration: none;
+}
+.button {
+
+}
+
+/* header部分
+---------------------- */
+
+header {
+    display: flex;
+}
+.title {
+    
+}
+.title h1 {
+
+}
+.navSideL {
+    
+}
+.navSideR {
+
+}
+.nextReserveMessage {
+
+}
+.nextReserve {
+
+}
+/* header部分終了
+---------------------- */
+
+/* footer部分
+---------------------- */
+
+/* footer部分終了
+---------------------- */
+
+/* -------- 共通部分終了 ---------- */
