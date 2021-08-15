@@ -30,7 +30,7 @@ require_once __DIR__ . '/../../common/config.php';
                     </div>
                     <!-- 予約ありor新規予約 -->
                     <div class="nextReserve">
-                        <a href="mypage">2021年9月5日(日) 12:00~</a>
+                        <a href="../mypage/mypage.php">2021年9月5日(日) 12:00~</a>
                         <!-- 新規予約 -->
                         <!-- <a href="">予約する</a> -->
                     </div>
