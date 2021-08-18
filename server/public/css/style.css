@@ -4,19 +4,38 @@
 
 html {
     font-size: 100%;
+    font-family: "Yu Gothic Medium", "游ゴシック Medium", YuGothic, "游ゴシック体", "ヒラギノ角ゴ Pro W3", sans-serif;
+}
+body {
+
 }
 a {
     text-decoration: none;
 }
 .button {
-
+    display: inline-block;
+    padding: 6px 8px;
+    border-radius: 50px;
+}
+.wrapper {
+    width: 100%;
+    max-width: 1080px;
+    margin: auto;
 }
 
 /* header部分
 ---------------------- */
 
 header {
+    width: 100%;
+    height: 100px;
+    background-color: #FAB2A0;
+}
+.headerMenu {
     display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 100%;
 }
 .title {
     
@@ -24,17 +43,36 @@ header {
 .title h1 {
 
 }
+nav {
+    display: flex;
+    align-items: center;
+    font-size: 0.85rem;
+    color: #8D5C4A;
+}
 .navSideL {
-    
+    background-color: #FAF5B9;
+    margin-right: 10px;
 }
 .navSideR {
-
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 .nextReserveMessage {
-
+    height: 30px;
+    width: 180px;
+    background-color: #8D5C4A;
+    color: #FAF5B9;
+    border-radius: 10px 10px 0 0;
+    text-align: center;
 }
 .nextReserve {
-
+    height: 35px;
+    width: 180px;
+    font-size: 0.75rem;
+    background-color: #FAF5B9;
+    border-radius: 0 0 10px 10px;
+    text-align: center;
 }
 /* header部分終了
 ---------------------- */
