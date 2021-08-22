@@ -9,7 +9,7 @@ require_once __DIR__ . '/../../common/config.php';
         <div class="title">
             <h1>
                 <a href="../index.php" class="logo">
-                    <img src="" alt="ママさんタクシー">
+                    ママさんタクシー
                 </a>
             </h1>
         </div>

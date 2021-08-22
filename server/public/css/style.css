@@ -38,12 +38,14 @@ header {
     height: 100%;
 }
 .title {
-    
+    font-family: 'RocknRoll One', sans-serif;
+    letter-spacing: 0.3em;
+    font-size: 1.3rem;
 }
 .title h1 {
 
 }
-nav {
+header nav {
     display: flex;
     align-items: center;
     font-size: 0.85rem;
