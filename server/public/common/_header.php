@@ -22,11 +22,11 @@ require_once __DIR__ . '/../../common/config.php';
             <!-- 次回予約or会員登録 -->
             <div class="navSideR">
                 <div class="navReserve">
-                    <div class="nextReserveMessage">
+                    <div class="nextReserveMessage toNRMtext">
                         <span class="nRMtext">次回予約</span>
                     </div>
                     <!-- 予約ありor新規予約 -->
-                    <div class="nextReserve">
+                    <div class="nextReserve toNRMtext">
                         <a href="../mypage/mypage.php" class="nRMtext">2021年9月5日(日) 12:00~</a>
                         <!-- 新規予約 -->
                         <!-- <a href="">予約する</a> -->
