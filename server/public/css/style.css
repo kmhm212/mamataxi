@@ -12,6 +12,9 @@ body {
 a {
     text-decoration: none;
 }
+li {
+    list-style: none;
+}
 .button {
     display: inline-block;
     padding: 6px 8px;
@@ -42,8 +45,8 @@ header {
     letter-spacing: 0.3em;
     font-size: 1.3rem;
 }
-.title h1 {
-
+.title a {
+    color: #492E23;
 }
 header nav {
     display: flex;
@@ -66,7 +69,6 @@ header nav {
     background-color: #8D5C4A;
     color: #FAF5B9;
     border-radius: 10px 10px 0 0;
-    text-align: center;
 }
 .nextReserve {
     height: 35px;
@@ -74,7 +76,14 @@ header nav {
     font-size: 0.75rem;
     background-color: #FAF5B9;
     border-radius: 0 0 10px 10px;
-    text-align: center;
+}
+.toNRMtext {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.nRMtext {
+    display: inline-block;
 }
 /* header部分終了
 ---------------------- */
@@ -82,6 +91,53 @@ header nav {
 /* footer部分
 ---------------------- */
 
+footer {
+    width: 100%;
+}
+.footer1 {
+    background-color: #8D5C4A;
+    height: 200px;
+    width: 100%;
+}
+.footerMenu {
+    display: flex;
+    justify-content: center;
+}
+footer nav {
+    width: 800px;
+    padding: 30px 50px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+.footerNav{
+    margin-left: 50px;
+}
+.footerNav a {
+    color: #EEFFAA;
+}
+.footer2 {
+    height: 80px;
+    width: 100%;
+    background-color: #492E23;
+    color: #A5A5A5;
+}
+.footerCopy {
+    height: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.footerLogo {
+    font-family: 'RocknRoll One', sans-serif;
+    letter-spacing: 0.3em;
+    font-size: 1.2rem;
+}
+.footerLogo a {
+    color: #A5A5A5;
+}
+.copy {
+    font-size: 0.95rem;
+}
 /* footer部分終了
 ---------------------- */
 
