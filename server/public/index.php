@@ -7,5 +7,7 @@
 
 <?php include_once __DIR__ . '/common/_header.php' ?>
 
+<?php include_once __DIR__ . '/common/_footer.html' ?>
+
 </body>
 </html>
