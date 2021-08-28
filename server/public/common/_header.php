@@ -14,9 +14,12 @@ require_once __DIR__ . '/../../common/config.php';
             </h1>
         </div>
         <nav>
+            <div class="navSideL">
+                <a href="" class="button">使い方</a>
+            </div>
             <!-- マイページorログイン -->
-            <div class="navSideL button">
-                <a href="../mypage/mypage.php">マイページ</a>
+            <div class="navSideC">
+                <a href="../mypage/mypage.php" class="button">マイページ</a>
                 <!-- <a href="../login/login.php">ログイン</a> -->
             </div>
             <!-- 次回予約or会員登録 -->
