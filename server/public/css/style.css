@@ -11,6 +11,10 @@ body {
 }
 a {
     text-decoration: none;
+    color: #8D5C4A;
+}
+a:hover {
+    color: rgb(136, 221, 102);
 }
 li {
     list-style: none;
@@ -18,7 +22,11 @@ li {
 .button {
     display: inline-block;
     padding: 6px 8px;
+    border: solid transparent 3px;
     border-radius: 50px;
+}
+.button:hover {
+    border: solid #8ADE68 3px;
 }
 .wrapper {
     width: 100%;
@@ -33,6 +41,9 @@ header {
     width: 100%;
     height: 100px;
     background-color: #FAB2A0;
+    border-bottom: solid rgba(0, 0, 0, .3) 2px;
+    position: fixed;
+    top: 0;
 }
 .headerMenu {
     display: flex;
@@ -54,9 +65,17 @@ header nav {
     font-size: 0.85rem;
     color: #8D5C4A;
 }
-.navSideL {
+header nav a {
+    color: #8D5C4A;
+}
+.navSideL a {
+    padding: 6px 15px;
+}
+.navSideL a, .navSideC a {
     background-color: #FAF5B9;
-    margin-right: 10px;
+}
+.navSideL, .navSideC {
+    margin-right: 12px;
 }
 .navSideR {
     display: flex;
@@ -88,11 +107,195 @@ header nav {
 /* header部分終了
 ---------------------- */
 
+/* index部
+----------------------*/
+
+.topImg {
+    background-image: url("../images/slide1.jpg");
+    background-size: cover;
+    background-position: center 40%;
+    height: 300px;
+    width: 100%;
+    margin-top: 99px;
+}
+.topImgCover {
+    height: 100%;
+    width: 100%;
+    background-color: rgba(255, 255, 255, 0.4);
+}
+.index {
+    margin-top: -80px;
+    display: grid;
+    grid-template-areas: 
+    "indexA indexB"
+    "indexC indexC"
+    "indexD indexD"
+    "indexE indexF";
+    grid-template-columns: 3fr 2fr;
+    gap: 20px;
+}
+.indexParts {
+    background-color: #FAF5B9;
+    border-radius: 30px;
+    padding: 30px;
+    width: 100%;
+    height: 100%;
+}
+.indexPartsContainer {
+    height: 100%;
+}
+.indexH2 {
+    display: inline-block;
+    border-left: #8D5C4A solid 8px;
+    padding-left: 8px;
+    font-size: 1.2rem;
+}
+.indexContents {
+    background-color: #fff;
+    margin-top: 10px;
+    padding: 10px;
+    word-break: break-word;
+}
+.slider {
+    grid-area: indexA;
+}
+.indexNews {
+    grid-area: indexB;
+}
+.indexNews li {
+    margin-bottom: 5px;
+}
+.more {
+    display: inline-block;
+    text-align: center;
+    width: 100%;
+}
+.reserveParts{
+    grid-area: indexC;
+    display: grid;
+    grid-template-columns: minmax(60px, 100px) 1fr;
+    background-color: #FAF5B9;
+    border-radius: 30px;
+    padding: 50px;
+}
+.reserveMSG {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+.indexReserveForm form {
+    display: grid;
+    grid-template-columns: 2fr 2fr 1fr 80px;
+    grid-template-areas: 
+    "reserveFormA reserveFormB reserveFormE reserveFormF"
+    "reserveFormC reserveFormD reserveFormD reserveFormD";
+    row-gap: 10px;
+}
+.indexReserveForm input[type="postal-code"],
+.indexReserveForm input[type="date"] {
+    background-color: #FFF;
+    border-bottom: solid 3px transparent;
+}
+.indexReserveForm input[type="postal-code"]:focus,
+.indexReserveForm input[type="date"]:focus {
+    outline: none;
+    border-bottom: solid 3px #FAB2A0;
+}
+.indexReserveForm input[type="postal-code"] {
+    padding-left: 10px;
+}
+.indexDeparturePC, .indexDestinationPC, .indexReserveDate, .indexReserveSubmit {
+    height: 60px;
+}
+.indexDeparturePC {
+    grid-area: reserveFormA;
+    border-right: solid .5px #EEE;
+    border-radius: 5px 0 0 5px;
+}
+.indexDestinationPC {
+    grid-area: reserveFormB;
+    border-right: solid .5px #EEE;
+}
+.indexWaypoint1PC, 
+.indexWaypoint2PC {
+    height: 40px;
+    border-radius: 5px;
+}
+.indexWaypoint1PC {
+    grid-area: reserveFormC;
+    width: calc(100% - 20px);
+}
+.indexWaypoint2PC {
+    grid-area: reserveFormD;
+    width: calc((100% - 80px)*(2/3) - 20px);
+}
+.indexReserveDate {
+    grid-area: reserveFormE;
+    border-right: solid .5px #EEE;
+}
+.indexReserveSubmit {
+    grid-area: reserveFormF;
+    border-radius: 0 5px 5px 0;
+    background-color: #8D5C4A;
+    color: #FFF;
+    font-weight: bold;
+}
+.indexReserveSubmit:hover {
+    background-color: rgba(141, 92, 74, .8);
+}
+.howToUse {
+    grid-area: indexD;
+    margin: auto;
+}
+.howToUseMSG {
+    display: inline-block;
+    color: #FFF;
+    font-size: 1.5rem;
+    background-color: #8D5C4A;
+    padding: 20px 30px;
+    border-radius: 20px;
+    margin: 30px 0;
+}
+.howToUseMSG:hover {
+    color: #FFF;
+    background-color: rgba(141, 92, 74, .8);
+}
+.indexThoughts {
+    grid-area: indexE;
+}
+.indexThoughts li {
+    margin-bottom: 8px;
+}
+.thoughtH2 {
+    font-size: 1.125rem;
+}
+.thoughtUserName {
+    font-size: .9rem;
+}
+.indexThoughts li p {
+    font-size: .95rem;
+}
+.twwiter {
+    grid-area: indexF;
+}
+
+.slider img {
+    width: 100%;
+    border-radius: 20px;
+    object-fit: cover;
+}
+
+/* index部終了
+----------------------*/
+
 /* footer部分
 ---------------------- */
 
 footer {
     width: 100%;
+    margin-top: 50px;
 }
 .footer1 {
     background-color: #8D5C4A;
@@ -114,6 +317,9 @@ footer nav {
 }
 .footerNav a {
     color: #EEFFAA;
+}
+.footerNav a:hover {
+    color: rgba(238, 255, 170, .5);
 }
 .footer2 {
     height: 80px;
