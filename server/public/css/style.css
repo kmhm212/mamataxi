@@ -312,6 +312,8 @@ header nav a {
 /* login関連
 ----------------------*/
 
+/* 共通部 */
+
 .label1 {
     grid-area: label1;
 }
@@ -331,53 +333,72 @@ header nav a {
     grid-area: input3;
 }
 
-.signUp {
-
-}
-.signUp section {
+.loginParts section {
     width: 100%;
     max-width: 700px;
     margin: auto;
 }
-.signUp form {
+.loginParts form {
     padding: 50px 30px;
     background-color: #EEE;
     display: grid;
-    grid-template-columns: 130px 1fr;
-    grid-template-areas: 
-    "label1 input1"
-    "label2 input2"
-    "label3 input3"
-    /* "label4 input4"
-    "label5 input5"
-    "label6 input6" */
-    "submit submit";
     grid-gap: 10px;
     margin-bottom: 20px;
+    border-radius: 5px;
 }
-.signUp label {
+.loginParts label {
     font-size: .95rem;
 }
-.signUp input[type="email"], .signUp input[type="password"] {
+.loginParts input:not([type="submit"]) {
     border: solid #999 2px;
     padding: 5px;
 }
-.signUp input[type="email"]:focus, .signUp input[type="password"]:focus {
+.loginParts input:not([type="submit"]):focus {
     outline: none;
 }
-.signUp input[type="submit"] {
+.loginParts input[type="submit"] {
     grid-area: submit;
     background-color: #FAB2A0;
     color: #492E23;
-    width: 300px;
     font-size: 1.2rem;
     padding: 5px;
     margin-top: 20px;
     border-radius: 10px;
 }
-.signUp input[type="submit"]:hover {
+.loginParts input[type="submit"]:hover {
     background-color: rgba(250, 178, 160, .5);
 }
+
+/* signUp */
+
+.signUp {
+
+}
+.signUp form {
+    grid-template-columns: 130px 1fr;
+    grid-template-areas: 
+    "label1 input1"
+    "label2 input2"
+    "label3 input3"
+    "submit submit";
+}
+.signUp input[type="submit"] , .login input[type="submit"]{
+    width: 200px;
+}
+
+/* login */
+
+.login {
+
+}
+.login form {
+    grid-template-columns: 130px 1fr;
+    grid-template-areas: 
+    "label1 input1"
+    "label2 input2"
+    "submit submit";
+}
+
 /* login関連終了
 ----------------------*/
 
