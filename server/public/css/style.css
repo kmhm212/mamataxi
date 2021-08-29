@@ -323,6 +323,9 @@ header nav a {
 .label3 {
     grid-area: label3;
 }
+.label4 {
+    grid-area: label4;
+}
 .input1 {
     grid-area: input1;
 }
@@ -331,6 +334,9 @@ header nav a {
 }
 .input3 {
     grid-area: input3;
+}
+.input4 {
+    grid-area: input4;
 }
 
 .loginParts section {
@@ -348,6 +354,7 @@ header nav a {
 }
 .loginParts label {
     font-size: .95rem;
+    padding: 5px 0;
 }
 .loginParts input:not([type="submit"]) {
     border: solid #999 2px;
@@ -382,8 +389,26 @@ header nav a {
     "label3 input3"
     "submit submit";
 }
-.signUp input[type="submit"] , .login input[type="submit"]{
+.signUp input[type="submit"] , .login input[type="submit"] {
     width: 200px;
+}
+.signUp2 form {
+    grid-template-columns: 130px 1fr;
+    grid-template-areas: 
+    "label1 input1"
+    "label2 input2"
+    "label3 input3"
+    "label4 input4"
+    "submit submit";
+}
+.signUp2 input[type="submit"] {
+    width: 120px;
+}
+.signUp2 .input2 {
+    padding: 5px;
+}
+.signUp2 .input2 input {
+    margin-right: 5px;
 }
 
 /* login */
