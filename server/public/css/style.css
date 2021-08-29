@@ -410,6 +410,53 @@ header nav a {
 .signUp2 .input2 input {
     margin-right: 5px;
 }
+.checkUser section {
+    width: 100%;
+    max-width: 700px;
+    margin: auto;
+}
+.checkUserData {
+    padding: 50px 30px;
+    background-color: #EEE;
+    margin-bottom: 20px;
+    border-radius: 5px;
+}
+.checkUserData dl {
+    display: grid;
+    grid-template-columns: 150px 1fr;
+    border-bottom: solid #CCC 1px;
+    padding: 10px 0;
+}
+.checkUserData dl:last-of-type {
+    border-bottom: none;
+}
+.checkUserData span {
+    margin-right: 30px;
+}
+.checkUserData input[type="submit"], .checkUserData a {
+    display: inline-block;
+    text-align: center;
+    width: 120px;
+    font-size: 1.2rem;
+    padding: 5px;
+    margin-top: 20px;
+    border-radius: 10px;
+}
+.checkUserData input[type="submit"] {
+    background-color: #FAB2A0;
+    color: #492E23;
+    margin-right: 30px;
+}
+.checkUserData input[type="submit"]:hover {
+    background-color: rgba(250, 178, 160, .5);
+}
+.checkUserData a {
+    background-color: #492E23;
+    color: #FAB2A0;
+}
+.checkUserData a:hover {
+    background-color: rgba(73, 46, 35, .5);
+}
 
 /* login */
 
