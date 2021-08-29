@@ -104,6 +104,9 @@ header nav a {
 .nRMtext {
     display: inline-block;
 }
+.space {
+    height: 100px;
+}
 /* header部分終了
 ---------------------- */
 
@@ -116,7 +119,6 @@ header nav a {
     background-position: center 40%;
     height: 300px;
     width: 100%;
-    margin-top: 99px;
 }
 .topImgCover {
     height: 100%;
@@ -145,7 +147,6 @@ header nav a {
     height: 100%;
 }
 .indexH2 {
-    display: inline-block;
     border-left: #8D5C4A solid 8px;
     padding-left: 8px;
     font-size: 1.2rem;
@@ -280,7 +281,6 @@ header nav a {
 .twwiter {
     grid-area: indexF;
 }
-
 .slider img {
     width: 100%;
     border-radius: 20px;
@@ -288,6 +288,190 @@ header nav a {
 }
 
 /* index部終了
+----------------------*/
+
+/* サブページ共通部
+----------------------*/
+
+.subPageH2 {
+    border-bottom: #8D5C4A solid 4px;
+    padding-bottom: 5px;
+    font-size: 1.725rem;
+    margin: 20px 0 30px;
+}
+.subPageH3 {
+    border-left: solid #8D5C4A 6px;
+    padding-left: 6px;
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+}
+
+/* サブページ共通部終了
+----------------------*/
+
+/* login関連
+----------------------*/
+
+/* 共通部 */
+
+.label1 {
+    grid-area: label1;
+}
+.label2 {
+    grid-area: label2;
+}
+.label3 {
+    grid-area: label3;
+}
+.label4 {
+    grid-area: label4;
+}
+.input1 {
+    grid-area: input1;
+}
+.input2 {
+    grid-area: input2;
+}
+.input3 {
+    grid-area: input3;
+}
+.input4 {
+    grid-area: input4;
+}
+
+.loginParts section {
+    width: 100%;
+    max-width: 700px;
+    margin: auto;
+}
+.loginParts form {
+    padding: 50px 30px;
+    background-color: #EEE;
+    display: grid;
+    grid-gap: 10px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+}
+.loginParts label {
+    font-size: .95rem;
+    padding: 5px 0;
+}
+.loginParts input:not([type="submit"]) {
+    border: solid #999 2px;
+    padding: 5px;
+}
+.loginParts input:not([type="submit"]):focus {
+    outline: none;
+}
+.loginParts input[type="submit"] {
+    grid-area: submit;
+    background-color: #FAB2A0;
+    color: #492E23;
+    font-size: 1.2rem;
+    padding: 5px;
+    margin-top: 20px;
+    border-radius: 10px;
+}
+.loginParts input[type="submit"]:hover {
+    background-color: rgba(250, 178, 160, .5);
+}
+
+/* signUp */
+
+.signUp {
+
+}
+.signUp form {
+    grid-template-columns: 130px 1fr;
+    grid-template-areas: 
+    "label1 input1"
+    "label2 input2"
+    "label3 input3"
+    "submit submit";
+}
+.signUp input[type="submit"] , .login input[type="submit"] {
+    width: 200px;
+}
+.signUp2 form {
+    grid-template-columns: 130px 1fr;
+    grid-template-areas: 
+    "label1 input1"
+    "label2 input2"
+    "label3 input3"
+    "label4 input4"
+    "submit submit";
+}
+.signUp2 input[type="submit"] {
+    width: 120px;
+}
+.signUp2 .input2 {
+    padding: 5px;
+}
+.signUp2 .input2 input {
+    margin-right: 5px;
+}
+.checkUser section {
+    width: 100%;
+    max-width: 700px;
+    margin: auto;
+}
+.checkUserData {
+    padding: 50px 30px;
+    background-color: #EEE;
+    margin-bottom: 20px;
+    border-radius: 5px;
+}
+.checkUserData dl {
+    display: grid;
+    grid-template-columns: 150px 1fr;
+    border-bottom: solid #CCC 1px;
+    padding: 10px 0;
+}
+.checkUserData dl:last-of-type {
+    border-bottom: none;
+}
+.checkUserData span {
+    margin-right: 30px;
+}
+.checkUserData input[type="submit"], .checkUserData a {
+    display: inline-block;
+    text-align: center;
+    width: 120px;
+    font-size: 1.2rem;
+    padding: 5px;
+    margin-top: 20px;
+    border-radius: 10px;
+}
+.checkUserData input[type="submit"] {
+    background-color: #FAB2A0;
+    color: #492E23;
+    margin-right: 30px;
+}
+.checkUserData input[type="submit"]:hover {
+    background-color: rgba(250, 178, 160, .5);
+}
+.checkUserData a {
+    background-color: #492E23;
+    color: #FAB2A0;
+}
+.checkUserData a:hover {
+    background-color: rgba(73, 46, 35, .5);
+}
+
+/* login */
+
+.login {
+
+}
+.login form {
+    grid-template-columns: 130px 1fr;
+    grid-template-areas: 
+    "label1 input1"
+    "label2 input2"
+    "submit submit";
+}
+
+/* login関連終了
 ----------------------*/
 
 /* footer部分
