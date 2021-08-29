@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html lang="ja">
 
-<?php include_once __DIR__ . '/common/_head.html' ?>
+<?php include_once __DIR__ . '/common/_head.php' ?>
 
 <body>
 
 <?php include_once __DIR__ . '/common/_header.php' ?>
+
 <div class="topImg">
 <div class="topImgCover"></div></div>
 <article class="index wrapper">

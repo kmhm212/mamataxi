@@ -39,3 +39,4 @@ require_once __DIR__ . '/../../common/config.php';
         </nav>
     </div>
 </header>
+<div class="space"></div>
