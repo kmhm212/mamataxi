@@ -71,6 +71,18 @@ CREATE TABLE areas (
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
+--地域設定
+
+INSERT INTO
+    areas
+    (name, area_code, x_axis, y_axis)
+    VALUE
+    ('中央区', '0', '0', '0'),
+    ('北区', '1', '1', '3'),
+    ('東区', '2', '4', '-1'),
+    ('南区', '3', '-1', '-3'),
+    ('西区', '4', '-2', '0');
+
 ```
 ```sql
 
@@ -237,10 +249,10 @@ INSERT INTO
     categorys
     (name, created_at)
     VALUE
-    ('重要', '2021-09-05 12:00:00')
-    ('キャンペーン', '2021-09-05 12:00:00')
-    ('募集', '2021-09-05 12:00:00')
-    ('PR', '2021-09-05 12:00:00')
+    ('重要'),
+    ('キャンペーン'),
+    ('募集'),
+    ('PR');
 
 ```
 ```sql
