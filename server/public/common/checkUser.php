@@ -1,6 +1,42 @@
 <?php
 
+require_once __DIR__ . '/../../common/functions.php';
+
 $title = " | 会員情報確認";
+
+session_start();
+
+$email = $_SESSION['email'];
+$password = $_SESSION['password'];
+$name = $_SESSION['name'];
+$sex = $_SESSION['sex'];
+$birth = $_SESSION['birth'];
+$tel = $_SESSION['tel'];
+
+$array_sex = ['', '男', '女', 'その他'];
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+        $dbh = connectDb();
+    $sql = <<<EOM
+    INSERT INTO
+        users
+        (email, password, name, sex, birth, tel)
+        VALUES
+        (:email, :password, :name, :sex, :birth, :tel);
+    EOM;
+    $stmt = $dbh->prepare($sql);
+    $stmt->bindParam(':email', $email, PDO::PARAM_STR);
+    $stmt->bindParam(':password', $password, PDO::PARAM_STR);
+    $stmt->bindParam(':name', $name, PDO::PARAM_STR);
+    $stmt->bindParam(':sex', $sex, PDO::PARAM_INT);
+    $stmt->bindParam(':birth', $birth, PDO::PARAM_STR);
+    $stmt->bindParam(':tel', $tel, PDO::PARAM_STR);
+    $stmt->execute();
+
+    header('Location: login.php');
+    exit;
+}
 
 ?>
 
@@ -22,7 +58,7 @@ $title = " | 会員情報確認";
                 <dl class="check1">
                     <dt>PCメールアドレス</dt>
                     <dd>
-                        <span>:</span>asasda@asasdad.com
+                        <span>:</span><?= h($email) ?>
                     </dd>
                 </dl>
                 <dl class="check2">
@@ -34,25 +70,25 @@ $title = " | 会員情報確認";
                 <dl class="check3">
                     <dt>ユーザー名</dt>
                     <dd>
-                        <span>:</span>木村ママ
+                        <span>:</span><?= h($name) ?>
                     </dd>
                 </dl>
                 <dl class="check4">
                     <dt>性別</dt>
                     <dd>
-                        <span>:</span>女
+                        <span>:</span><?= h($array_sex[$sex]) ?>
                     </dd>
                 </dl>
                 <dl class="check5">
                     <dt>生年月日</dt>
                     <dd>
-                        <span>:</span>1990年1月1日
+                        <span>:</span><?= h($birth) ?>
                     </dd>
                 </dl>
                 <dl class="check6">
                     <dt>電話番号</dt>
                     <dd>
-                        <span>:</span>09012345678
+                        <span>:</span><?= h($tel) ?>
                     </dd>
                 </dl>
                 <form action="" method="post">

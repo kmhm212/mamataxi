@@ -1,5 +1,8 @@
-<!DOCTYPE html>
-<html lang="ja">
+<?php
+
+session_start();
+
+?>
 
 <?php include_once __DIR__ . '/common/_head.php' ?>
 
