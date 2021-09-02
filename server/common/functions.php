@@ -47,7 +47,7 @@ function signupValidate2($name, $sex, $birth, $tel)
 {
     $errors = [];
 
-    $checkTel = findUserByEmail($tel);
+    $checkTel = findUserByTel($tel);
 
     if (empty($name)) {
         $name = $_SESSION['email'];
@@ -61,7 +61,7 @@ function signupValidate2($name, $sex, $birth, $tel)
     if (empty($tel)) {
         $errors[] = MSG_TEL_REQUIRED;
     } elseif ($checkTel) {
-        $errors[] = MSG_USER_TEL_USED;
+        $errors[] = MSG_TEL_USED;
     }
     return $errors;
 }
@@ -97,7 +97,7 @@ function loginValidate ($email, $password)
 }
 function findUserByEmail($email)
 {
-    $dbh = connectDB();
+    $dbh = connectDb();
     $sql = <<<EOM
         SELECT
             *
@@ -113,7 +113,7 @@ function findUserByEmail($email)
 }
 function findUserByTel($tel)
 {
-    $dbh = connectDB();
+    $dbh = connectDb();
     $sql = <<<EOM
         SELECT
             *

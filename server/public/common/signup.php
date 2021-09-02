@@ -24,7 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (empty($errors)) {
         $_SESSION['email'] = $email;
-        $_SESSION['password'] = $password;
+        $_SESSION['password'] = password_hash($password, PASSWORD_DEFAULT);
         header('Location: signup2.php');
         exit;
     }

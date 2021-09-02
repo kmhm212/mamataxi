@@ -17,7 +17,7 @@ define('MSG_SEX_REQUIRED', '性別が未選択です');
 define('MSG_BIRTH_REQUIRED', '生年月日が未入力です');
 define('MSG_TEL_REQUIRED', '電話番号が未入力です');
 define('MSG_EMAIL_USED', '使用済みのメールアドレスです');
-define('MSG_USER_TEL_USED', '使用済みの電話番号です');
+define('MSG_TEL_USED', '使用済みの電話番号です');
 
 // 子ども情報
 

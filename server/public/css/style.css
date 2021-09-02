@@ -78,27 +78,29 @@ header nav a {
 .navSideL a, .navSideC a {
     background-color: #FAF5B9;
 }
-.navSideL, .navSideC {
-    margin-right: 12px;
+.navSideL, .navSideC a {
+    margin-right: 8px;
 }
 .navSideR {
     display: flex;
     justify-content: center;
     align-items: center;
 }
-.nextReserveMessage {
+.navTopMessage {
     height: 30px;
     width: 180px;
     background-color: #8D5C4A;
     color: #FAF5B9;
     border-radius: 10px 10px 0 0;
 }
-.nextReserve {
+.navUnderMessage {
     height: 35px;
     width: 180px;
-    font-size: 0.75rem;
     background-color: #FAF5B9;
     border-radius: 0 0 10px 10px;
+}
+.nextReserve {
+    font-size: 0.75rem;
 }
 .toNRMtext {
     display: flex;

@@ -61,13 +61,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <label for="male" class="label2">性別</label>
                 <div class="input2">
                     <label>男
-                        <input type="radio" name="sex" id="male" value=0>
+                        <input type="radio" name="sex" id="male" value=1>
                     </label>
                     <label>女
-                        <input type="radio" name="sex" id="female" value=1>
+                        <input type="radio" name="sex" id="female" value=2>
                     </label>
                     <label>その他
-                        <input type="radio" name="sex" id="other" value=2>
+                        <input type="radio" name="sex" id="other" value=>
                     </label>
                 </div>
                 <label for="birth" class="label3">生年月日</label>

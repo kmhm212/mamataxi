@@ -46,6 +46,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <h2 class="subPageH2">ログイン</h2>
         <section>
             <h3 class="subPageH3">メールアドレスでログイン</h3>
+            <?php if($errors): ?>
+                <ul class="error-list">
+                    <?php foreach($errors as $error): ?>
+                        <li><?= h($error) ?></li>
+                    <?php endforeach ?>
+                </ul>
+            <?php endif ?>
             <form action="" method="post">
                 <label for="email" class="label1">メールアドレス</label>
                 <input type="email" name="email" id="email" class="input1" placeholder="mamasan@taxi.com">

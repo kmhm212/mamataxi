@@ -13,7 +13,7 @@ $sex = $_SESSION['sex'];
 $birth = $_SESSION['birth'];
 $tel = $_SESSION['tel'];
 
-$array_sex = ['男', '女', 'その他'];
+$array_sex = ['', '男', '女', 'その他'];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
@@ -31,10 +31,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt->bindParam(':name', $name, PDO::PARAM_STR);
     $stmt->bindParam(':sex', $sex, PDO::PARAM_INT);
     $stmt->bindParam(':birth', $birth, PDO::PARAM_STR);
-    $stmt->bindParam(':tel', $tel, PDO::PARAM_INT);
+    $stmt->bindParam(':tel', $tel, PDO::PARAM_STR);
     $stmt->execute();
 
-    header('Location: ../index.php');
+    header('Location: login.php');
     exit;
 }
 
