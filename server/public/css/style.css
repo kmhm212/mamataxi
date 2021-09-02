@@ -480,6 +480,27 @@ header nav a {
 /* login関連終了
 ----------------------*/
 
+/* mypage
+--------------------- */
+
+.mypage {
+
+}
+.mypageContents {
+    padding: 80px;
+    background-color: #EEE;
+    border-radius: 5px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    row-gap: 30px;
+}
+.mypageContent {
+
+}
+
+/* mypage終了
+--------------------- */
+
 /* footer部分
 ---------------------- */
 

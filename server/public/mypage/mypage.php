@@ -1,0 +1,74 @@
+<?php
+
+require_once __DIR__ . '/../../common/functions.php';
+
+$title = " | マイページ";
+
+session_start();
+if(empty($_SESSION['id'])) {
+    header('Location: index.php');
+    exit;
+}
+
+?>
+
+<!DOCTYPE html>
+<html lang="ja">
+
+<?php include_once __DIR__ . '/../common/_head.php' ?>
+
+<body>
+
+<?php include_once __DIR__ . '/../common/_header.php' ?>
+
+<article>
+    <div class="mypage wrapper">
+        <section>
+            <h2 class="subPageH2">マイページ</h2>
+            <div class="mypageContents">
+                <div class="mypageContent">
+                    <h3 class="subPageH3">会員情報</h3>
+                    <ul>
+                        <li><a href="">会員情報の確認</a></li>
+                        <li><a href="">パスワードの変更</a></li>
+                    </ul>
+                </div>
+                <div class="mypageContent">
+                    <h3 class="subPageH3">お子様の情報</h3>
+                    <ul>
+                        <li><a href="">子ども情報の確認</a></li>
+                        <li><a href="">子ども情報の登録</a></li>
+                        <li><a href="">子ども情報の変更</a></li>
+                    </ul>
+                </div>
+                <div class="mypageContent">
+                    <h3 class="subPageH3">予約情報</h3>
+                    <ul>
+                        <li><a href="">予約の確認</a></li>
+                        <li><a href="">予約の登録</a></li>
+                    </ul>
+                </div>
+                <div class="mypageContent">
+                    <h3 class="subPageH3">住所情報</h3>
+                    <ul>
+                        <li><a href="">住所の確認</a></li>
+                        <li><a href="">住所の登録</a></li>
+                    </ul>
+                </div>
+                <div class="mypageContent">
+                    <h3 class="subPageH3">ご感想はこちらから</h3>
+                    <ul>
+                        <li><a href="">感想の確認</a></li>
+                        <li><a href="">感想の登録</a></li>
+                        <li><a href="">他の人の感想を見てみる</a></li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </div>
+</article>
+
+<?php include_once __DIR__ . '/../common/_footer.html' ?>
+
+</body>
+</html>
