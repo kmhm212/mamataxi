@@ -37,6 +37,9 @@ li {
     color: red;
     list-style: none;
 }
+.br {
+    display: none;
+}
 
 /* header部分
 ---------------------- */
@@ -539,10 +542,12 @@ input[id="postalCode2"] {
     color: rgba(255, 0, 0, .6);
     border-bottom: solid 1px rgba(255, 0, 0, .6);
 }
-.userPage {
+.myPageParts {
     width: 100%;
-    max-width: 700px;
     margin: auto;
+}
+.userPage {
+    max-width: 700px;
 }
 .userPage a {
     background-color: #FAB2A0;
@@ -591,6 +596,56 @@ input[id="postalCode2"] {
 }
 .changePassword input[type='submit'] {
     width: 120px;
+}
+.adressPage section {
+    max-width: 900px;
+    margin: auto;
+}
+.adressDatas {
+    background-color: #EEE;
+    border-radius: 5px;
+    padding: 30px;
+}
+.adressData {
+    display: grid;
+    padding: 10px 0;
+    border-bottom: solid #CCC 1px;
+    grid-template-columns: 100px 1fr 200px;
+    align-items: center;
+}
+.adressData h4 {
+    font-size: 1.1rem;
+    overflow-wrap: break-word;
+    
+}
+.adressData ul {
+    display: flex;
+}
+.adressData li{
+    margin-right: 20px;
+    overflow-wrap: break-word;
+}
+.adressData:last-of-type {
+    border: none;
+}
+.changeDelete {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+.changeDelete a {
+    border: solid #8D5C4A 3px;
+    background-color: #FFF;
+    margin-right: 10px;
+}
+.changeAdress form {
+    grid-template-columns: 130px 1fr;
+    grid-template-areas: 
+    "label1 input1"
+    "label2 input2"
+    "label3 input3"
+    "label4 input4"
+    "submit submit";
 }
 /* mypage終了
 --------------------- */

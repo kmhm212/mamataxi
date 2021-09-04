@@ -60,11 +60,15 @@ function signupValidate2($name, $sex, $birth, $tel, $postal_code1, $postal_code2
     }
     if (empty($tel)) {
         $errors[] = MSG_TEL_REQUIRED;
+    } elseif (strlen($tel) > 11 || strlen($tel) < 10) {
+        $errors[] = MSG_TEL_LIMIT;
     } elseif ($checkTel) {
         $errors[] = MSG_TEL_USED;
     }
     if (empty($postal_code1 || $postal_code2)) {
         $errors[] = MSG_POSTAL_CODE_REQUIRED;
+    } elseif (strlen($postal_code1) != 3 ||strlen($postal_code2) != 4) {
+        $errors[] = MSG_POSTAL_CODE_LIMIT;
     }
     if (empty($adress)) {
         $errors[] = MSG_ADRESS_REQUIRED;
@@ -89,46 +93,6 @@ function insertUser($email, $password, $name, $sex, $birth, $tel)
     $stmt->bindParam(':birth', $birth, PDO::PARAM_STR);
     $stmt->bindParam(':tel', $tel, PDO::PARAM_STR);
     $stmt->execute();
-}
-function insertAdress($user, $name, $tel, $postal_code, $adress)
-{
-    $area_id = findAreaId($postal_code);
-
-    $dbh = connectDb();
-    $sql = <<<EOM
-    INSERT INTO
-        adresses
-        (user_id, name, tel, postal_code, area_id, adress)
-        VALUES
-        (:user_id, :name, :tel, :postal_code, :area_id, :adress);
-    EOM;
-    $stmt = $dbh->prepare($sql);
-
-    $stmt->bindParam(':user_id', $user['id'], PDO::PARAM_INT);
-    $stmt->bindParam(':name', $name, PDO::PARAM_STR);
-    $stmt->bindParam(':tel', $tel, PDO::PARAM_STR);
-    $stmt->bindParam(':postal_code', $postal_code, PDO::PARAM_STR);
-    $stmt->bindParam(':area_id', $area_id['id'], PDO::PARAM_INT);
-    $stmt->bindParam(':adress', $adress, PDO::PARAM_STR);
-    $stmt->execute();
-}
-function findAreaId($postal_code)
-{
-    $area_code = intval(str_replace('-', '', $postal_code)) % 5;
-    $dbh = connectDb();
-    $sql = <<<EOM
-        SELECT
-            id
-        FROM
-            areas
-        WHERE
-            area_code = :area_code;
-    EOM;
-    $stmt = $dbh->prepare($sql);
-    $stmt->bindParam(':area_code', $area_code, PDO::PARAM_INT);
-    $stmt->execute();
-    return $stmt->fetch(PDO::FETCH_ASSOC);
-
 }
 function loginValidate ($email, $password)
 {
@@ -228,6 +192,8 @@ function changeUserValidate($user, $name, $sex, $birth, $tel)
     }
     if (empty($tel)) {
         $errors[] = MSG_TEL_REQUIRED;
+    } elseif (strlen($tel) > 11 || strlen($tel) < 10) {
+        $errors[] = MSG_TEL_LIMIT;
     } elseif ($tel != $user['tel'] && $checkTel) {
         $errors[] = MSG_TEL_USED;
     }
@@ -296,3 +262,150 @@ function updatePassword($id, $new_password)
 }
 
 // 住所
+
+function findAdressByUserId($user_id)
+{
+    $dbh = connectDb();
+    $sql = <<<EOM
+        SELECT
+            *
+        FROM
+            adresses
+        WHERE
+            user_id = :user_id;
+    EOM;
+    $stmt = $dbh->prepare($sql);
+
+    $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+    $stmt->execute();
+    return $stmt->fetchALL(PDO::FETCH_ASSOC);
+}
+function findAdressByAdressId($id)
+{
+    $dbh = connectDb();
+    $sql = <<<EOM
+        SELECT
+            *
+        FROM
+            adresses
+        WHERE
+            id = :id;
+    EOM;
+    $stmt = $dbh->prepare($sql);
+
+    $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+    $stmt->execute();
+    return $stmt->fetch(PDO::FETCH_ASSOC);
+}
+function insertAdress($user_id, $name, $tel, $postal_code, $adress)
+{
+    $area = findAreaId($postal_code);
+
+    $dbh = connectDb();
+    $sql = <<<EOM
+        INSERT INTO
+            adresses
+            (user_id, name, tel, postal_code, area_id, adress)
+        VALUES
+            (:user_id, :name, :tel, :postal_code, :area_id, :adress);
+    EOM;
+    $stmt = $dbh->prepare($sql);
+
+    $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+    $stmt->bindParam(':name', $name, PDO::PARAM_STR);
+    $stmt->bindParam(':tel', $tel, PDO::PARAM_STR);
+    $stmt->bindParam(':postal_code', $postal_code, PDO::PARAM_STR);
+    $stmt->bindParam(':area_id', $area['id'], PDO::PARAM_INT);
+    $stmt->bindParam(':adress', $adress, PDO::PARAM_STR);
+    $stmt->execute();
+}
+function findAreaId($postal_code)
+{
+    $area_code = intval(str_replace('-', '', $postal_code)) % 5;
+    $dbh = connectDb();
+    $sql = <<<EOM
+        SELECT
+            id
+        FROM
+            areas
+        WHERE
+            area_code = :area_code;
+    EOM;
+    $stmt = $dbh->prepare($sql);
+    $stmt->bindParam(':area_code', $area_code, PDO::PARAM_INT);
+    $stmt->execute();
+    return $stmt->fetch(PDO::FETCH_ASSOC);
+}
+function changeAdressValidate($id, $name, $tel, $postal_code1, $postal_code2, $adress)
+{
+$errors = [];
+    $user_adress = findAdressByAdressId($id);
+
+    if (empty($name)) {
+        $errors[] = MSG_NAME_REQUIRED;
+    }
+    if (empty($postal_code1 || $postal_code2)) {
+        $errors[] = MSG_POSTAL_CODE_REQUIRED;
+    } elseif (strlen($postal_code1) != 3 ||strlen($postal_code2) != 4) {
+        $errors[] = MSG_POSTAL_CODE_LIMIT;
+    }
+    if (empty($adress)) {
+        $errors[] = MSG_ADRESS_REQUIRED;
+    }
+    if (empty($tel)) {
+        $errors[] = MSG_TEL_REQUIRED;
+    } elseif (strlen($tel) > 11 || strlen($tel) < 10) {
+        $errors[] = MSG_TEL_LIMIT;
+    }
+    if ($user_adress['name'] == $name
+    && $user_adress['tel'] == $tel
+    && $user_adress['postal_code'] == $postal_code1 . '-' . $postal_code2
+    && $user_adress['adress'] == $adress) {
+        $errors = MSG_NO_CHANGE;
+    }
+    return $errors;
+}
+function updateAdress($id, $name, $tel, $postal_code, $adress)
+{
+    $area = findAreaId($postal_code);
+
+    $dbh = connectDb();
+    $sql = <<<EOM
+        UPDATE
+            adresses
+        SET
+            name = :name,
+            postal_code = :postal_code,
+            adress = :adress,
+            area_id = :area_id,
+            tel = :tel
+        WHERE
+            id = :id;
+    EOM;
+    $stmt = $dbh->prepare($sql);
+
+    $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+    $stmt->bindParam(':name', $name, PDO::PARAM_STR);
+    $stmt->bindParam(':tel', $tel, PDO::PARAM_STR);
+    $stmt->bindParam(':postal_code', $postal_code, PDO::PARAM_STR);
+    $stmt->bindParam(':area_id', $area['id'], PDO::PARAM_INT);
+    $stmt->bindParam(':adress', $adress, PDO::PARAM_STR);
+    $stmt->execute();
+}
+function deleteAdress($id)
+{
+    $dbh = connectDb();
+    $sql = <<<EOM
+        DELETE
+            adresses
+        WHERE
+            id = :id;
+    EOM;
+    $stmt = $dbh->prepare($sql);
+    $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+    $stmt->execute();
+}
+function insertAdressValidate($name, $tel, $postal_code1, $postal_code2, $adress)
+{
+
+}

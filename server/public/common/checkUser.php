@@ -20,9 +20,9 @@ $array_sex = ['', '男', '女', 'その他'];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     insertUser($email, $password, $name, $sex, $birth, $tel);
+    
     $user = findUserByEmail($email);
-
-    insertAdress($user, $adress_name, $tel, $postal_code, $adress);
+    insertAdress($user['id'], $adress_name, $tel, $postal_code, $adress);
     
     unset($_SESSION['email']);
     unset($_SESSION['password']);
@@ -32,6 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     unset($_SESSION['tel']);
     unset($_SESSION['postal_code']);
     unset($_SESSION['adress']);
+    
     header('Location: login.php?pp=sigupcomp');
     exit;
 }
@@ -103,7 +104,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </dl>
                 <form action="" method="post">
                     <input type="submit" value="登録">
-                    <a href="signup2.php">戻る</a>
+                    <a href="signup2.php?pp=back">戻る</a>
                 </form>
             </div>
         </section>

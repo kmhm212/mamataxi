@@ -71,7 +71,7 @@ if ($pp == 'insertcomp') {
                 <div class="mypageContent">
                     <h3 class="subPageH3">住所情報</h3>
                     <ul>
-                        <li><a href="">住所の確認</a></li>
+                        <li><a href="adressPage.php">住所の確認</a></li>
                         <li><a href="">住所の登録</a></li>
                     </ul>
                 </div>
