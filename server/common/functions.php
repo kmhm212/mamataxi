@@ -43,7 +43,7 @@ function signupValidate ($email, $password, $re_password)
     }
     return $errors;
 }
-function signupValidate2($name, $sex, $birth, $tel)
+function signupValidate2($name, $sex, $birth, $tel, $postal_code1, $postal_code2, $adress)
 {
     $errors = [];
 
@@ -63,6 +63,12 @@ function signupValidate2($name, $sex, $birth, $tel)
     } elseif ($checkTel) {
         $errors[] = MSG_TEL_USED;
     }
+    if (empty($postal_code1 || $postal_code2)) {
+        $errors[] = MSG_POSTAL_CODE_REQUIRED;
+    }
+    if (empty($adress)) {
+        $errors[] = MSG_ADRESS_REQUIRED;
+    }
     return $errors;
 }
 function insertUser($email, $password, $name, $sex, $birth, $tel)
@@ -81,8 +87,48 @@ function insertUser($email, $password, $name, $sex, $birth, $tel)
     $stmt->bindParam(':name', $name, PDO::PARAM_STR);
     $stmt->bindParam(':sex', $sex, PDO::PARAM_INT);
     $stmt->bindParam(':birth', $birth, PDO::PARAM_STR);
-    $stmt->bindParam(':tel', $tel, PDO::PARAM_INT);
+    $stmt->bindParam(':tel', $tel, PDO::PARAM_STR);
     $stmt->execute();
+}
+function insertAdress($user, $name, $tel, $postal_code, $adress)
+{
+    $area_id = findAreaId($postal_code);
+
+    $dbh = connectDb();
+    $sql = <<<EOM
+    INSERT INTO
+        adresses
+        (user_id, name, tel, postal_code, area_id, adress)
+        VALUES
+        (:user_id, :name, :tel, :postal_code, :area_id, :adress);
+    EOM;
+    $stmt = $dbh->prepare($sql);
+
+    $stmt->bindParam(':user_id', $user['id'], PDO::PARAM_INT);
+    $stmt->bindParam(':name', $name, PDO::PARAM_STR);
+    $stmt->bindParam(':tel', $tel, PDO::PARAM_STR);
+    $stmt->bindParam(':postal_code', $postal_code, PDO::PARAM_STR);
+    $stmt->bindParam(':area_id', $area_id['id'], PDO::PARAM_INT);
+    $stmt->bindParam(':adress', $adress, PDO::PARAM_STR);
+    $stmt->execute();
+}
+function findAreaId($postal_code)
+{
+    $area_code = intval(str_replace('-', '', $postal_code)) % 5;
+    $dbh = connectDb();
+    $sql = <<<EOM
+        SELECT
+            id
+        FROM
+            areas
+        WHERE
+            area_code = :area_code;
+    EOM;
+    $stmt = $dbh->prepare($sql);
+    $stmt->bindParam(':area_code', $area_code, PDO::PARAM_INT);
+    $stmt->execute();
+    return $stmt->fetch(PDO::FETCH_ASSOC);
+
 }
 function loginValidate ($email, $password)
 {
@@ -127,3 +173,126 @@ function findUserByTel($tel)
     $stmt->execute();
     return $stmt->fetch(PDO::FETCH_ASSOC);
 }
+
+// 子どもいるか判断
+
+function haveChild($user_id)
+{
+    $dbh = connectDb();
+    $sql = <<<EOM
+        SELECT
+            *
+        FROM
+            children
+        WHERE
+            user_id = :user_id;
+    EOM;
+    $stmt = $dbh->prepare($sql);
+    $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+    $stmt->execute();
+    return $stmt->fetch(PDO::FETCH_ASSOC);
+}
+
+// mypage
+
+function findById($id)
+{
+    $dbh = connectDb();
+    $sql = <<<EOM
+        SELECT
+            *
+        FROM
+            users
+        WHERE
+            id = :id;
+    EOM;
+    $stmt = $dbh->prepare($sql);
+    $stmt->bindParam(':id', $id, PDO::PARAM_STR);
+    $stmt->execute();
+    return $stmt->fetch(PDO::FETCH_ASSOC);
+}
+function changeUserValidate($user, $name, $sex, $birth, $tel)
+{
+    $errors = [];
+
+    $checkTel = findUserByTel($tel);
+
+    if (empty($name)) {
+        $name = $_SESSION['email'];
+    }
+    if (empty($sex)) {
+        $errors[] = MSG_SEX_REQUIRED;
+    }
+    if (empty($birth)) {
+        $errors[] = MSG_BIRTH_REQUIRED;
+    }
+    if (empty($tel)) {
+        $errors[] = MSG_TEL_REQUIRED;
+    } elseif ($tel != $user['tel'] && $checkTel) {
+        $errors[] = MSG_TEL_USED;
+    }
+    if ($name == $user['name']
+    && $sex == $user['sex']
+    && $birth == $user['birth']
+    && $tel == $user['tel']) {
+        $errors[] = MSG_NO_CHANGE;
+    }
+    return $errors;
+}
+function updateUser($id, $name, $sex, $birth, $tel)
+{
+    $dbh = connectDb();
+    $sql = <<<EOM
+        UPDATE
+            users
+        SET
+            name = :name,
+            sex = :sex,
+            birth = :birth,
+            tel = :tel
+        WHERE
+            id = :id;
+    EOM;
+    $stmt = $dbh->prepare($sql);
+    $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+    $stmt->bindParam(':name', $name, PDO::PARAM_STR);
+    $stmt->bindParam(':sex', $sex, PDO::PARAM_INT);
+    $stmt->bindParam(':birth', $birth, PDO::PARAM_STR);
+    $stmt->bindParam(':tel', $tel, PDO::PARAM_STR);
+    $stmt->execute();
+}
+function changePassValidate($password, $new_password, $re_new_password)
+{
+    $errors = [];
+    
+    if (empty($password)) {
+        $errors[] = MSG_PASSWORD_REQUIRED;
+    }
+    if (empty($new_password)) {
+        $errors[] = MSG_NEW_PASSWORD_REQUIRED;
+    } elseif ($new_password !== $re_new_password) {
+        $errors[] = MSG_NEW_PASSWORD_NOT_MATCH;
+    }
+    if (empty($re_new_password)) {
+        $errors[] = MSG_NEW_PASSWORD_2_REQUIRED;
+    }
+    return $errors;
+}
+function updatePassword($id, $new_password)
+{
+    $dbh = connectDb();
+    $sql = <<<EOM
+        UPDATE
+            users
+        SET
+            password = :password
+        WHERE
+            id = :id;
+    EOM;
+    $stmt = $dbh->prepare($sql);
+    $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+    $stmt->bindParam(':password', $new_password, PDO::PARAM_STR);
+    $stmt->execute();
+}
+
+// 住所

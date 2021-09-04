@@ -12,29 +12,27 @@ $name = $_SESSION['name'];
 $sex = $_SESSION['sex'];
 $birth = $_SESSION['birth'];
 $tel = $_SESSION['tel'];
+$postal_code = $_SESSION['postal_code'];
+$adress = $_SESSION['adress'];
 
+$adress_name = '自宅';
 $array_sex = ['', '男', '女', 'その他'];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    insertUser($email, $password, $name, $sex, $birth, $tel);
+    $user = findUserByEmail($email);
 
-        $dbh = connectDb();
-    $sql = <<<EOM
-    INSERT INTO
-        users
-        (email, password, name, sex, birth, tel)
-        VALUES
-        (:email, :password, :name, :sex, :birth, :tel);
-    EOM;
-    $stmt = $dbh->prepare($sql);
-    $stmt->bindParam(':email', $email, PDO::PARAM_STR);
-    $stmt->bindParam(':password', $password, PDO::PARAM_STR);
-    $stmt->bindParam(':name', $name, PDO::PARAM_STR);
-    $stmt->bindParam(':sex', $sex, PDO::PARAM_INT);
-    $stmt->bindParam(':birth', $birth, PDO::PARAM_STR);
-    $stmt->bindParam(':tel', $tel, PDO::PARAM_STR);
-    $stmt->execute();
-
-    header('Location: login.php');
+    insertAdress($user, $adress_name, $tel, $postal_code, $adress);
+    
+    unset($_SESSION['email']);
+    unset($_SESSION['password']);
+    unset($_SESSION['name']);
+    unset($_SESSION['sex']);
+    unset($_SESSION['birth']);
+    unset($_SESSION['tel']);
+    unset($_SESSION['postal_code']);
+    unset($_SESSION['adress']);
+    header('Location: login.php?pp=sigupcomp');
     exit;
 }
 
@@ -91,9 +89,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <span>:</span><?= h($tel) ?>
                     </dd>
                 </dl>
+                <dl class="check7">
+                    <dt>郵便番号</dt>
+                    <dd>
+                        <span>:</span><?= h($postal_code) ?>
+                    </dd>
+                </dl>
+                <dl class="check8">
+                    <dt>住所</dt>
+                    <dd>
+                        <span>:</span><?= h($adress) ?>
+                    </dd>
+                </dl>
                 <form action="" method="post">
                     <input type="submit" value="登録">
-                    <a href="">戻る</a>
+                    <a href="signup2.php">戻る</a>
                 </form>
             </div>
         </section>
