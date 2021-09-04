@@ -42,7 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <?php include_once __DIR__ . '/_header.php' ?>
 
 <article>
-    <div class="loginParts signUp wrapper">
+    <div class="formParts signUp wrapper">
         <h2 class="subPageH2">会員登録</h2>
         <section>
             <h3 class="subPageH3">メールアドレスで登録</h3>

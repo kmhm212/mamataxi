@@ -30,6 +30,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
+$pp = filter_input(INPUT_GET, 'pp');
+if ($pp == 'sigupcomp') {
+    $msg = '登録が完了しました。';
+} elseif ($pp == 'changepasscomp') {
+    $msg = '変更が完了しました。';
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -42,9 +49,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <?php include_once __DIR__ . '/_header.php' ?>
 
 <article>
-    <div class="loginParts login wrapper">
+    <div class="formParts login wrapper">
         <h2 class="subPageH2">ログイン</h2>
         <section>
+            <?php if($msg): ?>
+                <p class="checkMSG">
+                    <?= $msg ?><br>
+                </p>
+            <?php endif ?>
             <h3 class="subPageH3">メールアドレスでログイン</h3>
             <?php if($errors): ?>
                 <ul class="error-list">
