@@ -2,26 +2,29 @@
 
 require_once __DIR__ . '/../../common/functions.php';
 
-$title = " | マイページ > 会員情報";
+$title = ' | マイページ > 住所情報';
 
 session_start();
+if(empty($_SESSION['id'])) {
+    header('Location: ../index.php');
+    exit;
+}
 
-$id = $_SESSION['id'];
-
+$id = $_SESSION['adress_id'];
 $name = $_SESSION['name'];
-$sex = $_SESSION['sex'];
-$birth = $_SESSION['birth'];
+$postal_code = $_SESSION['postal_code'];
+$adress = $_SESSION['adress'];
 $tel = $_SESSION['tel'];
 
-$array_sex = ['', '男', '女', 'その他'];
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    updateUser($id, $name, $sex, $birth, $tel);
+    updateAdress($id, $name, $tel, $postal_code, $adress);
     
+    unset($_SESSION['adress_id']);
     unset($_SESSION['name']);
-    unset($_SESSION['sex']);
-    unset($_SESSION['birth']);
+    unset($_SESSION['postal_code']);
+    unset($_SESSION['adress']);
     unset($_SESSION['tel']);
+    
     header('Location: mypage.php?pp=changecomp');
     exit;
 }
@@ -38,38 +41,38 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <?php include_once __DIR__ . '/../common/_header.php' ?>
 
 <article>
-    <div class="checkUser wrapper">
-        <h2 class="subPageH2">会員情報確認</h2>
+    <div class="myPageParts adressPage wrapper">
+        <h2 class="subPageH2">住所情報</h2>
         <section>
-            <h3 class="subPageH3">以下の情報で再登録</h3>
+            <h3 class="subPageH3">登録住所を確認</h3>
             <div class="checkUserData">
-                <dl class="check1">
-                    <dt>ユーザー名</dt>
+                <dl class="">
+                    <dt>登録名</dt>
                     <dd>
                         <span>:</span><?= h($name) ?>
                     </dd>
                 </dl>
-                <dl class="check2">
-                    <dt>性別</dt>
+                <dl class="">
+                    <dt>郵便番号</dt>
                     <dd>
-                        <span>:</span><?= h($array_sex[$sex]) ?>
+                        <span>:</span>〒<?= h($postal_code) ?>
                     </dd>
                 </dl>
-                <dl class="check3">
-                    <dt>生年月日</dt>
+                <dl class="">
+                    <dt>住所</dt>
                     <dd>
-                        <span>:</span><?= h($birth) ?>
+                        <span>:</span><?= h($adress) ?>
                     </dd>
                 </dl>
-                <dl class="check4">
+                <dl class="">
                     <dt>電話番号</dt>
                     <dd>
                         <span>:</span><?= h($tel) ?>
                     </dd>
                 </dl>
                 <form action="" method="post">
-                    <input type="submit" value="登録">
-                    <a href="changeUser.php?pp=back">戻る</a>
+                    <input type="submit" value="変更">
+                    <a href="changeAdress.php">戻る</a>
                 </form>
             </div>
         </section>

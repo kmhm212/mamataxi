@@ -56,9 +56,8 @@ if ($pp == 'insertcomp') {
                 <div class="mypageContent">
                     <h3 class="subPageH3">お子様の情報</h3>
                     <ul>
-                        <li><a href="">子ども情報の確認</a></li>
-                        <li><a href="">子ども情報の登録</a></li>
-                        <li><a href="">子ども情報の変更</a></li>
+                        <li><a href="childPage.php">子ども情報の確認</a></li>
+                        <li><a href="insertChild.php">子ども情報の登録</a></li>
                     </ul>
                 </div>
                 <div class="mypageContent">
@@ -71,8 +70,8 @@ if ($pp == 'insertcomp') {
                 <div class="mypageContent">
                     <h3 class="subPageH3">住所情報</h3>
                     <ul>
-                        <li><a href="">住所の確認</a></li>
-                        <li><a href="">住所の登録</a></li>
+                        <li><a href="adressPage.php">住所の確認</a></li>
+                        <li><a href="insertAdress.php">住所の登録</a></li>
                     </ul>
                 </div>
                 <div class="mypageContent">

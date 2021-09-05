@@ -33,7 +33,7 @@ $tel = $user['tel'];
 <?php include_once __DIR__ . '/../common/_header.php' ?>
 
 <article>
-    <div class="userPage wrapper">
+    <div class="myPageParts userPage wrapper">
         <h2 class="subPageH2">会員情報</h2>
         <section>
             <h3 class="subPageH3">会員情報を確認</h3>
