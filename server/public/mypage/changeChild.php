@@ -60,7 +60,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['adress'] = $nursery_adress;
             $_SESSION['tel'] = $tel;
         }
-        header('Location: insertChildComplate.php');
+        header('Location: changeChildComplate.php');
         exit;
     }
 }

@@ -396,7 +396,7 @@ function deleteAdress($id)
 {
     $dbh = connectDb();
     $sql = <<<EOM
-        DELETE
+        DELETE FROM
             adresses
         WHERE
             id = :id;
@@ -550,7 +550,7 @@ function updateChild($id, $name, $sex, $birth, $adress_id)
             name = :name,
             sex = :sex,
             birth = :birth,
-            adress_id = :adress_id,
+            adress_id = :adress_id
         WHERE
             id = :id;
     EOM;
@@ -558,7 +558,7 @@ function updateChild($id, $name, $sex, $birth, $adress_id)
 
     $stmt->bindParam(':id', $id, PDO::PARAM_INT);
     $stmt->bindParam(':name', $name, PDO::PARAM_STR);
-    $stmt->bindParam(':sex', $sex, PDO::PARAM_STR);
+    $stmt->bindParam(':sex', $sex, PDO::PARAM_INT);
     $stmt->bindParam(':birth', $birth, PDO::PARAM_STR);
     $stmt->bindParam(':adress_id', $adress_id, PDO::PARAM_INT);
     $stmt->execute();
@@ -567,7 +567,7 @@ function deleteChild($id)
 {
     $dbh = connectDb();
     $sql = <<<EOM
-        DELETE
+        DELETE FROM
             children
         WHERE
             id = :id;
