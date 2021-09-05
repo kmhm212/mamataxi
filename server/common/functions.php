@@ -596,3 +596,33 @@ function insertChildValidate($name, $sex, $birth, $adress_id, $adress_name, $tel
     }
     return $errors;
 }
+
+// 予約情報
+
+function insertReseave($user_id, $departure_time, $destination_time, $departure_area_id, $departure_postal_code,$departure_adress, $destination_area_id, $destination_postal_code, $destination_adress, $waypoint_1_area_id, $waypoint_1_postal_code, $waypoint_1_adress, $waypoint_2_area_id, $waypoint_2_postal_code, $waypoint_2_adress)
+{
+    $dbh = connectDb();
+    $sql = <<<EOM
+        INSERT INTO
+            (user_id, departure_time, destination_time, departure_area_id, departure_postal_code, departure_adress, destination_area_id, destination_postal_code, destination_adress, waypoint_1_area_id, waypoint_1_postal_code, waypoint_1_adress, waypoint_2_area_id, waypoint_2_postal_code, waypoint_2_adress)
+        VALUE
+            (:user_id, :departure_time, :destination_time, :departure_area_id, :departure_postal_code, :departure_adress, :destination_area_id, :destination_postal_code, :destination_adress, :waypoint_1_area_id, :waypoint_1_postal_code, :waypoint_1_adress, :waypoint_2_area_id, :waypoint_2_postal_code, :waypoint_2_adress)
+    EOM;
+    $stmt = $dbh->prepare($sql);
+    $stmt->bindParam(':user_id',$user_id, PDO::PARAM_INT);
+    $stmt->bindParam(':departure_time',$departure_time, PDO::PARAM_STR);
+    $stmt->bindParam(':destination_time',$destination_time, PDO::PARAM_STR);
+    $stmt->bindParam(':departure_area_id',$departure_area_id, PDO::PARAM_INT);
+    $stmt->bindParam(':departure_postal_code',$departure_postal_code, PDO::PARAM_STR);
+    $stmt->bindParam(':departure_adress',$departure_adress, PDO::PARAM_STR);
+    $stmt->bindParam(':destination_area_id',$destination_area_id, PDO::PARAM_INT);
+    $stmt->bindParam(':destination_postal_code',$destination_postal_code, PDO::PARAM_STR);
+    $stmt->bindParam(':destination_adress',$destination_adress, PDO::PARAM_STR);
+    $stmt->bindParam(':waypoint_1_area_id',$waypoint_1_area_id, PDO::PARAM_INT);
+    $stmt->bindParam(':waypoint_1_postal_code',$waypoint_1_postal_code, PDO::PARAM_STR);
+    $stmt->bindParam(':waypoint_1_adress',$waypoint_1_adress, PDO::PARAM_STR);
+    $stmt->bindParam(':waypoint_2_area_id',$waypoint_2_area_id, PDO::PARAM_INT);
+    $stmt->bindParam(':waypoint_2_postal_code',$waypoint_2_postal_code, PDO::PARAM_STR);
+    $stmt->bindParam(':waypoint_2_adress',$waypoint_2_adress, PDO::PARAM_STR);
+    $stmt->execute();
+}
