@@ -601,7 +601,6 @@ input[id="postalCode2"] {
 /* adress */
 
 .adressPage section {
-    max-width: 900px;
     margin: auto;
 }
 .adressDatas {
@@ -613,27 +612,26 @@ input[id="postalCode2"] {
     display: grid;
     padding: 10px 0;
     border-bottom: solid #CCC 1px;
-    grid-template-columns: 100px 1fr 200px;
+    grid-template-columns: 120px 1fr 200px;
     align-items: center;
 }
 .adressData h4 {
     font-size: 1.1rem;
     overflow-wrap: break-word;
-    
 }
 .adressData ul {
     display: flex;
 }
 .adressData li{
-    margin-right: 20px;
     overflow-wrap: break-word;
+    margin-right: 20px;
 }
 .adressData:last-of-type {
     border: none;
 }
 .changeDelete {
     display: flex;
-    justify-content: flex-end;
+    justify-content: center;
     align-items: center;
 }
 .changeDelete a {
@@ -667,6 +665,51 @@ input[id="postalCode2"] {
 .childCheck a:hover {
     color: rgba(255, 0, 0, .6);
     border-bottom: solid 1px rgba(255, 0, 0, .6);
+}
+.childPage section {
+    margin: auto;
+}
+.childDatas {
+    background-color: #EEE;
+    border-radius: 5px;
+    padding: 30px;
+}
+.childData {
+    display: grid;
+    padding: 10px 0;
+    border-bottom: solid #CCC 1px;
+    grid-template-areas: 
+    "h4 child  cd"
+    "h4 adress cd";
+    grid-template-columns: 100px 1fr 200px;
+    align-items: center;
+}
+.childDate .changeDelete {
+    grid-area: cd;
+}
+.childData h4 {
+    grid-area: h4;
+    font-size: 1.1rem;
+    overflow-wrap: break-word;
+}
+.childData ul {
+    display: flex;
+}
+.childData li{
+    margin-right: 20px;
+    overflow-wrap: break-word;
+}
+.childData:last-of-type {
+    border: none;
+}
+.checkChild {
+    grid-area: child;
+}
+.childPage .checkAdress {
+    grid-area: adress;
+}
+.childPage .checkAdress li:nth-of-type(1) {
+    font-weight: bold;
 }
 .insertChild form {
     grid-template-columns: 130px 1fr;

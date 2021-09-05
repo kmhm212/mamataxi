@@ -11,7 +11,7 @@ if(empty($_SESSION['id'])) {
 }
 
 $id = $_SESSION['id'];
-
+$array_sex = ['', '男', '女', 'その他'];
 $children = findChildrenByUserId($id);
 
 ?>
@@ -32,11 +32,11 @@ $children = findChildrenByUserId($id);
             <h3 class="subPageH3">子ども情報を確認</h3>
             <div class="childDatas">
                 <?php foreach($children as $child): ?>
-                    <?php $adress = findAdressByAdressId($child['sdress_id']) ?>
+                    <?php $adress = findAdressByAdressId($child['adress_id']) ?>
                     <div class="childData myData">
                         <h4 class=""><?= h($child['name']) ?></h4>
                         <ul class="checkChild">
-                            <li><?= h($child['sex']) ?></li>
+                            <li><?= h($array_sex[$child['sex']]) ?></li>
                             <li><?= h($child['birth']) ?></li>
                         </ul>
                         <ul class="checkAdress">
@@ -46,12 +46,12 @@ $children = findChildrenByUserId($id);
                             <li>TEL : <?= h($adress['tel']) ?></li>
                         </ul>
                         <div class="changeDelete">
-                            <a href="changeChild.php?id=<?= h($adress['id']) ?>" class="button">変更</a>
-                            <a href="deleteChild.php?id=<?= h($adress['id']) ?>" class="button">削除</a>
+                            <a href="changeChild.php?id=<?= h($child['id']) ?>" class="button">変更</a>
+                            <a href="deleteChild.php?id=<?= h($child['id']) ?>" class="button">削除</a>
                         </div>
                     </div>
                 <?php endforeach ?>
-                <a href="insertChild.php" class="insertBtn">住所を新規登録</a>
+                <a href="insertChild.php" class="insertBtn">子ども情報を新規登録</a>
             </div>
         </section>
     </div>

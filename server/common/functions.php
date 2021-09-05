@@ -512,9 +512,12 @@ function insertChild($user_id, $name, $sex, $birth, $adress_id)
     $stmt->bindParam(':adress_id', $adress_id, PDO::PARAM_INT);
     $stmt->execute();
 }
-function changeChildrenValidate($id, $name, $sex, $birth, $adress_id)
+function updataChildValidate($id, $name, $sex, $birth, $adress_id, $adress_name, $tel, $postal_code1, $postal_code2, $nursery_adress)
 {
     $errors = [];
+    if ($adress_id == 'new') {
+        $errors = insertAdressValidate($adress_name, $tel, $postal_code1, $postal_code2, $nursery_adress);
+    }
     $child = findChildByChildId($id);
 
     if (empty($name)) {
@@ -533,7 +536,7 @@ function changeChildrenValidate($id, $name, $sex, $birth, $adress_id)
     && $child['sex'] == $sex
     && $child['birth'] == $birth
     && $child['adress_id'] == $adress_id) {
-        $errors = MSG_NO_CHANGE;
+        $errors[] = MSG_NO_CHANGE;
     }
     return $errors;
 }
