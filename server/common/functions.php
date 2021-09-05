@@ -338,7 +338,7 @@ function findAreaId($postal_code)
 }
 function changeAdressValidate($id, $name, $tel, $postal_code1, $postal_code2, $adress)
 {
-$errors = [];
+    $errors = [];
     $user_adress = findAdressByAdressId($id);
 
     if (empty($name)) {
@@ -353,7 +353,7 @@ $errors = [];
         $errors[] = MSG_ADRESS_REQUIRED;
     }
     if (empty($tel)) {
-        $errors[] = MSG_TEL_REQUIRED;
+
     } elseif (strlen($tel) > 11 || strlen($tel) < 10) {
         $errors[] = MSG_TEL_LIMIT;
     }
@@ -407,5 +407,189 @@ function deleteAdress($id)
 }
 function insertAdressValidate($name, $tel, $postal_code1, $postal_code2, $adress)
 {
+    $errors = [];
 
+    if (empty($name)) {
+        $errors[] = MSG_NAME_REQUIRED;
+    }
+    if (empty($postal_code1 || $postal_code2)) {
+        $errors[] = MSG_POSTAL_CODE_REQUIRED;
+    } elseif (strlen($postal_code1) != 3 ||strlen($postal_code2) != 4) {
+        $errors[] = MSG_POSTAL_CODE_LIMIT;
+    }
+    if (empty($adress)) {
+        $errors[] = MSG_ADRESS_REQUIRED;
+    }
+    if (empty($tel)) {
+
+    } elseif (strlen($tel) > 11 || strlen($tel) < 10) {
+        $errors[] = MSG_TEL_LIMIT;
+    }
+    return $errors;
+}
+function findInsertAdress($user_id, $name, $tel, $postal_code, $adress)
+{
+    $dbh = connectDb();
+    $sql = <<<EOM
+        SELECT
+            id
+        FROM
+            adresses
+        WHERE
+            user_id = :user_id
+        AND
+            name = :name
+        AND
+            tel = :tel
+        AND
+            postal_code = :postal_code
+        AND
+            adress = :adress;
+    EOM;
+    $stmt = $dbh->prepare($sql);
+
+    $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+    $stmt->bindParam(':name', $name, PDO::PARAM_STR);
+    $stmt->bindParam(':tel', $tel, PDO::PARAM_STR);
+    $stmt->bindParam(':postal_code', $postal_code, PDO::PARAM_STR);
+    $stmt->bindParam(':adress', $adress, PDO::PARAM_STR);
+    $stmt->execute();
+    return $stmt->fetch(PDO::FETCH_ASSOC);
+}
+
+// 子ども
+
+function findChildrenByUserId($user_id)
+{
+    $dbh = connectDb();
+    $sql = <<<EOM
+        SELECT
+            *
+        FROM
+            children
+        WHERE
+            user_id = :user_id;
+    EOM;
+    $stmt = $dbh->prepare($sql);
+
+    $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+    $stmt->execute();
+    return $stmt->fetchALL(PDO::FETCH_ASSOC);
+}
+function findChildByChildId($id)
+{
+    $dbh = connectDb();
+    $sql = <<<EOM
+        SELECT
+            *
+        FROM
+            children
+        WHERE
+            id = :id;
+    EOM;
+    $stmt = $dbh->prepare($sql);
+
+    $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+    $stmt->execute();
+    return $stmt->fetch(PDO::FETCH_ASSOC);
+}
+function insertChild($user_id, $name, $sex, $birth, $adress_id)
+{
+    $dbh = connectDb();
+    $sql = <<<EOM
+        INSERT INTO
+            children
+            (user_id, name, sex, birth, adress_id)
+        VALUES
+            (:user_id, :name, :sex, :birth, :adress_id);
+    EOM;
+    $stmt = $dbh->prepare($sql);
+
+    $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+    $stmt->bindParam(':name', $name, PDO::PARAM_STR);
+    $stmt->bindParam(':sex', $sex, PDO::PARAM_INT);
+    $stmt->bindParam(':birth', $birth, PDO::PARAM_STR);
+    $stmt->bindParam(':adress_id', $adress_id, PDO::PARAM_INT);
+    $stmt->execute();
+}
+function changeChildrenValidate($id, $name, $sex, $birth, $adress_id)
+{
+    $errors = [];
+    $child = findChildByChildId($id);
+
+    if (empty($name)) {
+        $errors[] = MSG_NAME_REQUIRED;
+    }
+    if (empty($sex)) {
+        $errors[] = MSG_SEX_REQUIRED;
+    }
+    if (empty($birth)) {
+        $errors[] = MSG_BIRTH_REQUIRED;
+    }
+    if (empty($adress_id)) {
+        $errors[] = MSG_ADRESS_REQUIRED;
+    }
+    if ($child['name'] == $name
+    && $child['sex'] == $sex
+    && $child['birth'] == $birth
+    && $child['adress_id'] == $adress_id) {
+        $errors = MSG_NO_CHANGE;
+    }
+    return $errors;
+}
+function updateChild($id, $name, $sex, $birth, $adress_id)
+{
+    $dbh = connectDb();
+    $sql = <<<EOM
+        UPDATE
+            children
+        SET
+            name = :name,
+            sex = :sex,
+            birth = :birth,
+            adress_id = :adress_id,
+        WHERE
+            id = :id;
+    EOM;
+    $stmt = $dbh->prepare($sql);
+
+    $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+    $stmt->bindParam(':name', $name, PDO::PARAM_STR);
+    $stmt->bindParam(':sex', $sex, PDO::PARAM_STR);
+    $stmt->bindParam(':birth', $birth, PDO::PARAM_STR);
+    $stmt->bindParam(':adress_id', $adress_id, PDO::PARAM_INT);
+    $stmt->execute();
+}
+function deleteChild($id)
+{
+    $dbh = connectDb();
+    $sql = <<<EOM
+        DELETE
+            children
+        WHERE
+            id = :id;
+    EOM;
+    $stmt = $dbh->prepare($sql);
+    $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+    $stmt->execute();
+}
+function insertChildValidate($name, $sex, $birth, $adress_id, $adress_name, $tel, $postal_code1, $postal_code2, $nursery_adress)
+{
+    $errors = [];
+    if ($adress_id == 'new') {
+        $errors = insertAdressValidate($adress_name, $tel, $postal_code1, $postal_code2, $nursery_adress);
+    }
+    if (empty($name)) {
+        $errors[] = MSG_NAME_REQUIRED;
+    }
+    if (empty($sex)) {
+        $errors[] = MSG_SEX_REQUIRED;
+    }
+    if (empty($birth)) {
+        $errors[] = MSG_BIRTH_REQUIRED;
+    }
+    if (empty($adress_id)) {
+        $errors[] = MSG_ADRESS_REQUIRED;
+    }
+    return $errors;
 }

@@ -10,7 +10,7 @@ if(empty($_SESSION['id'])) {
     exit;
 }
 
-if (filter_input(INPUT_POST, 'pp') == 'back') {
+if (filter_input(INPUT_GET, 'pp') == 'back') {
     $name = $_SESSION['name'];
     $postal_code1 = substr($_SESSION['postal_code'], 0, 3);
     $postal_code2 = substr($_SESSION['postal_code'], 4);
