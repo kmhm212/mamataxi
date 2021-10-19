@@ -456,6 +456,22 @@ function findInsertAdress($user_id, $name, $tel, $postal_code, $adress)
     $stmt->execute();
     return $stmt->fetch(PDO::FETCH_ASSOC);
 }
+function findAreaCode($id) {
+    $dbh = connectDb();
+    $sql = <<<EOM
+        SELECT
+            *
+        FROM
+            areas
+        WHERE
+            id = :id;
+    EOM;
+    $stmt = $dbh->prepare($sql);
+
+    $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+    $stmt->execute();
+    return $stmt->fetch(PDO::FETCH_ASSOC)['area_code'];
+}
 
 // 子ども
 
@@ -599,11 +615,51 @@ function insertChildValidate($name, $sex, $birth, $adress_id, $adress_name, $tel
 
 // 予約情報
 
+function findReseaveById($id)
+{
+    $dbh = connectDb();
+    $sql = <<<EOM
+        SELECT
+            *
+        FROM
+            reseaves
+        WHERE
+            id = :id
+    EOM;
+    $stmt = $dbh->prepare($sql);
+    $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+    $stmt->execute();
+    return $stmt->fetch(PDO::FETCH_ASSOC);
+}
+
+function findReseaveByUserId($user_id)
+{
+    $today = new DateTime(date('y-m-d h:i:s'));
+
+    $dbh = connectDb();
+    $sql = <<<EOM
+        SELECT
+            *
+        FROM
+            reseaves
+        WHERE
+            user_id = :user_id
+        AND
+            departure_time > :today;
+    EOM;
+    $stmt = $dbh->prepare($sql);
+    $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+    $stmt->bindParam(':today', $today, PDO::PARAM_INT);
+    $stmt->execute();
+    return $stmt->fetchALL(PDO::FETCH_ASSOC);
+}
+
 function insertReseave($user_id, $departure_time, $destination_time, $departure_area_id, $departure_postal_code,$departure_adress, $destination_area_id, $destination_postal_code, $destination_adress, $waypoint_1_area_id, $waypoint_1_postal_code, $waypoint_1_adress, $waypoint_2_area_id, $waypoint_2_postal_code, $waypoint_2_adress)
 {
     $dbh = connectDb();
     $sql = <<<EOM
         INSERT INTO
+            reseaves
             (user_id, departure_time, destination_time, departure_area_id, departure_postal_code, departure_adress, destination_area_id, destination_postal_code, destination_adress, waypoint_1_area_id, waypoint_1_postal_code, waypoint_1_adress, waypoint_2_area_id, waypoint_2_postal_code, waypoint_2_adress)
         VALUE
             (:user_id, :departure_time, :destination_time, :departure_area_id, :departure_postal_code, :departure_adress, :destination_area_id, :destination_postal_code, :destination_adress, :waypoint_1_area_id, :waypoint_1_postal_code, :waypoint_1_adress, :waypoint_2_area_id, :waypoint_2_postal_code, :waypoint_2_adress)
@@ -625,4 +681,132 @@ function insertReseave($user_id, $departure_time, $destination_time, $departure_
     $stmt->bindParam(':waypoint_2_postal_code',$waypoint_2_postal_code, PDO::PARAM_STR);
     $stmt->bindParam(':waypoint_2_adress',$waypoint_2_adress, PDO::PARAM_STR);
     $stmt->execute();
+}
+function timeCalculationAtReseave($departure_area_id, $destination_area_id, $waypoint_1_area_id, $waypoint_2_area_id)
+{
+    if ($waypoint_2_area_id) {
+        $calc = timeCalculationByAreaId($departure_area_id, $waypoint_1_area_id) + 10 
+        + timeCalculationByAreaId($waypoint_1_area_id, $waypoint_2_area_id) + 10 
+        + timeCalculationByAreaId($waypoint_2_area_id, $destination_area_id);
+    } elseif ($waypoint_1_area_id) {
+        $calc = timeCalculationByAreaId($departure_area_id, $waypoint_1_area_id) +10 
+        + timeCalculationByAreaId($waypoint_1_area_id, $destination_area_id);
+    } else {
+        $calc = timeCalculationByAreaId($departure_area_id, $destination_area_id);
+    }
+
+    return $calc;
+}
+
+function timeCalculationByAreaId($area_1_id, $area_2_id) {
+    $area_1_code = findAreaCode($area_1_id);
+    $area_2_code = findAreaCode($area_2_id);
+
+    $distance = floor(sqrt(abs(pow($area_1_code, 2) - pow($area_2_code, 2))));
+
+    return $distance * 3 + 5;
+}
+
+function checkReseave($reseave, $i, $j)
+{
+    // $reseave 一例
+    // $reseave = [
+    //     'user_id' => 1,
+    //     'departure_area_id' => 0,
+    //     'departure_postal_code' => '0000000',
+    //     'departure_adress' => 'asdfasdf',
+    //     'destination_area_id' => 0,
+    //     'destination_postal_code' => '0000000',
+    //     'destination_adress' => 'asdfasdf',
+    //     'waypoint_1_area_id' => 0,
+    //     'waypoint_1_postal_code' => '0000000',
+    //     'waypoint_1_adress' => 'asdfasdf',
+    //     'waypoint_2_area_id' => 0,
+    //     'waypoint_2_postal_code' => '0000000',
+    //     'waypoint_2_adress' => 'asdfasdf',
+    //     'time' => 60
+    // ];
+
+    $flg = false;
+    $reseave['time'] = timeCalculationAtReseave($reseave['departure_area_id'], $reseave['destination_area_id'], $reseave['waypoint_1_area_id'], $reseave['waypoint_2_area_id']);
+    $departure_time = date('Y-M-D H:I', strtotime('+' . $i . 'day ' . (($j / 2) + 6) . ':' . (($j % 2) * 30)));
+
+    $before_reseave_check = beforeReseaveCheck($reseave, $departure_time);
+    $after_reseave_check = afterReseaveCheck($reseave, $departure_time);
+    
+    if ($before_reseave_check && $after_reseave_check) {
+        $flg = true;
+    }
+    return $flg;
+}
+
+// function findDriverList()
+// {
+//     $dbh = connectDb();
+//     $sql = <<<EOM
+//         SELECT
+//             *
+//         FROM
+//             drivers
+//     EOM;
+//     $stmt = $dbh->prepare($sql);
+//     $stmt->execute();
+//     return $stmt->fetchALL(PDO::FETCH_ASSOC);
+// }
+
+function beforeReseaveCheck($reseave, $departure_time)
+{
+    $flg = true;
+
+    $dbh = connectDb();
+    $sql = <<<EOM
+        SELECT
+            MAX(destination_time)
+        FROM
+            reseave
+        WHERE
+            destination_time < :departure_time
+    EOM;
+
+    $stmt = $dbh->prepare($sql);
+    $stmt ->bindParam(':departure_time', $$departure_time, PDO::PARAM_STR);
+    $stmt->execute();
+    
+    $beforReseave =  $stmt->fetch(PDO::FETCH_ASSOC);
+    
+    $calc = timeCalculationByAreaId($beforReseave['destination_area_id'], $reseave['departure_area_id']);
+    $check = $departure_time - $beforReseave['destination_time'] - $calc;
+    
+    if ($check < 0) {
+        $flg = false;
+    }
+    return $flg;
+}
+function afterReseaveCheck($reseave, $departure_time)
+{
+    $flg = true;
+    $destination_time = $departure_time + $reseave['time'];
+
+    $dbh = connectDb();
+    $sql = <<<EOM
+        SELECT
+            MIN(departure_time)
+        FROM
+            reseave
+        WHERE
+            departure_time > :destination_time
+    EOM;
+    $stmt = $dbh->prepare($sql);
+    $stmt ->bindParam(':destination_time', $destination_time, PDO::PARAM_STR);
+    $stmt->execute();
+
+    $afterReseave = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        $calc = timeCalculationByAreaId($afterReseave['departure_area_id'], $reseave['destination_area_id']);
+    $check = $afterReseave['destination_time'] - $departure_time - $calc;
+    
+    if ($check < 0) {
+        $flg = false;
+    }
+    return $flg;
 }

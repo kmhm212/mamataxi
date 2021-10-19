@@ -788,4 +788,85 @@ footer nav {
 /* footer部分終了
 ---------------------- */
 
-/* -------- 共通部分終了 ---------- */
+/* 予約(css元ネタはホットペッパービューティ)
+---------------------- */
+
+.insertReseave section {
+    max-width: 90%;
+    padding: 15px;
+    margin: auto;
+}
+.innerTable {
+    border: solid #BFB9B0;
+    border-spacing: 0;
+    border-width: 0 1px 1px 1px;
+    box-sizing: border-box;
+    width: 100%;
+}
+.monthCell {
+    border-top: 1px solid #BFB9B0;
+    box-sizing: border-box;
+    height: 38px;
+    text-align: center;
+}
+.weekPaging {
+    background-color: #FFFFFF;
+    border: solid #BFB9B0;
+    border-width: 1px 0 2px 0;
+    font-weight: bold;
+    text-align: center;
+    width: 87px;
+}
+.weekPaging > .arrowPagingWeekROff, .weekPaging > .arrowPagingWeekLOff {
+    color: #CCCCCC;
+}
+.innerTable > thead > tr:first-child > th + th {
+    border-left: 1px solid #BFB9B0;
+}
+.dayCell {
+    border: solid #BFB9B0;
+    border-width: 1px 0 2px 1px;
+    box-sizing: border-box;
+    height: 45px;
+    text-align: center;
+    width: 42px;
+}
+.moreInnerTable {
+    border: 0 none;
+    border-collapse: collapse;
+    width: 100%;
+    border-spacing: 0;
+    padding: 0;
+    margin: 0;
+    height: 230px;
+}
+.timeTableLeft .timeCell {
+    text-align: right;
+    padding-right: 15px;
+}
+.timeCell .timeSharpLine {
+    font-size: .95rem;
+}
+.timeCell {
+    background-color: #F6F6F6;
+    border-top: 1px solid #BFB9B0;
+    font-size: .90rem;
+    height: 38px;
+    line-height: 35px;
+    width: 100%;
+}
+.innerTable > tbody > tr > th + th {
+    border-left: 1px solid #BFB9B0;
+}
+.innerCol, .telCol, .closeCol {
+    box-sizing: border-box;
+    text-align: center;
+    width: 42px;
+}
+.closeCell, .openCell, .telCell {
+    border: solid #BFB9B0;
+    border-width: 1px 0 0 0;
+    height: 38px;
+    text-align: center;
+    width: auto;
+}
