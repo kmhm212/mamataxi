@@ -11,14 +11,34 @@ if(empty($_SESSION['id'])) {
 }
 
 $id = $_SESSION['id'];
-$time = timeCalculation($departure_area_id, $destination_area_id, $waypoint_1_area_id, $waypoint_2_area_id);
 
-
-$reseave_date = [
-    'user_id' => $_SESSION['user_id'],
-    'departure_area_id' => $_SESSION['departure_area_id'],
-    'destination_area_id' => $_SESSION['destination_area_id'],
-    'time' => $_SESSION['time']
+$reseave = [
+    'user_id' => 0,
+    'departure_area_id' => 1,
+    'departure_postal_code' => $_SESSION['departure_postal_code'],
+    'departure_adress' => $_SESSION['departure_adress'],
+    'destination_area_id' => 2,
+    'destination_postal_code' => $_SESSION['destination_postal_code'],
+    'destination_adress' => $_SESSION['destination_adress'],
+    'waypoint_1_area_id' => $_SESSION['waypoint_1_area_id'],
+    'waypoint_1_postal_code' => $_SESSION['waypoint_1_postal_code'],
+    'waypoint_1_adress' => $_SESSION['waypoint_1_adress'],
+    'waypoint_2_area_id' => $_SESSION['waypoint_2_area_id'],
+    'waypoint_2_postal_code' => $_SESSION['waypoint_2_postal_code'],
+    'waypoint_2_adress' => $_SESSION['waypoint_2_adress']
+    // 'user_id' => $_SESSION['user_id'],
+    // 'departure_area_id' => $_SESSION['departure_area_id'],
+    // 'departure_postal_code' => $_SESSION['departure_postal_code'],
+    // 'departure_adress' => $_SESSION['departure_adress'],
+    // 'destination_area_id' => $_SESSION['destination_area_id'],
+    // 'destination_postal_code' => $_SESSION['destination_postal_code'],
+    // 'destination_adress' => $_SESSION['destination_adress'],
+    // 'waypoint_1_area_id' => $_SESSION['waypoint_1_area_id'],
+    // 'waypoint_1_postal_code' => $_SESSION['waypoint_1_postal_code'],
+    // 'waypoint_1_adress' => $_SESSION['waypoint_1_adress'],
+    // 'waypoint_2_area_id' => $_SESSION['waypoint_2_area_id'],
+    // 'waypoint_2_postal_code' => $_SESSION['waypoint_2_postal_code'],
+    // 'waypoint_2_adress' => $_SESSION['waypoint_2_adress']
 ];
 $arr_week = ['月', '火', '水', '木', '金', '土', '日'];
 
@@ -42,11 +62,18 @@ $arr_week = ['月', '火', '水', '木', '金', '土', '日'];
                 <table class="innerTable nowrap jscInnerTable" cellpadding="0" cellspacing="0">
                     <thead>
                         <tr>
-                            <th rowspan="2" class="weekPaging"><span class="arrowPagingWeekLOff">前の一週間</span></th>
+                            <th rowspan="2" class="weekPaging">
+                                <a href="" title="前の一週間" class="arrowPagingWeekR jscCalNavi">
+                                    <span class="">前の一週間</span>
+                                </a>
+                            </th>
                             <th colspan="14" class="monthCell">
                                 <?= date('Y年m月') ?>
                             </th>
-                            <th rowspan="2" class="weekPaging"><a href="https://beauty.hotpepper.jp/CSP/bt/reserve/salonSchedule?storeId=H000345870&amp;week=1" title="次の一週間" class="arrowPagingWeekR jscCalNavi">次の一週間</a>
+                            <th rowspan="2" class="weekPaging">
+                                <a href="" title="次の一週間" class="arrowPagingWeekR jscCalNavi">
+                                    <span>次の一週間</span>
+                                </a>
                         </th>
                     </tr>
                         <tr class="dayCellContainer">
@@ -75,12 +102,18 @@ $arr_week = ['月', '火', '水', '木', '金', '土', '日'];
                                     <table cellpadding="0" cellspacing="0" class="moreInnerTable">
                                         <tbody>
                                             <?php for ($j=0; $j < 28; $j++): ?>
-                                                <?php $check = checkReseave($reseave_date, $i, $j) ?>
                                                 <tr>
+                                                <?php $check = checkReseave($reseave, $i, $j) ?>
+                                                <?php if($check): ?>
+                                                    <td class="closeCell timeSharpLine isDisabled">
+                                                        <a href=""><span class="icnClose">○</span></a>
+                                                    </td>
+                                                <?php else: ?>
                                                     <td class="closeCell timeSharpLine isDisabled">
                                                         <a href=""><span class="icnClose">×</span></a>
                                                     </td>
-                                                </tr>
+                                                <?php endif ?>
+                                            </tr>
                                             <?php endfor ?>
                                             <!-- <tr>
                                                 <td class="openCell timeSharpLine isDisabled">

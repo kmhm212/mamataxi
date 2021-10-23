@@ -704,7 +704,7 @@ function timeCalculationByAreaId($area_1_id, $area_2_id) {
 
     $distance = floor(sqrt(abs(pow($area_1_code, 2) - pow($area_2_code, 2))));
 
-    return $distance * 3 + 5;
+    return $distance * 4 + 5;
 }
 
 function checkReseave($reseave, $i, $j)
@@ -724,12 +724,11 @@ function checkReseave($reseave, $i, $j)
     //     'waypoint_2_area_id' => 0,
     //     'waypoint_2_postal_code' => '0000000',
     //     'waypoint_2_adress' => 'asdfasdf',
-    //     'time' => 60
     // ];
 
     $flg = false;
     $reseave['time'] = timeCalculationAtReseave($reseave['departure_area_id'], $reseave['destination_area_id'], $reseave['waypoint_1_area_id'], $reseave['waypoint_2_area_id']);
-    $departure_time = date('Y-M-D H:I', strtotime('+' . $i . 'day ' . (($j / 2) + 6) . ':' . (($j % 2) * 30)));
+    $departure_time = date('Y/m/d/H:i', strtotime('+' . $i . 'day ' . floor(($j / 2) + 6) . ':' . (($j % 2) * 30)));
 
     $before_reseave_check = beforeReseaveCheck($reseave, $departure_time);
     $after_reseave_check = afterReseaveCheck($reseave, $departure_time);
@@ -740,61 +739,57 @@ function checkReseave($reseave, $i, $j)
     return $flg;
 }
 
-// function findDriverList()
-// {
-//     $dbh = connectDb();
-//     $sql = <<<EOM
-//         SELECT
-//             *
-//         FROM
-//             drivers
-//     EOM;
-//     $stmt = $dbh->prepare($sql);
-//     $stmt->execute();
-//     return $stmt->fetchALL(PDO::FETCH_ASSOC);
-// }
-
 function beforeReseaveCheck($reseave, $departure_time)
 {
-    $flg = true;
+    $flg = false;
 
     $dbh = connectDb();
     $sql = <<<EOM
         SELECT
-            MAX(destination_time)
+            *
         FROM
-            reseave
+            reseaves
         WHERE
-            destination_time < :departure_time
+            departure_time <= :departure_time
+        ORDER BY
+            departure_time
+        DESC;
     EOM;
-
     $stmt = $dbh->prepare($sql);
-    $stmt ->bindParam(':departure_time', $$departure_time, PDO::PARAM_STR);
+    $stmt ->bindParam(':departure_time', $departure_time, PDO::PARAM_STR);
     $stmt->execute();
-    
-    $beforReseave =  $stmt->fetch(PDO::FETCH_ASSOC);
+
+    $beforReseave = $stmt->fetch(PDO::FETCH_ASSOC);
     
     $calc = timeCalculationByAreaId($beforReseave['destination_area_id'], $reseave['departure_area_id']);
-    $check = $departure_time - $beforReseave['destination_time'] - $calc;
     
-    if ($check < 0) {
-        $flg = false;
+    $time1 = strtotime($departure_time);
+    $time2 = strtotime($beforReseave['destination_time']);
+    $check = $time1 - $time2 - ($calc * 60);
+
+    
+    if ($check > 0) {
+        $flg = true;
     }
     return $flg;
 }
+
 function afterReseaveCheck($reseave, $departure_time)
 {
     $flg = true;
-    $destination_time = $departure_time + $reseave['time'];
+    $destination_time = date('Y/m/d h:i', strtotime('+' . $reseave['time'] . 'min', strtotime( $departure_time)));
 
     $dbh = connectDb();
     $sql = <<<EOM
         SELECT
-            MIN(departure_time)
+            *
         FROM
-            reseave
+            reseaves
         WHERE
-            departure_time > :destination_time
+            departure_time >= :destination_time
+        ORDER BY
+            departure_time
+        ASC;
     EOM;
     $stmt = $dbh->prepare($sql);
     $stmt ->bindParam(':destination_time', $destination_time, PDO::PARAM_STR);
@@ -802,9 +797,12 @@ function afterReseaveCheck($reseave, $departure_time)
 
     $afterReseave = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        $calc = timeCalculationByAreaId($afterReseave['departure_area_id'], $reseave['destination_area_id']);
-    $check = $afterReseave['destination_time'] - $departure_time - $calc;
+    $calc = timeCalculationByAreaId($afterReseave['departure_area_id'], $reseave['destination_area_id']);
     
+    $time1 = strtotime($afterReseave['departure_time']);
+    $time2 = strtotime($destination_time);
+    $check = $time1 - $time2 - ($calc * 60);
+
     if ($check < 0) {
         $flg = false;
     }
