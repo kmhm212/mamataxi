@@ -707,7 +707,7 @@ function timeCalculationByAreaId($area_1_id, $area_2_id) {
     return $distance * 4 + 5;
 }
 
-function checkReseave($reseave, $i, $j)
+function checkReseave($reseave, $departure_time)
 {
     // $reseave 一例
     // $reseave = [
@@ -728,12 +728,13 @@ function checkReseave($reseave, $i, $j)
 
     $flg = false;
     $reseave['time'] = timeCalculationAtReseave($reseave['departure_area_id'], $reseave['destination_area_id'], $reseave['waypoint_1_area_id'], $reseave['waypoint_2_area_id']);
-    $departure_time = date('Y/m/d/H:i', strtotime('+' . $i . 'day ' . floor(($j / 2) + 6) . ':' . (($j % 2) * 30)));
+    
+    $dif = strtotime($departure_time) - strtotime(date('Y/m/d/H:i')) - 1800;
 
     $before_reseave_check = beforeReseaveCheck($reseave, $departure_time);
     $after_reseave_check = afterReseaveCheck($reseave, $departure_time);
     
-    if ($before_reseave_check && $after_reseave_check) {
+    if ($before_reseave_check && $after_reseave_check && $dif > 0) {
         $flg = true;
     }
     return $flg;

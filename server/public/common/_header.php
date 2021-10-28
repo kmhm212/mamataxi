@@ -2,7 +2,7 @@
 
 require_once __DIR__ . '/../../common/functions.php';
 $next_reseave = findReseaveByUserId($_SESSION['id'])[0]['departure_time'];
-$arr_week = ['月', '火', '水', '木', '金', '土', '日'];
+$arr_week = ['日', '月', '火', '水', '木', '金', '土'];
 
 ?>
 
