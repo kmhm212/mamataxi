@@ -81,7 +81,7 @@ CREATE TABLE adresses (
     user_id INT NOT NULL,
     name VARCHAR(50) NOT NULL,
     tel VARCHAR(11),
-    postal_code CHAR(11) NOT NULL,
+    postal_code CHAR(8) NOT NULL,
     adress VARCHAR(255) NOT NULL,
     area_id INT NOT NULL,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
@@ -119,17 +119,17 @@ CREATE TABLE reseaves (
     departure_time DATETIME NOT NULL,
     destination_time DATETIME NOT NULL,
     departure_area_id INT NOT NULL,
-    departure_postal_code CHAR(7) NOT NULL,
+    departure_postal_code CHAR(8) NOT NULL,
     departure_adress VARCHAR(255) NOT NULL,
     destination_area_id INT NOT NULL,
-    destination_postal_code CHAR(7) NOT NULL,
+    destination_postal_code CHAR(8) NOT NULL,
     destination_adress VARCHAR(255) NOT NULL,
-    waypoint_1_area_id INT NOT NULL,
-    waypoint_1_postal_code CHAR(7) NOT NULL,
-    waypoint_1_adress VARCHAR(255) NOT NULL,
-    waypoint_2_area_id INT NOT NULL,
-    waypoint_2_postal_code CHAR(7) NOT NULL,
-    waypoint_2_adress VARCHAR(255) NOT NULL,
+    waypoint_1_area_id INT,
+    waypoint_1_postal_code CHAR(8),
+    waypoint_1_adress VARCHAR(255),
+    waypoint_2_area_id INT,
+    waypoint_2_postal_code CHAR(8),
+    waypoint_2_adress VARCHAR(255),
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE RESTRICT ON UPDATE RESTRICT,
@@ -283,7 +283,7 @@ INSERT INTO
     reseaves
     (user_id, departure_time, destination_time, departure_area_id, departure_postal_code, departure_adress, destination_area_id, destination_postal_code, destination_adress, waypoint_1_area_id, waypoint_1_postal_code, waypoint_1_adress, waypoint_2_area_id, waypoint_2_postal_code, waypoint_2_adress)
 VALUE
-    (1, '1980/01/01/00:00', '1980/01/01/00:00', 1, '0000000', 'test', 1, '0000000', 'test', 1, '0000000', 'test', 1, '0000000', 'test'),
-    (1, '2100/01/01/00:00', '2100/01/01/00:00', 1, '0000000', 'test', 1, '0000000', 'test', 1, '0000000', 'test', 1, '0000000', 'test');
+    (1, '1980/01/01/00:00', '1980/01/01/00:00', 1, '000-0000', 'test', 1, '000-0000', 'test', 1, '000-0000', 'test', 1, '000-0000', 'test'),
+    (1, '2100/01/01/00:00', '2100/01/01/00:00', 1, '000-0000', 'test', 1, '000-0000', 'test', 1, '000-0000', 'test', 1, '000-0000', 'test');
 
 ```

@@ -14,10 +14,10 @@ $id = $_SESSION['id'];
 
 $reseave = [
     'user_id' => $id,
-    'departure_area_id' => 1,
+    'departure_area_id' => $_SESSION['departure_area_id'],
     'departure_postal_code' => $_SESSION['departure_postal_code'],
     'departure_adress' => $_SESSION['departure_adress'],
-    'destination_area_id' => 2,
+    'destination_area_id' => $_SESSION['destination_area_id'],
     'destination_postal_code' => $_SESSION['destination_postal_code'],
     'destination_adress' => $_SESSION['destination_adress'],
     'waypoint_1_area_id' => $_SESSION['waypoint_1_area_id'],
@@ -26,21 +26,7 @@ $reseave = [
     'waypoint_2_area_id' => $_SESSION['waypoint_2_area_id'],
     'waypoint_2_postal_code' => $_SESSION['waypoint_2_postal_code'],
     'waypoint_2_adress' => $_SESSION['waypoint_2_adress']
-    // 'user_id' => $_SESSION['user_id'],
-    // 'departure_area_id' => $_SESSION['departure_area_id'],
-    // 'departure_postal_code' => $_SESSION['departure_postal_code'],
-    // 'departure_adress' => $_SESSION['departure_adress'],
-    // 'destination_area_id' => $_SESSION['destination_area_id'],
-    // 'destination_postal_code' => $_SESSION['destination_postal_code'],
-    // 'destination_adress' => $_SESSION['destination_adress'],
-    // 'waypoint_1_area_id' => $_SESSION['waypoint_1_area_id'],
-    // 'waypoint_1_postal_code' => $_SESSION['waypoint_1_postal_code'],
-    // 'waypoint_1_adress' => $_SESSION['waypoint_1_adress'],
-    // 'waypoint_2_area_id' => $_SESSION['waypoint_2_area_id'],
-    // 'waypoint_2_postal_code' => $_SESSION['waypoint_2_postal_code'],
-    // 'waypoint_2_adress' => $_SESSION['waypoint_2_adress']
 ];
-$arr_week = ['日','月', '火', '水', '木', '金', '土'];
 $page = intval(filter_input(INPUT_GET, 'p'));
 
 ?>
@@ -108,7 +94,7 @@ $page = intval(filter_input(INPUT_GET, 'p'));
                                                 <?php $check = checkReseave($reseave, $departure_time) ?>
                                                 <?php if($check): ?>
                                                     <td class="closeCell timeSharpLine isDisabled">
-                                                        <a href="insertReseave.php?date=<?= $departure_time ?>"><span class="icnClose">○</span></a>
+                                                        <a href="insertReseaveComplate.php?date=<?= $departure_time ?>"><span class="icnClose">○</span></a>
                                                     </td>
                                                 <?php else: ?>
                                                     <td class="closeCell timeSharpLine isDisabled">

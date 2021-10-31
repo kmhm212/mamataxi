@@ -1,6 +1,11 @@
 <?php
 
+require_once __DIR__ . '/../common/functions.php';
+
 session_start();
+$id = $_SESSION['id'];
+$news = findNews();
+$thoughts = findThoughts();
 
 ?>
 
@@ -16,9 +21,6 @@ session_start();
     <section class="slider">
         <ul>
             <li><a href=""><img src="images/slide3.jpg" alt="イメージ1"></a></li>
-            <!-- <li><a href=""><img src="images/slide2.jpg" alt="イメージ2"></a></li>
-            <li><a href=""><img src="images/slide3.jpg" alt="イメージ3"></a></li>
-            <li><a href=""><img src="images/slide4.jpg" alt="イメージ4"></a></li> -->
         </ul>
     </section>
     <section class="indexNews indexParts">
@@ -26,14 +28,21 @@ session_start();
             <h2 class="indexH2">おしらせ</h2>
             <div class="indexContents">
                 <ul>
-                    <li><a href=""><span class="newsDate">◯月◯日</span><span> - </span> asdfasdfas</a></li>
-                    <li><a href=""><span class="newsDate">◯月◯日</span><span> - </span> asdfasdfas</a></li>
-                    <li><a href=""><span class="newsDate">◯月◯日</span><span> - </span> asdfasdfas</a></li>
-                    <li><a href=""><span class="newsDate">◯月◯日</span><span> - </span> asdfasdfas</a></li>
-                    <li><a href=""><span class="newsDate">◯月◯日</span><span> - </span> asdfasdfas</a></li>
-                    <li><a href=""><span class="newsDate">◯月◯日</span><span> - </span> asdfasdfas</a></li>
-                    <li><a href=""><span class="newsDate">◯月◯日</span><span> - </span> asdfasdfas</a></li>
-                    <li><a href=""><span class="newsDate">◯月◯日</span><span> - </span> asdfasdfas</a></li>
+                    <?php $i = 0 ?>
+                    <?php foreach ($news as $n): ?>
+                        <?php if ($i > 8){break;} ?>
+                        <li>
+                            <a href="newsPage.php?id=<?= h($n['id']) ?>">
+                                <span class="newsDate">
+                                    <?= h(date('m月d日', strtotime($n['created_at']))) ?>
+                                </span>
+                                <span> - </span>
+                                <?= h(LimitStrlen($n['title'], 32)) ?>
+                            </a>
+                        </li>
+                        <?php $i++ ?>
+                    <?php endforeach ?>
+                    <?php unset($i) ?>
                 </ul>
                 <a href="" class="more">もっと見る</a>
             </div>
@@ -63,26 +72,20 @@ session_start();
             <h2 class="indexH2">新着感想</h2>
             <div class="indexContents">
                 <ul>
-                    <li><a href="">
-                        <span class="thoughtH2">見出し見出し</span> - <span class="thoughtUserName"> name </span>
-                        <p>asdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdf...</p>
-                    </a></li>
-                    <li><a href="">
-                        <span class="thoughtH2">見出し見出し</span> - <span class="thoughtUserName"> name </span>
-                        <p>asdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdf...</p>
-                    </a></li>
-                    <li><a href="">
-                        <span class="thoughtH2">見出し見出し</span> - <span class="thoughtUserName"> name </span>
-                        <p>asdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdf...</p>
-                    </a></li>
-                    <li><a href="">
-                        <span class="thoughtH2">見出し見出し</span> - <span class="thoughtUserName"> name </span>
-                        <p>asdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdf...</p>
-                    </a></li>
-                    <li><a href="">
-                        <span class="thoughtH2">見出し見出し</span> - <span class="thoughtUserName"> name </span>
-                        <p>asdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdf...</p>
-                    </a></li>
+                    <?php $i = 0 ?>
+                    <?php foreach ($thoughts as $thought): ?>
+                        <?php if ($i > 6){break;} ?>
+                        <li>
+                            <a href="thoughtPage.php?id=<?= h($thought['id']) ?>">
+                                <span class="thoughtH2"><?= h(LimitStrlen($thought['title'], 32)) ?></span> - 
+                                <span class="thoughtUserName"><?= h(findUserById($thought['user_id'])['name']) ?></span>
+                                <span> - </span>
+                                <p><?= h(LimitStrlen($thought['body'], 150)) ?></p>
+                            </a>
+                        </li>
+                        <?php $i++ ?>
+                    <?php endforeach ?>
+                    <?php unset($i) ?>
                 </ul>
                 <a href="" class="more">もっと見る</a>
             </div>

@@ -137,6 +137,22 @@ function findUserByTel($tel)
     $stmt->execute();
     return $stmt->fetch(PDO::FETCH_ASSOC);
 }
+function findUserById($id)
+{
+    $dbh = connectDb();
+    $sql = <<<EOM
+        SELECT
+            *
+        FROM
+            users
+        WHERE
+            id = :id;
+    EOM;
+    $stmt = $dbh->prepare($sql);
+    $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+    $stmt->execute();
+    return $stmt->fetch(PDO::FETCH_ASSOC);
+}
 
 // 子どもいるか判断
 
@@ -634,7 +650,7 @@ function findReseaveById($id)
 
 function findReseaveByUserId($user_id)
 {
-    $today = new DateTime(date('y-m-d h:i:s'));
+    $now = date('Y/m/d/H:i');
 
     $dbh = connectDb();
     $sql = <<<EOM
@@ -645,43 +661,188 @@ function findReseaveByUserId($user_id)
         WHERE
             user_id = :user_id
         AND
-            departure_time > :today;
+            departure_time >= :now
+        ORDER BY
+            departure_time
+        ASC;
     EOM;
     $stmt = $dbh->prepare($sql);
     $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
-    $stmt->bindParam(':today', $today, PDO::PARAM_INT);
+    $stmt->bindParam(':now', $now, PDO::PARAM_STR);
     $stmt->execute();
     return $stmt->fetchALL(PDO::FETCH_ASSOC);
 }
 
-function insertReseave($user_id, $departure_time, $destination_time, $departure_area_id, $departure_postal_code,$departure_adress, $destination_area_id, $destination_postal_code, $destination_adress, $waypoint_1_area_id, $waypoint_1_postal_code, $waypoint_1_adress, $waypoint_2_area_id, $waypoint_2_postal_code, $waypoint_2_adress)
+function insertReseaveValidate($departure_postal_code_1, $departure_postal_code_2, $departure_adress, $destination_postal_code_1, $destination_postal_code_2, $destination_adress, $waypoint_1_postal_code_1, $waypoint_1_postal_code_2, $waypoint_1_adress, $waypoint_2_postal_code_1, $waypoint_2_postal_code_2, $waypoint_2_adress, $child_id)
 {
+    $errors = [];
+
+    if (empty($departure_postal_code_1 || $departure_postal_code_2)) {
+        $errors[] = MSG_DEPARTURE_POSTAL_CODE_REQUIRED;
+    } elseif (strlen($departure_postal_code_1) != 3 ||strlen($departure_postal_code_2) != 4) {
+        $errors[] = MSG_DEPARTURE_POSTAL_CODE_LIMIT;
+    }
+    if (empty($departure_adress)) {
+        $errors[] = MSG_DEPARTURE_ADRESS_REQUIRED;
+    }
+
+    if (empty($destination_postal_code_1 || $destination_postal_code_2)) {
+        $errors[] = MSG_DESTINATION_POSTAL_CODE_REQUIRED;
+    } elseif (strlen($destination_postal_code_1) != 3 ||strlen($destination_postal_code_2) != 4) {
+        $errors[] = MSG_DESTINATION_POSTAL_CODE_LIMIT;
+    }
+    if (empty($destination_adress)) {
+        $errors[] = MSG_DESTINATION_ADRESS_REQUIRED;
+    }
+
+    if ($waypoint_1_postal_code_1 || $waypoint_1_postal_code_2 || $waypoint_1_adress) {
+        if (empty($waypoint_1_postal_code_1 || $waypoint_1_postal_code_2)) {
+            $errors[] = MSG_WAYPOINT_1_POSTAL_CODE_REQUIRED;
+        } elseif (strlen($waypoint_1_postal_code_1) != 3 ||strlen($waypoint_1_postal_code_2) != 4) {
+            $errors[] = MSG_WAYPOINT_1_POSTAL_CODE_LIMIT;
+        }
+        if (empty($waypoint_1_adress)) {
+            $errors[] = MSG_WAYPOINT_1_ADRESS_REQUIRED;
+        }
+    }
+    
+    if ($waypoint_2_postal_code_1 || $waypoint_2_postal_code_2 || $waypoint_2_adress) {
+        if ($waypoint_1_postal_code_1 || $waypoint_1_postal_code_2 || $waypoint_1_adress) {
+            if (empty($waypoint_2_postal_code_1 || $waypoint_2_postal_code_2)) {
+                $errors[] = MSG_WAYPOINT_2_POSTAL_CODE_REQUIRED;
+            } elseif (strlen($waypoint_2_postal_code_1) != 3 ||strlen($waypoint_2_postal_code_2) != 4) {
+                $errors[] = MSG_WAYPOINT_2_POSTAL_CODE_LIMIT;
+            }
+            if (empty($waypoint_2_adress)) {
+                $errors[] = MSG_WAYPOINT_2_ADRESS_REQUIRED;
+            }
+        } else {
+            $errors[] = MSG_WAYPOINT_1_REQUIRED;
+        }
+    }
+    if (empty($child_id)) {
+        $errors[] = MSG_CHILD_REQUIRED;
+    }
+
+    return $errors;
+}
+
+function insertReseave($reseave)
+{
+    $null = null;
     $dbh = connectDb();
     $sql = <<<EOM
         INSERT INTO
             reseaves
             (user_id, departure_time, destination_time, departure_area_id, departure_postal_code, departure_adress, destination_area_id, destination_postal_code, destination_adress, waypoint_1_area_id, waypoint_1_postal_code, waypoint_1_adress, waypoint_2_area_id, waypoint_2_postal_code, waypoint_2_adress)
-        VALUE
+        VALUES
             (:user_id, :departure_time, :destination_time, :departure_area_id, :departure_postal_code, :departure_adress, :destination_area_id, :destination_postal_code, :destination_adress, :waypoint_1_area_id, :waypoint_1_postal_code, :waypoint_1_adress, :waypoint_2_area_id, :waypoint_2_postal_code, :waypoint_2_adress)
     EOM;
     $stmt = $dbh->prepare($sql);
-    $stmt->bindParam(':user_id',$user_id, PDO::PARAM_INT);
-    $stmt->bindParam(':departure_time',$departure_time, PDO::PARAM_STR);
-    $stmt->bindParam(':destination_time',$destination_time, PDO::PARAM_STR);
-    $stmt->bindParam(':departure_area_id',$departure_area_id, PDO::PARAM_INT);
-    $stmt->bindParam(':departure_postal_code',$departure_postal_code, PDO::PARAM_STR);
-    $stmt->bindParam(':departure_adress',$departure_adress, PDO::PARAM_STR);
-    $stmt->bindParam(':destination_area_id',$destination_area_id, PDO::PARAM_INT);
-    $stmt->bindParam(':destination_postal_code',$destination_postal_code, PDO::PARAM_STR);
-    $stmt->bindParam(':destination_adress',$destination_adress, PDO::PARAM_STR);
-    $stmt->bindParam(':waypoint_1_area_id',$waypoint_1_area_id, PDO::PARAM_INT);
-    $stmt->bindParam(':waypoint_1_postal_code',$waypoint_1_postal_code, PDO::PARAM_STR);
-    $stmt->bindParam(':waypoint_1_adress',$waypoint_1_adress, PDO::PARAM_STR);
-    $stmt->bindParam(':waypoint_2_area_id',$waypoint_2_area_id, PDO::PARAM_INT);
-    $stmt->bindParam(':waypoint_2_postal_code',$waypoint_2_postal_code, PDO::PARAM_STR);
-    $stmt->bindParam(':waypoint_2_adress',$waypoint_2_adress, PDO::PARAM_STR);
+    $stmt->bindParam(':user_id',$reseave['user_id'], PDO::PARAM_INT);
+    $stmt->bindParam(':departure_time',$reseave['departure_time'], PDO::PARAM_STR);
+    $stmt->bindParam(':destination_time',$reseave['destination_time'], PDO::PARAM_STR);
+    $stmt->bindParam(':departure_area_id',$reseave['departure_area_id'], PDO::PARAM_INT);
+    $stmt->bindParam(':departure_postal_code',$reseave['departure_postal_code'], PDO::PARAM_STR);
+    $stmt->bindParam(':departure_adress',$reseave['departure_adress'], PDO::PARAM_STR);
+    $stmt->bindParam(':destination_area_id',$reseave['destination_area_id'], PDO::PARAM_INT);
+    $stmt->bindParam(':destination_postal_code',$reseave['destination_postal_code'], PDO::PARAM_STR);
+    $stmt->bindParam(':destination_adress',$reseave['destination_adress'], PDO::PARAM_STR);
+
+    if ($reseave['waypoint_1_postal_area_id']) {
+        $stmt->bindParam(':waypoint_1_area_id',$reseave['waypoint_1_area_id'], PDO::PARAM_INT);
+        $stmt->bindParam(':waypoint_1_postal_code',$reseave['waypoint_1_postal_code'], PDO::PARAM_STR);
+        $stmt->bindParam(':waypoint_1_adress',$reseave['waypoint_1_adress'], PDO::PARAM_STR);
+    } else {
+        $stmt->bindParam(':waypoint_1_area_id',$null, PDO::PARAM_NULL);
+        $stmt->bindParam(':waypoint_1_postal_code',$null, PDO::PARAM_NULL);
+        $stmt->bindParam(':waypoint_1_adress',$null, PDO::PARAM_NULL);
+    }
+    if ($reseave['waypoint_2_area_id']) {
+        $stmt->bindParam(':waypoint_2_area_id',$reseave['waypoint_2_area_id'], PDO::PARAM_INT);
+        $stmt->bindParam(':waypoint_2_postal_code',$reseave['waypoint_2_postal_code'], PDO::PARAM_STR);
+        $stmt->bindParam(':waypoint_2_adress',$reseave['waypoint_2_adress'], PDO::PARAM_STR);
+    } else {
+        $stmt->bindParam(':waypoint_2_area_id',$null, PDO::PARAM_NULL);
+        $stmt->bindParam(':waypoint_2_postal_code',$null, PDO::PARAM_NULL);
+        $stmt->bindParam(':waypoint_2_adress',$null, PDO::PARAM_NULL);
+    }
     $stmt->execute();
 }
+
+function insertReseaveChildren($reseave)
+{
+    $reseave_id = findNewReseaveId($reseave);
+
+    foreach ($reseave['child_id'] as $child_id) {
+        $dbh = connectDb();
+        $sql = <<<EOM
+            INSERT INTO
+            reserve_children
+            (reseave_id,child_id)
+            VALUES
+            (:reseave_id,:child_id);
+        EOM;
+        $stmt = $dbh->prepare($sql);
+        $stmt->bindParam(':reseave_id',$reseave_id, PDO::PARAM_INT);
+        $stmt->bindParam(':child_id',$child_id, PDO::PARAM_INT);
+        $stmt->execute();
+    }
+}
+
+function findNewReseaveId($reseave)
+{
+    $now = date('Y/m/d/H:i:s');
+
+    $dbh = connectDb();
+    $sql = <<<EOM
+        SELECT
+            *
+        FROM
+            reseaves
+        WHERE
+            user_id = :user_id
+        AND
+            created_at <= :now
+        ORDER BY
+            created_at
+        DESC;
+    EOM;
+    $stmt = $dbh->prepare($sql);
+    $stmt->bindParam(':user_id',$reseave['user_id'], PDO::PARAM_INT);
+    $stmt->bindParam(':now',$now, PDO::PARAM_STR);
+    $stmt->execute();
+
+    return $stmt->fetch(PDO::FETCH_ASSOC)['id'];
+}
+
+function findAfterReseaveIdByUserId($user_id)
+{
+    $now = date('Y/m/d/H:i');
+
+    $dbh = connectDb();
+    $sql = <<<EOM
+        SELECT
+            *
+        FROM
+            reseaves
+        WHERE
+            user_id = :user_id
+        AND
+            destination_time <= :now
+        ORDER BY
+            destination_time
+        DESC;
+    EOM;
+    $stmt = $dbh->prepare($sql);
+    $stmt->bindParam(':user_id',$user_id, PDO::PARAM_INT);
+    $stmt->bindParam(':now',$now, PDO::PARAM_STR);
+    $stmt->execute();
+
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+}
+
 function timeCalculationAtReseave($departure_area_id, $destination_area_id, $waypoint_1_area_id, $waypoint_2_area_id)
 {
     if ($waypoint_2_area_id) {
@@ -808,4 +969,133 @@ function afterReseaveCheck($reseave, $departure_time)
         $flg = false;
     }
     return $flg;
+}
+
+// お知らせ
+
+function findNews()
+{
+    $dbh = connectDb();
+    $sql = <<<EOM
+        SELECT
+            *
+        FROM
+            news
+        ORDER BY
+            created_at
+        DESC;
+    EOM;
+    $stmt = $dbh->prepare($sql);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+function findNewsById($id)
+{
+    $dbh = connectDb();
+    $sql = <<<EOM
+        SELECT
+            *
+        FROM
+            news
+        WHERE
+            id = :id;
+    EOM;
+    $stmt = $dbh->prepare($sql);
+    $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+    $stmt->execute();
+    return $stmt->fetch(PDO::FETCH_ASSOC);
+}
+function insertNews()
+{
+    $dbh = connectDb();
+    $sql = <<<EOM
+        INSERT INTO
+            news
+            (category_id, title, body)
+        VALUES
+            (:category_id, :title, :body)
+    EOM;
+    $stmt = $dbh->prepare($sql);
+    $stmt->bindParam(':category_id', $category_id, PDO::PARAM_INT);
+    $stmt->bindParam(':title', $title, PDO::PARAM_STR);
+    $stmt->bindParam(':body', $body, PDO::PARAM_STR);
+    $stmt->execute();
+}
+
+// 
+
+function findThoughts()
+{
+    $dbh = connectDb();
+    $sql = <<<EOM
+        SELECT
+            *
+        FROM
+            thoughts
+        ORDER BY
+            created_at
+        DESC;
+    EOM;
+    $stmt = $dbh->prepare($sql);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+function findThoughtsById($id)
+{
+    $dbh = connectDb();
+    $sql = <<<EOM
+        SELECT
+            *
+        FROM
+            thoughts
+        WHERE
+            id = :id;
+    EOM;
+    $stmt = $dbh->prepare($sql);
+    $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+    $stmt->execute();
+    return $stmt->fetch(PDO::FETCH_ASSOC);
+}
+function findThoughtsByUserId($user_id)
+{
+    $dbh = connectDb();
+    $sql = <<<EOM
+        SELECT
+            *
+        FROM
+            thoughts
+        WHERE
+            user_id = :user_id;
+        ORDER BY
+            created_at
+        DESC;
+    EOM;
+    $stmt = $dbh->prepare($sql);
+    $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+    $stmt->execute();
+    return $stmt->fetchALL(PDO::FETCH_ASSOC);
+}
+function insertThoughts($user_id, $reseave_id, $title, $body)
+{
+    $dbh = connectDb();
+    $sql = <<<EOM
+        INSERT INTO
+            thoughts
+            (user_id, reserve_id, title, body, goods)
+        VALUES
+            (:user_id, :reserve_id, :title, :body, 0)
+    EOM;
+    $stmt = $dbh->prepare($sql);
+    $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+    $stmt->bindParam(':reseave_id', $reseave_id, PDO::PARAM_INT);
+    $stmt->bindParam(':title', $title, PDO::PARAM_STR);
+    $stmt->bindParam(':body', $body, PDO::PARAM_STR);
+    $stmt->execute();
+}
+function LimitStrlen($str, $limit)
+{
+    if (mb_strlen($str) > $limit) { 
+    $str = mb_substr($str, 0, $limit) . '･･･' ;
+    }
+    return $str;
 }
