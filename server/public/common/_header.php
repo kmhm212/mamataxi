@@ -2,6 +2,10 @@
 
 require_once __DIR__ . '/../../common/functions.php';
 
+$id = $_SESSION['id'];
+$next_reseave = findReseaveByUserId($id)[0]['departure_time'];
+$arr_week = ['日', '月', '火', '水', '木', '金', '土'];
+
 ?>
 
 <header>
@@ -35,9 +39,14 @@ require_once __DIR__ . '/../../common/functions.php';
                         </div>
                         <!-- 予約ありor新規予約 -->
                         <div class="navUnderMessage nextReserve toNRMtext">
-                            <a href="../mypage/mypage.php" class="nRMtext">2021年9月5日(日) 12:00~</a>
-                            <!-- 新規予約 -->
-                            <!-- <a href="">予約する</a> -->
+                            <?php if ($next_reseave): ?>
+                                <a href="../reseave/reseavePage.php" class="nRMtext">
+                                <?= h(date('Y年m月d日', strtotime($next_reseave))) ?>
+                                (<?= h($arr_week[date('w', strtotime($next_reseave))]) ?>) 
+                                <?= h(date('H:i~', strtotime($next_reseave))) ?></a>
+                            <?php else : ?>
+                                <a href="../reseave/insertReseave.php" class="nRMtext">予約はまだありません</a>
+                            <?php endif ?>
                         </div>
                     <?php else : ?>
                         <div class="navTopMessage toNRMtext">

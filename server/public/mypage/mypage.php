@@ -63,8 +63,8 @@ if ($pp == 'insertcomp') {
                 <div class="mypageContent">
                     <h3 class="subPageH3">予約情報</h3>
                     <ul>
-                        <li><a href="">予約の確認</a></li>
-                        <li><a href="">予約の登録</a></li>
+                        <li><a href="../reseave/reseavePage.php">予約の確認</a></li>
+                        <li><a href="../reseave/insertReseave.php">予約の登録</a></li>
                     </ul>
                 </div>
                 <div class="mypageContent">

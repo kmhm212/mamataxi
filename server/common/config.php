@@ -27,6 +27,20 @@ define('MSG_TEL_LIMIT', '電話番号は10桁もしくは11桁で入力くださ
 define('MSG_POSTAL_CODE_REQUIRED', '郵便番号が未入力です');
 define('MSG_POSTAL_CODE_LIMIT', '郵便番号は3桁と4桁で入力ください');
 define('MSG_ADRESS_REQUIRED', '住所が未入力です');
+define('MSG_DEPARTURE_POSTAL_CODE_REQUIRED', '出発地の郵便番号が未入力です');
+define('MSG_DEPARTURE_POSTAL_CODE_LIMIT', '出発地の郵便番号は3桁と4桁で入力ください');
+define('MSG_DEPARTURE_ADRESS_REQUIRED', '出発地の住所が未入力です');
+define('MSG_DESTINATION_POSTAL_CODE_REQUIRED', '目的地の郵便番号が未入力です');
+define('MSG_DESTINATION_POSTAL_CODE_LIMIT', '目的地の郵便番号は3桁と4桁で入力ください');
+define('MSG_DESTINATION_ADRESS_REQUIRED', '目的地の住所が未入力です');
+define('MSG_WAYPOINT_1_POSTAL_CODE_REQUIRED', '経由地①の郵便番号が未入力です');
+define('MSG_WAYPOINT_1_POSTAL_CODE_LIMIT', '経由地①の郵便番号は3桁と4桁で入力ください');
+define('MSG_WAYPOINT_1_ADRESS_REQUIRED', '経由地①の住所が未入力です');
+define('MSG_WAYPOINT_2_POSTAL_CODE_REQUIRED', '経由地②の郵便番号が未入力です');
+define('MSG_WAYPOINT_2_POSTAL_CODE_LIMIT', '経由地②の郵便番号は3桁と4桁で入力ください');
+define('MSG_WAYPOINT_2_ADRESS_REQUIRED', '経由地②の住所が未入力です');
+define('MSG_WAYPOINT_1_REQUIRED', '経由地①が未入力です');
+define('MSG_CHILD_REQUIRED', 'お子様を一人以上選択してください');
 define('MSG_NO_CHANGE', '情報が変更されていません');
 
 
