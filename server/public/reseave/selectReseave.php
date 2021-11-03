@@ -28,7 +28,6 @@ $reseave = [
     'waypoint_2_adress' => $_SESSION['waypoint_2_adress']
 ];
 $page = intval(filter_input(INPUT_GET, 'p'));
-
 ?>
 
 <!DOCTYPE html>
@@ -41,7 +40,7 @@ $page = intval(filter_input(INPUT_GET, 'p'));
 <?php include_once __DIR__ . '/../common/_header.php' ?>
 
 <article>
-    <div class="insertReseave wrapper">
+    <div class="selectReseave wrapper">
         <h2 class="subPageH2">予約情報</h2>
         <section>
             <h3 class="subPageH3">以下から予約を登録</h3>
@@ -90,7 +89,7 @@ $page = intval(filter_input(INPUT_GET, 'p'));
                                         <tbody>
                                             <?php for ($j=0; $j < 28; $j++): ?>
                                                 <tr>
-                                                <?php $departure_time = date('Y/m/d/H:i', strtotime('+' . ($i + $page * 7) . 'day ' . floor(($j / 2) + 6) . ':' . (($j % 2) * 30))) ?>
+                                                <?php $departure_time = date('Y/m/d/', strtotime('+' . ($i + $page * 7) . 'day ')) . date('H:i', strtotime(floor(($j / 2) + 6) . ':' . (($j % 2) * 30))) ?>
                                                 <?php $check = checkReseave($reseave, $departure_time) ?>
                                                 <?php if($check): ?>
                                                     <td class="closeCell timeSharpLine isDisabled">

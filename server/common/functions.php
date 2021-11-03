@@ -331,7 +331,7 @@ function insertAdress($user_id, $name, $tel, $postal_code, $adress)
     $stmt->bindParam(':name', $name, PDO::PARAM_STR);
     $stmt->bindParam(':tel', $tel, PDO::PARAM_STR);
     $stmt->bindParam(':postal_code', $postal_code, PDO::PARAM_STR);
-    $stmt->bindParam(':area_id', $area['id'], PDO::PARAM_INT);
+    $stmt->bindParam(':area_id', $area, PDO::PARAM_INT);
     $stmt->bindParam(':adress', $adress, PDO::PARAM_STR);
     $stmt->execute();
 }
@@ -341,7 +341,7 @@ function findAreaId($postal_code)
     $dbh = connectDb();
     $sql = <<<EOM
         SELECT
-            id
+            *
         FROM
             areas
         WHERE
@@ -350,7 +350,7 @@ function findAreaId($postal_code)
     $stmt = $dbh->prepare($sql);
     $stmt->bindParam(':area_code', $area_code, PDO::PARAM_INT);
     $stmt->execute();
-    return $stmt->fetch(PDO::FETCH_ASSOC);
+    return $stmt->fetch(PDO::FETCH_ASSOC)['id'];
 }
 function changeAdressValidate($id, $name, $tel, $postal_code1, $postal_code2, $adress)
 {
@@ -404,7 +404,7 @@ function updateAdress($id, $name, $tel, $postal_code, $adress)
     $stmt->bindParam(':name', $name, PDO::PARAM_STR);
     $stmt->bindParam(':tel', $tel, PDO::PARAM_STR);
     $stmt->bindParam(':postal_code', $postal_code, PDO::PARAM_STR);
-    $stmt->bindParam(':area_id', $area['id'], PDO::PARAM_INT);
+    $stmt->bindParam(':area_id', $area, PDO::PARAM_INT);
     $stmt->bindParam(':adress', $adress, PDO::PARAM_STR);
     $stmt->execute();
 }
@@ -487,6 +487,22 @@ function findAreaCode($id) {
     $stmt->bindParam(':id', $id, PDO::PARAM_INT);
     $stmt->execute();
     return $stmt->fetch(PDO::FETCH_ASSOC)['area_code'];
+}
+function findArea($id) {
+    $dbh = connectDb();
+    $sql = <<<EOM
+        SELECT
+            *
+        FROM
+            areas
+        WHERE
+            id = :id;
+    EOM;
+    $stmt = $dbh->prepare($sql);
+
+    $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+    $stmt->execute();
+    return $stmt->fetch(PDO::FETCH_ASSOC);
 }
 
 // 子ども
@@ -749,7 +765,7 @@ function insertReseave($reseave)
     $stmt->bindParam(':destination_postal_code',$reseave['destination_postal_code'], PDO::PARAM_STR);
     $stmt->bindParam(':destination_adress',$reseave['destination_adress'], PDO::PARAM_STR);
 
-    if ($reseave['waypoint_1_postal_area_id']) {
+    if ($reseave['waypoint_1_area_id']) {
         $stmt->bindParam(':waypoint_1_area_id',$reseave['waypoint_1_area_id'], PDO::PARAM_INT);
         $stmt->bindParam(':waypoint_1_postal_code',$reseave['waypoint_1_postal_code'], PDO::PARAM_STR);
         $stmt->bindParam(':waypoint_1_adress',$reseave['waypoint_1_adress'], PDO::PARAM_STR);
@@ -816,9 +832,35 @@ function findNewReseaveId($reseave)
     return $stmt->fetch(PDO::FETCH_ASSOC)['id'];
 }
 
-function findAfterReseaveIdByUserId($user_id)
+function findBeforReseaveIdByUserId($user_id)
 {
     $now = date('Y/m/d/H:i');
+
+    $dbh = connectDb();
+    $sql = <<<EOM
+        SELECT
+            *
+        FROM
+            reseaves
+        WHERE
+            user_id = :user_id
+        AND
+            departure_time >= :now
+        ORDER BY
+            departure_time
+        ASC;
+    EOM;
+    $stmt = $dbh->prepare($sql);
+    $stmt->bindParam(':user_id',$user_id, PDO::PARAM_INT);
+    $stmt->bindParam(':now',$now, PDO::PARAM_STR);
+    $stmt->execute();
+
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+}
+function findAfterReseaveIdByUserId($user_id)
+{
+    $now = date('Y/m/d/H:i:s');
 
     $dbh = connectDb();
     $sql = <<<EOM
@@ -835,8 +877,8 @@ function findAfterReseaveIdByUserId($user_id)
         DESC;
     EOM;
     $stmt = $dbh->prepare($sql);
-    $stmt->bindParam(':user_id',$user_id, PDO::PARAM_INT);
-    $stmt->bindParam(':now',$now, PDO::PARAM_STR);
+    $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+    $stmt->bindParam(':now', $now, PDO::PARAM_STR);
     $stmt->execute();
 
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -860,12 +902,12 @@ function timeCalculationAtReseave($departure_area_id, $destination_area_id, $way
 }
 
 function timeCalculationByAreaId($area_1_id, $area_2_id) {
-    $area_1_code = findAreaCode($area_1_id);
-    $area_2_code = findAreaCode($area_2_id);
+    $area_1 = findArea($area_1_id);
+    $area_2 = findArea($area_2_id);
 
-    $distance = floor(sqrt(abs(pow($area_1_code, 2) - pow($area_2_code, 2))));
+    $distance = floor(sqrt(abs(pow(($area_1['x_axis'] - $area_2['x_axis']), 2) + pow(($area_1['y_axis'] - $area_2['y_axis']), 2))));
 
-    return $distance * 4 + 5;
+    return $distance * 10 + 5;
 }
 
 function checkReseave($reseave, $departure_time)
@@ -939,7 +981,7 @@ function beforeReseaveCheck($reseave, $departure_time)
 function afterReseaveCheck($reseave, $departure_time)
 {
     $flg = true;
-    $destination_time = date('Y/m/d h:i', strtotime('+' . $reseave['time'] . 'min', strtotime( $departure_time)));
+    $destination_time = date('Y/m/d/H:i', strtotime($departure_time . '+ ' . $reseave['time'] . ' minute'));
 
     $dbh = connectDb();
     $sql = <<<EOM
@@ -969,6 +1011,35 @@ function afterReseaveCheck($reseave, $departure_time)
         $flg = false;
     }
     return $flg;
+}
+function deleteReseave($id)
+{
+    deleteReseaveChildrenByReseaveId($id);
+
+    $dbh = connectDb();
+    $sql = <<<EOM
+        DELETE FROM
+            reseaves
+        WHERE
+            id = :id;
+    EOM;
+    $stmt = $dbh->prepare($sql);
+    $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+    $stmt->execute();
+}
+
+function deleteReseaveChildrenByReseaveId($reseave_id)
+{
+    $dbh = connectDb();
+    $sql = <<<EOM
+        DELETE FROM
+            reserve_children
+        WHERE
+            reseave_id = :reseave_id;
+    EOM;
+    $stmt = $dbh->prepare($sql);
+    $stmt->bindParam(':reseave_id', $reseave_id, PDO::PARAM_INT);
+    $stmt->execute();
 }
 
 // お知らせ
@@ -1098,4 +1169,48 @@ function LimitStrlen($str, $limit)
     $str = mb_substr($str, 0, $limit) . '･･･' ;
     }
     return $str;
+}
+function findThoughtByReseaveId($reseave_id)
+{
+    $dbh = connectDb();
+    $sql = <<<EOM
+        SELECT
+            *
+        FROM
+            thoughts
+        WHERE
+            reseave_id = :reseave_id;
+    EOM;
+    $stmt = $dbh->prepare($sql);
+    $stmt->bindParam(':reseave_id', $reseave_id, PDO::PARAM_INT);
+    $stmt->execute();
+    return $stmt->fetchALL(PDO::FETCH_ASSOC);
+}
+function deleteThought($id)
+{
+    $dbh = connectDb();
+    $sql = <<<EOM
+        DELETE FROM
+            thoughts
+        WHERE
+            id = :id;
+    EOM;
+    $stmt = $dbh->prepare($sql);
+    $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+    $stmt->execute();
+}
+function insertThoughtValidate($reseaveId, $title, $body)
+{
+    $errors = [];
+    $check = findThoughtByReseaveId($reseaveId);
+    if ($check) {
+        $errors[] = 'すでに感想は投稿されています。マイページより編集ください。';
+    }
+    if (empty($title)) {
+        $errors[] = 'タイトルを入力してください';
+    };
+    if (empty($body)) {
+        $errors[] = '本文を入力してください';
+    };
+    return $errors;
 }

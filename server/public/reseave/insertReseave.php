@@ -12,7 +12,7 @@ if(empty($_SESSION['id'])) {
 
 $id = $_SESSION['id'];
 $children = findChildrenByUserId($id);
-
+$adresses = findAdressByUserId($id);
 
 if (filter_input(INPUT_GET, 'pp') == 'fromHome') {
     $departure_postal_code_1 = $_SESSION['departure_postal_code_1'];
@@ -80,6 +80,35 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $waypoint_2_adress = filter_input(INPUT_POST, 'waypoint_2_adress');
     $child_id = filter_input(INPUT_POST, 'child_id', FILTER_DEFAULT,FILTER_REQUIRE_ARRAY);
 
+    $select_departure = filter_input(INPUT_POST, 'select_departure');
+    if ($select_departure != 'new') {
+        $select_adress = findAdressByAdressId($select_departure);
+        $departure_postal_code_1 = substr($select_adress['postal_code'], 0, 3);
+        $departure_postal_code_2 = substr($select_adress['postal_code'], 4);
+        $departure_adress = $select_adress['adress'];
+    }
+    $select_destination = filter_input(INPUT_POST, 'select_destination');
+    if ($select_destination != 'new') {
+        $select_adress = findAdressByAdressId($select_destination);
+        $destination_postal_code_1 = substr($select_adress['postal_code'], 0, 3);
+        $destination_postal_code_2 = substr($select_adress['postal_code'], 4);
+        $destination_adress = $select_adress['adress'];
+    }
+    $select_waypoint_1 = filter_input(INPUT_POST, 'select_waypoint_1');
+    if ($select_waypoint_1 != 'new') {
+        $select_adress = findAdressByAdressId($select_waypoint_1);
+        $waypoint_1_postal_code_1 = substr($select_adress['postal_code'], 0, 3);
+        $waypoint_1_postal_code_2 = substr($select_adress['postal_code'], 4);
+        $waypoint_1_adress = $select_adress['adress'];
+    }
+    $select_waypoint_2 = filter_input(INPUT_POST, 'select_waypoint_2');
+    if ($select_waypoint_2 != 'new') {
+        $select_adress = findAdressByAdressId($select_waypoint_2);
+        $waypoint_2_postal_code_1 = substr($select_adress['postal_code'], 0, 3);
+        $waypoint_2_postal_code_2 = substr($select_adress['postal_code'], 4);
+        $waypoint_2_adress = $select_adress['adress'];
+    }
+
     $errors = insertReseaveValidate($departure_postal_code_1, $departure_postal_code_2, $departure_adress, $destination_postal_code_1, $destination_postal_code_2, $destination_adress, $waypoint_1_postal_code_1, $waypoint_1_postal_code_2, $waypoint_1_adress, $waypoint_2_postal_code_1, $waypoint_2_postal_code_2, $waypoint_2_adress, $child_id);
 
     if (empty($errors)) {
@@ -128,7 +157,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <?php include_once __DIR__ . '/../common/_header.php' ?>
 
 <article>
-    <div class="formParts changeAdress wrapper">
+    <div class="formParts insertReseave wrapper">
         <h2 class="subPageH2">予約登録</h2>
         <section>
             <h3 class="subPageH3">予約情報を登録</h3>
@@ -144,50 +173,78 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 <div class="reseaveAdress adress1">
                     <h4>出発地</h4>
-                    <label for="departure_postal_code_1" class="label1">郵便番号</label>
-                    <div class="input1">
+                    <label for="select_departure label1">登録済み住所から選ぶ</label>
+                    <select name="select_departure" id="select_departure" class="input1">
+                        <option value="new" selected>-</option>
+                        <?php foreach($adresses as $adress): ?>
+                            <option value="<?= h($adress['id'])?>"><?= h($adress['name'])?></option> 
+                        <?php endforeach ?>
+                    </select>
+                    <label for="departure_postal_code_1" class="label2">郵便番号</label>
+                    <div class="input2">
                         <input type="number" name="departure_postal_code_1" id="departure_postal_code_1" placeholder="000" value="<?= h($departure_postal_code_1) ?>">
                         <span>-</span>
                         <input type="number" name="departure_postal_code_2" id="departure_postal_code_2" placeholder="0000" value="<?= h($departure_postal_code_2) ?>">
                     </div>
-                    <label for="departure_adress" class="label2">住所</label>
-                    <input type="text" name="departure_adress" id="departure_adress" class="input2" placeholder="〇〇県〇〇市〇〇町1−2−3 〇〇マンション101号室" value="<?= h($departure_adress) ?>">
+                    <label for="departure_adress" class="label3">住所</label>
+                    <input type="text" name="departure_adress" id="departure_adress" class="input3" placeholder="〇〇県〇〇市〇〇町1−2−3 〇〇マンション101号室" value="<?= h($departure_adress) ?>">
                 </div>
                 
                 <div class="reseaveAdress adress2">
                     <h4>目的地</h4>
-                    <label for="destination_postal_code_1" class="label1">郵便番号</label>
-                    <div class="input1">
+                    <label for="select_destination label1">登録済み住所から選ぶ</label>
+                    <select name="select_destination" id="select_destination" class="input1">
+                        <option value="new" selected>-</option>
+                        <?php foreach($adresses as $adress): ?>
+                            <option value="<?= h($adress['id'])?>"><?= h($adress['name'])?></option> 
+                        <?php endforeach ?>
+                    </select>
+                    <label for="destination_postal_code_1" class="label2">郵便番号</label>
+                    <div class="input2">
                         <input type="number" name="destination_postal_code_1" id="destination_postal_code_1" placeholder="000" value="<?= h($destination_postal_code_1) ?>">
                         <span>-</span>
                         <input type="number" name="destination_postal_code_2" id="destination_postal_code_2" placeholder="0000" value="<?= h($destination_postal_code_2) ?>">
                     </div>
-                    <label for="destination_adress" class="label2">住所</label>
-                    <input type="text" name="destination_adress" id="destination_adress" class="input2" placeholder="〇〇県〇〇市〇〇町1−2−3 〇〇マンション101号室" value="<?= h($destination_adress) ?>">
+                    <label for="destination_adress" class="label3">住所</label>
+                    <input type="text" name="destination_adress" id="destination_adress" class="input3" placeholder="〇〇県〇〇市〇〇町1−2−3 〇〇マンション101号室" value="<?= h($destination_adress) ?>">
                 </div>
 
                 <div class="reseaveAdress adress3">
                     <h4>経由地①</h4>
-                    <label for="waypoint_1_postal_code_1" class="label1">郵便番号</label>
-                    <div class="input1">
+                    <label for="select_waypoint_1 label1">登録済み住所から選ぶ</label>
+                    <select name="select_waypoint_1" id="select_waypoint_1" class="input1">
+                        <option value="new" selected>-</option>
+                        <?php foreach($adresses as $adress): ?>
+                            <option value="<?= h($adress['id'])?>"><?= h($adress['name'])?></option> 
+                        <?php endforeach ?>
+                    </select>
+                    <label for="waypoint_1_postal_code_1" class="label2">郵便番号</label>
+                    <div class="input2">
                         <input type="number" name="waypoint_1_postal_code_1" id="waypoint_1_postal_code_1" placeholder="000" value="<?= h($waypoint_1_postal_code_1) ?>">
                         <span>-</span>
                         <input type="number" name="waypoint_1_postal_code_2" id="waypoint_1_postal_code_2" placeholder="0000" value="<?= h($waypoint_1_postal_code_2) ?>">
                     </div>
-                    <label for="waypoint_1_adress" class="label2">住所</label>
-                    <input type="text" name="waypoint_1_adress" id="waypoint_1_adress" class="input2" placeholder="〇〇県〇〇市〇〇町1−2−3 〇〇マンション101号室" value="<?= h($waypoint_1_adress) ?>">
+                    <label for="waypoint_1_adress" class="label3">住所</label>
+                    <input type="text" name="waypoint_1_adress" id="waypoint_1_adress" class="input3" placeholder="〇〇県〇〇市〇〇町1−2−3 〇〇マンション101号室" value="<?= h($waypoint_1_adress) ?>">
                 </div>
 
                 <div class="reseaveAdress adress4">
                     <h4>経由地②</h4>
-                    <label for="waypoint_2_postal_code_1" class="label1">郵便番号</label>
-                    <div class="input1">
+                    <label for="select_waypoint_2 label1">登録済み住所から選ぶ</label>
+                    <select name="select_waypoint_2" id="select_waypoint_2" class="input1">
+                        <option value="new" selected>-</option>
+                        <?php foreach($adresses as $adress): ?>
+                            <option value="<?= h($adress['id'])?>"><?= h($adress['name'])?></option> 
+                        <?php endforeach ?>
+                    </select>
+                    <label for="waypoint_2_postal_code_1" class="label2">郵便番号</label>
+                    <div class="input2">
                         <input type="number" name="waypoint_2_postal_code_1" id="waypoint_2_postal_code_1" placeholder="000" value="<?= h($waypoint_2_postal_code_1) ?>">
                         <span>-</span>
                         <input type="number" name="waypoint_2_postal_code_2" id="waypoint_2_postal_code_2" placeholder="0000" value="<?= h($waypoint_2_postal_code_2) ?>">
                     </div>
-                    <label for="waypoint_2_adress" class="label2">住所</label>
-                    <input type="text" name="waypoint_2_adress" id="waypoint_2_adress" class="input2" placeholder="〇〇県〇〇市〇〇町1−2−3 〇〇マンション101号室" value="<?= h($waypoint_2_adress) ?>">
+                    <label for="waypoint_2_adress" class="label3">住所</label>
+                    <input type="text" name="waypoint_2_adress" id="waypoint_2_adress" class="input3" placeholder="〇〇県〇〇市〇〇町1−2−3 〇〇マンション101号室" value="<?= h($waypoint_2_adress) ?>">
                 </div>
                 <div class="reseaveChildren">
                     <h4>ご利用のお子様</h4>
@@ -198,7 +255,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         </label>
                     <?php endforeach ?>
                 </div>
-                <input type="submit" value="確認">
+                <input type="submit" value="日時を選択する">
             </form>
         </section>
     </div>

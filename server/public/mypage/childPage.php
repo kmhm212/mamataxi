@@ -51,7 +51,7 @@ $children = findChildrenByUserId($id);
                         </div>
                     </div>
                 <?php endforeach ?>
-                <a href="insertChild.php" class="insertBtn">子ども情報を新規登録</a>
+                <a href="insertChild.php" class="insertBtn  mypageBtn">子ども情報を新規登録</a>
             </div>
         </section>
     </div>

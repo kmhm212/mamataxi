@@ -543,6 +543,10 @@ input[id="postalCode2"] {
     width: 100%;
     margin: auto;
 }
+.myData {
+    margin-bottom: 10px;
+    /* padding-bottom: 20px; */
+}
 
 /* user */
 
@@ -788,8 +792,95 @@ footer nav {
 /* footer部分終了
 ---------------------- */
 
-/* 予約(css元ネタはホットペッパービューティ)
+/* 予約関連
 ---------------------- */
+
+/* 予約入力画面 */
+
+.insertReseave form input[type="submit"]{
+    width: 300px;
+    align-self: center;
+}
+.insertReseave form{
+    display: flex;
+    flex-direction: column;
+}
+.insertReseave form h4{
+    font-size: 1.125rem;
+}
+.reseaveChildren h4{
+    margin-bottom: 10px;
+}
+.insertReseave form .reseaveAdress h4 {
+    grid-area: h4;
+}
+.insertReseave form .reseaveAdress {
+    display: grid;
+    grid-template-areas: 
+    "h4 h4"
+    "label1 input1"
+    "label2 input2"
+    "label3 input3";
+    grid-template-columns: 200px 1fr;
+    row-gap: 10px;
+}
+.reseaveAdress {
+    padding-bottom: 20px;
+    border-bottom: solid #CCC 1px;
+}
+.reseaveAdress select {
+    width: 180px;
+    padding-left: 10px;
+    border-radius: 20px;
+}
+
+/* 予約確認画面 */
+
+.reseavePage {
+    max-width: 800px;
+}
+.reseavePage .checkAdress {
+    display: grid;
+    grid-template-columns: 120px 1fr;
+}
+.reseavePage .button:hover {
+    border-color: #8ADE68;
+}
+.reseavePage .button {
+    background-color: #FFF;
+    border-color: #8D5C4A;
+}
+.reseavePage h4 {
+    font-size: 1.0725rem;
+}
+.reseavePage dt {
+    font-weight: bolder;
+}
+.reseaveDatas {
+    background-color: #EEE;
+    border-radius: 5px;
+    padding: 30px;
+}
+.reseaveData {
+    display: grid;
+    grid-template-columns: 150px 1fr 100px;
+    padding-bottom: 20px;
+    border-bottom: solid #CCC 1px;
+    margin: 20px 0;
+}
+.mypageBtn {
+    display: inline-block;
+    background-color: #FAB2A0;
+    padding: 13px 20px;
+    border-radius: 10px;
+    margin-right: 20px;
+}
+.mypageBtn:hover {
+    background-color: rgba(141, 92, 74, .8);
+    color: #492E23;
+}
+
+/* 予約マルバツ表(css元ネタはホットペッパービューティ) */
 
 .insertReseave section {
     max-width: 90%;
@@ -869,4 +960,75 @@ footer nav {
     height: 38px;
     text-align: center;
     width: auto;
+}
+
+/* 感想
+------------------ */
+
+.thoughtPage {
+    max-width: 800px;
+}
+.thoughtPage .checkAdress {
+    display: grid;
+    grid-template-columns: 120px 1fr;
+}
+.thoughtPage .button:hover {
+    border-color: #8ADE68;
+}
+.thoughtPage .button {
+    background-color: #FFF;
+    border-color: #8D5C4A;
+}
+.thoughtPage h4 {
+    font-size: 1.0725rem;
+}
+.thoughtPage dt {
+    font-weight: bolder;
+}
+.thoughtDatas {
+    background-color: #EEE;
+    border-radius: 5px;
+    padding: 30px;
+}
+.thoughtData {
+    display: grid;
+    padding-bottom: 20px;
+    border-bottom: solid #CCC 1px;
+    margin: 20px 0;
+    grid-template-areas: 
+    "h4 checkAdress thoughtInsert"
+    "thoughtEditDelete thoughtEditDelete thoughtInsert";
+    grid-template-columns: 150px 1fr 130px;
+
+}
+.thoughtDatas h4 {
+    grid-area: h4;
+}
+.thoughtDatas .checkAdress {
+    grid-area: checkAdress;
+}
+.thoughtEditDelete {
+    grid-area: thoughtEditDelete;
+}
+.thoughtInsert {
+    grid-area: thoughtInsert;
+}
+.insertThought form {
+    display: grid;
+    grid-template-areas: 
+    "label1"
+    "input1"
+    "label2"
+    "input2"
+    "label3"
+    "input3"
+    "submit";
+}
+textarea {
+    border: solid #999 2px;
+    padding: 10px;
+}
+.insertThought select {
+    width: 200px;
+    padding: 10px;
 }

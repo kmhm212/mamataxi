@@ -66,7 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <?php include_once __DIR__ . '/../common/_header.php' ?>
 
 <article>
-    <div class="myPageParts adressPage wrapper">
+    <div class="myPageParts insertReseaveComp wrapper">
         <h2 class="subPageH2">予約情報</h2>
         <section>
             <h3 class="subPageH3">予約情報を確認</h3>
