@@ -32,7 +32,7 @@ $thoughts = findThoughts();
                     <?php foreach ($news as $n): ?>
                         <?php if ($i > 8){break;} ?>
                         <li>
-                            <a href="newsPage.php?id=<?= h($n['id']) ?>">
+                            <a href="news/news.php?id=<?= h($n['id']) ?>">
                                 <span class="newsDate">
                                     <?= h(date('m月d日', strtotime($n['created_at']))) ?>
                                 </span>
@@ -44,7 +44,7 @@ $thoughts = findThoughts();
                     <?php endforeach ?>
                     <?php unset($i) ?>
                 </ul>
-                <a href="" class="more">もっと見る</a>
+                <a href="news/newsPage.php" class="more">もっと見る</a>
             </div>
         </div>
     </section>
@@ -74,9 +74,9 @@ $thoughts = findThoughts();
                 <ul>
                     <?php $i = 0 ?>
                     <?php foreach ($thoughts as $thought): ?>
-                        <?php if ($i > 6){break;} ?>
+                        <?php if ($i > 5){break;} ?>
                         <li>
-                            <a href="thoughtPage.php?id=<?= h($thought['id']) ?>">
+                            <a href="thought/thought.php?id=<?= h($thought['id']) ?>">
                                 <span class="thoughtH2"><?= h(LimitStrlen($thought['title'], 32)) ?></span> - 
                                 <span class="thoughtUserName"><?= h(findUserById($thought['user_id'])['name']) ?></span>
                                 <span> - </span>
@@ -87,7 +87,7 @@ $thoughts = findThoughts();
                     <?php endforeach ?>
                     <?php unset($i) ?>
                 </ul>
-                <a href="" class="more">もっと見る</a>
+                <a href="thought/thoughts.php" class="more">もっと見る</a>
             </div>
         </div>
     </section>

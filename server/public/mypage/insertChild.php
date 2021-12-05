@@ -100,11 +100,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <input type="date" name="birth" id="birth" class="input3" placeholder="2021/9/5" value="<?= h($birth) ?>">
                 <label for="adressId" class="label4">保育園住所</label>
                 <select name="adressId" id="adressId" class="input4">
-                    <option value="" selected>-</option>
+                    <!-- <option value="" selected>-</option> -->
+                    <option value="new" selected>新規登録</option>
                     <?php foreach($adresses as $adress): ?>
                         <option value="<?= h($adress['id'])?>"><?= h($adress['name'])?></option> 
                     <?php endforeach ?>
-                    <option value="new">新規登録</option>
                 </select>
                 <label for="adressName" class="label5">登録名</label>
                 <input type="text" name="adressName" id="adressName" class="input5" placeholder="〇〇保育園" value="<?= h($adress_name) ?>">

@@ -45,7 +45,7 @@ $adresses = findAdressByUserId($id);
                         </div>
                     </div>
                 <?php endforeach ?>
-                <a href="insertAdress.php" class="insertAdressBtn">住所を新規登録</a>
+                <a href="insertAdress.php" class="insertAdressBtn mypageBtn">住所を新規登録</a>
             </div>
         </section>
     </div>

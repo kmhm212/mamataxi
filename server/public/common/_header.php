@@ -3,7 +3,7 @@
 require_once __DIR__ . '/../../common/functions.php';
 
 $id = $_SESSION['id'];
-$next_reseave = findReseaveByUserId($id)[0]['departure_time'];
+$next_reserve = findReserveByUserId($id)[0]['departure_time'];
 $arr_week = ['日', '月', '火', '水', '木', '金', '土'];
 
 ?>
@@ -39,13 +39,13 @@ $arr_week = ['日', '月', '火', '水', '木', '金', '土'];
                         </div>
                         <!-- 予約ありor新規予約 -->
                         <div class="navUnderMessage nextReserve toNRMtext">
-                            <?php if ($next_reseave): ?>
-                                <a href="../reseave/reseavePage.php" class="nRMtext">
-                                <?= h(date('Y年m月d日', strtotime($next_reseave))) ?>
-                                (<?= h($arr_week[date('w', strtotime($next_reseave))]) ?>) 
-                                <?= h(date('H:i~', strtotime($next_reseave))) ?></a>
+                            <?php if ($next_reserve): ?>
+                                <a href="../reserve/reservePage.php" class="nRMtext">
+                                <?= h(date('Y年m月d日', strtotime($next_reserve))) ?>
+                                (<?= h($arr_week[date('w', strtotime($next_reserve))]) ?>) 
+                                <?= h(date('H:i~', strtotime($next_reserve))) ?></a>
                             <?php else : ?>
-                                <a href="../reseave/insertReseave.php" class="nRMtext">予約はまだありません</a>
+                                <a href="../reserve/insertReserve.php" class="nRMtext">予約はまだありません</a>
                             <?php endif ?>
                         </div>
                     <?php else : ?>

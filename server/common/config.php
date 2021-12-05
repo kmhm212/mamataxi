@@ -42,6 +42,10 @@ define('MSG_WAYPOINT_2_ADRESS_REQUIRED', '経由地②の住所が未入力で�
 define('MSG_WAYPOINT_1_REQUIRED', '経由地①が未入力です');
 define('MSG_CHILD_REQUIRED', 'お子様を一人以上選択してください');
 define('MSG_NO_CHANGE', '情報が変更されていません');
+define('MSG_ALREADY_THOUGHT', 'そのご予約への感想はすでに投稿されています。マイページより編集ください。');
+define('MSG_TITLE_REQUIRED', 'タイトルを入力してください');
+define('MSG_BODY_REQUIRED', '本文を入力してください');
+
 
 
 // 子ども情報

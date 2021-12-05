@@ -277,12 +277,21 @@ header nav a {
 }
 .indexThoughts li {
     margin-bottom: 8px;
+    padding-bottom: 8px;
+    border-bottom: 2px dotted #CCC;
+}
+.indexThoughts li:nth-last-of-type(1) {
+    border-bottom: none;
 }
 .thoughtH2 {
     font-size: 1.125rem;
+    font-weight: bold;
 }
 .thoughtUserName {
     font-size: .9rem;
+    font-weight: bold;
+
+    
 }
 .indexThoughts li p {
     font-size: .95rem;
@@ -370,6 +379,27 @@ header nav a {
 }
 .input8 {
     grid-area: input8;
+}
+.grid1 {
+    grid-area: grid1;
+}
+.grid2 {
+    grid-area: grid2;
+}
+.grid3 {
+    grid-area: grid3;
+}
+.grid4 {
+    grid-area: grid4;
+}
+.grid5 {
+    grid-area: grid5;
+}
+.grid6 {
+    grid-area: grid6;
+}
+.grid7 {
+    grid-area: grid7;
 }
 
 .formParts section {
@@ -542,6 +572,10 @@ input[id="postalCode2"] {
 .myPageParts {
     width: 100%;
     margin: auto;
+}
+.myData {
+    margin-bottom: 10px;
+    /* padding-bottom: 20px; */
 }
 
 /* user */
@@ -788,10 +822,97 @@ footer nav {
 /* footer部分終了
 ---------------------- */
 
-/* 予約(css元ネタはホットペッパービューティ)
+/* 予約関連
 ---------------------- */
 
-.insertReseave section {
+/* 予約入力画面 */
+
+.insertReserve form input[type="submit"]{
+    width: 300px;
+    align-self: center;
+}
+.insertReserve form{
+    display: flex;
+    flex-direction: column;
+}
+.insertReserve form h4{
+    font-size: 1.125rem;
+}
+.reserveChildren h4{
+    margin-bottom: 10px;
+}
+.insertReserve form .reserveAdress h4 {
+    grid-area: h4;
+}
+.insertReserve form .reserveAdress {
+    display: grid;
+    grid-template-areas: 
+    "h4 h4"
+    "label1 input1"
+    "label2 input2"
+    "label3 input3";
+    grid-template-columns: 200px 1fr;
+    row-gap: 10px;
+}
+.reserveAdress {
+    padding-bottom: 20px;
+    border-bottom: solid #CCC 1px;
+}
+.reserveAdress select {
+    width: 180px;
+    padding-left: 10px;
+    border-radius: 20px;
+}
+
+/* 予約確認画面 */
+
+.reservePage {
+    max-width: 800px;
+}
+.reservePage .checkAdress {
+    display: grid;
+    grid-template-columns: 120px 1fr;
+}
+.reservePage .button:hover {
+    border-color: #8ADE68;
+}
+.reservePage .button {
+    background-color: #FFF;
+    border-color: #8D5C4A;
+}
+.reservePage h4 {
+    font-size: 1.0725rem;
+}
+.reservePage dt {
+    font-weight: bolder;
+}
+.reserveDatas {
+    background-color: #EEE;
+    border-radius: 5px;
+    padding: 30px;
+}
+.reserveData {
+    display: grid;
+    grid-template-columns: 150px 1fr 100px;
+    padding-bottom: 20px;
+    border-bottom: solid #CCC 1px;
+    margin: 20px 0;
+}
+.mypageBtn {
+    display: inline-block;
+    background-color: #FAB2A0;
+    padding: 13px 20px;
+    border-radius: 10px;
+    margin-right: 20px;
+}
+.mypageBtn:hover {
+    background-color: rgba(141, 92, 74, .8);
+    color: #492E23;
+}
+
+/* 予約マルバツ表(css元ネタはホットペッパービューティ) */
+
+.insertReserve section {
     max-width: 90%;
     padding: 15px;
     margin: auto;
@@ -869,4 +990,216 @@ footer nav {
     height: 38px;
     text-align: center;
     width: auto;
+}
+
+/* 感想
+------------------ */
+
+.thoughtPage {
+    max-width: 800px;
+}
+.thoughtPage .checkAdress {
+    display: grid;
+    grid-template-columns: 120px 1fr;
+}
+.thoughtPage .button:hover {
+    border-color: #8ADE68;
+}
+.thoughtPage .button {
+    background-color: #FFF;
+    border-color: #8D5C4A;
+}
+.thoughtPage h4 {
+    font-size: 1.0725rem;
+}
+.thoughtPage dt {
+    font-weight: bolder;
+}
+.thoughtDatas {
+    background-color: #EEE;
+    border-radius: 5px;
+    padding: 30px;
+}
+.thoughtData {
+    display: grid;
+    padding-bottom: 20px;
+    border-bottom: solid #CCC 1px;
+    margin: 20px 0;
+    grid-template-areas: 
+    "h4 checkAdress thoughtInsert"
+    "thoughtEditDelete thoughtEditDelete thoughtInsert";
+    grid-template-columns: 150px 1fr 130px;
+
+}
+.thoughtDatas h4 {
+    grid-area: h4;
+}
+.thoughtDatas .checkAdress {
+    grid-area: checkAdress;
+}
+.thoughtEditDelete {
+    grid-area: thoughtEditDelete;
+    display: grid;
+    margin-top: 20px;
+    grid-template-areas: 
+    "grid1"
+    "grid2"
+    "grid3";
+}
+.thoughtEditDelete > h5 {
+    border-top: solid 1px #8D5C4A;
+    border-bottom: solid 1px #8D5C4A;
+    background-color: #fff;
+    font-size: 1.35rem;
+    padding: 6px 20px;
+    margin-bottom: 30px;
+}
+.thoughtEditDelete > p {
+    border: solid 1px #8D5C4A;
+    background-color: #fff;
+    padding: 15px;
+    margin-bottom: 30px;
+}
+.thoughtInsert {
+    grid-area: thoughtInsert;
+}
+.insertThought form {
+    display: grid;
+    grid-template-areas: 
+    "label1"
+    "input1"
+    "label2"
+    "input2"
+    "label3"
+    "input3"
+    "submit";
+}
+textarea {
+    border: solid #999 2px;
+    padding: 10px;
+}
+.insertThought select {
+    width: 200px;
+    padding: 10px;
+}
+.thoughts {
+
+}
+.thoughtsList {
+    border: solid 2px #DDD;
+    border-radius: 10px;
+    padding: 10px;
+    margin-bottom: 20px;
+}
+.thoughtsList:hover {
+    border: solid 2px #8ADE68;
+}
+.thoughtsList > a {
+    color: #333;
+}
+.thoughtsList > a:hover {
+    color: #999;
+}
+.thoughtsList > a:hover .usedData {
+    border-bottom: 2px solid #ccc;
+}
+.thoughtsList .usedData {
+    border-bottom: 2px solid #999;
+    padding-bottom: 3px;
+    margin-bottom: 5px;
+}
+.thoughtsList h2 {
+    margin-bottom: 5px;
+}
+.body {
+
+}
+.prevAndNext {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+}
+.prevAndNext div {
+    background-color: #8D5C4A;
+}
+.prevAndNext > div > a {
+    display: block;
+    color: #fff;
+}
+.textPage {
+
+}
+.textContent {
+    margin-bottom: 20px;
+}
+.textContentHeader {
+    background-color: #8D5C4A;
+    color: #fff;
+    border-radius: 30px 30px 0 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+}
+.textContent h3 {
+    font-size: 1.75rem;
+}
+.textContent .body {
+    padding: 50px;
+    border: 3px solid #8D5C4A;
+    border-radius: 0 0 30px 30px;
+}
+.textPage .button {
+    background-color: #8D5C4A;
+    color: #fff;
+}
+.textPage .button:hover {
+    background-color: rgba(141, 92, 74, .5);
+}
+
+/* NEWS */
+
+.newsPage ul {
+    margin-bottom: 20px;
+}
+.newsList {
+    padding: 10px;
+    border-bottom: 2px dotted #CCC;
+}
+.newsList:nth-last-of-type(1) {
+    border-bottom: none;
+}
+.newsCategory {
+    display: inline-block;
+    min-width: 90px;
+    border-radius: 20px;
+    padding: 3px 8px;
+    border: #eee solid 3px;
+    text-align: center;
+    font-size: 0.8rem;
+    color: #fff;
+    margin-right: 5px;
+}
+.newsList a:hover .newsCategory {
+    border-color: #8ADE68;
+    opacity: .5;
+}
+.newsList a {
+    display: flex;
+}
+.category1 {
+    background-color: #ED6E6D;
+}
+.category2 {
+    background-color: #2D86CE;
+    font-size: 0.7rem;
+}
+.category3 {
+    background-color: #81C936;
+}
+.category4 {
+    background-color: #B950C5;
+}
+.newsList .data {
+    margin-right: 10px;
 }

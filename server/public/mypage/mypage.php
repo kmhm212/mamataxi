@@ -63,8 +63,8 @@ if ($pp == 'insertcomp') {
                 <div class="mypageContent">
                     <h3 class="subPageH3">予約情報</h3>
                     <ul>
-                        <li><a href="../reseave/reseavePage.php">予約の確認</a></li>
-                        <li><a href="../reseave/insertReseave.php">予約の登録</a></li>
+                        <li><a href="../reserve/reservePage.php">予約の確認</a></li>
+                        <li><a href="../reserve/insertReserve.php">予約の登録</a></li>
                     </ul>
                 </div>
                 <div class="mypageContent">
@@ -77,9 +77,9 @@ if ($pp == 'insertcomp') {
                 <div class="mypageContent">
                     <h3 class="subPageH3">ご感想はこちらから</h3>
                     <ul>
-                        <li><a href="">感想の確認</a></li>
-                        <li><a href="">感想の登録</a></li>
-                        <li><a href="">他の人の感想を見てみる</a></li>
+                        <li><a href="../thought/thoughtPage.php">感想の確認</a></li>
+                        <li><a href="../thought/insertThought.php">感想の登録</a></li>
+                        <li><a href="../thought/thoughts.php">他の人の感想を見てみる</a></li>
                     </ul>
                 </div>
             </div>

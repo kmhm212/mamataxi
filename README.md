@@ -31,7 +31,7 @@ GRANT ALL ON mama_taxi.* to mama_user;
 1. areas
 1. adresses
 1. children
-1. reseaves
+1. reserves
 1. reserve_children
 1. drivers
 1. shifts
@@ -113,7 +113,7 @@ CREATE TABLE children (
 
 --予約情報
 
-CREATE TABLE reseaves (
+CREATE TABLE reserves (
     id INT PRIMARY KEY AUTO_INCREMENT,
     user_id INT NOT NULL,
     departure_time DATETIME NOT NULL,
@@ -146,11 +146,11 @@ CREATE TABLE reseaves (
 
 CREATE TABLE reserve_children (
     id INT PRIMARY KEY AUTO_INCREMENT,
-    reseave_id INT NOT NULL,
+    reserve_id INT NOT NULL,
     child_id INT NOT NULL,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (reseave_id) REFERENCES reseaves (id) ON DELETE RESTRICT ON UPDATE RESTRICT,
+    FOREIGN KEY (reserve_id) REFERENCES reserves (id) ON DELETE RESTRICT ON UPDATE RESTRICT,
     FOREIGN KEY (child_id) REFERENCES children (id) ON DELETE RESTRICT ON UPDATE RESTRICT
 );
 
@@ -194,11 +194,11 @@ CREATE TABLE shifts (
 CREATE TABLE schedules(
     id INT PRIMARY KEY AUTO_INCREMENT,
     driver_id INT NOT NULL,
-    reseave_id INT NOT NULL,
+    reserve_id INT NOT NULL,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (driver_id) REFERENCES drivers (id) ON DELETE RESTRICT ON UPDATE RESTRICT,
-    FOREIGN KEY (reseave_id) REFERENCES reseaves (id) ON DELETE RESTRICT ON UPDATE RESTRICT
+    FOREIGN KEY (reserve_id) REFERENCES reserves (id) ON DELETE RESTRICT ON UPDATE RESTRICT
 );
 
 ```
@@ -209,14 +209,14 @@ CREATE TABLE schedules(
 CREATE TABLE thoughts(
     id INT PRIMARY KEY AUTO_INCREMENT,
     user_id INT NOT NULL,
-    reseave_id INT NOT NULL,
+    reserve_id INT NOT NULL,
     title VARCHAR(255) NOT NULL,
     body TEXT NOT NULL,
     goods INT DEFAULT 0,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE RESTRICT ON UPDATE RESTRICT,
-    FOREIGN KEY (reseave_id) REFERENCES reseaves (id) ON DELETE RESTRICT ON UPDATE RESTRICT
+    FOREIGN KEY (reserve_id) REFERENCES reserves (id) ON DELETE RESTRICT ON UPDATE RESTRICT
 );
 
 ```
@@ -280,7 +280,7 @@ VALUE
 	('test', 'test@test', 'testtest', 1, '1980/01/01', '00000000000');
 
 INSERT INTO
-    reseaves
+    reserves
     (user_id, departure_time, destination_time, departure_area_id, departure_postal_code, departure_adress, destination_area_id, destination_postal_code, destination_adress, waypoint_1_area_id, waypoint_1_postal_code, waypoint_1_adress, waypoint_2_area_id, waypoint_2_postal_code, waypoint_2_adress)
 VALUE
     (1, '1980/01/01/00:00', '1980/01/01/00:00', 1, '000-0000', 'test', 1, '000-0000', 'test', 1, '000-0000', 'test', 1, '000-0000', 'test'),

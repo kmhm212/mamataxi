@@ -12,7 +12,7 @@ if(empty($_SESSION['id'])) {
 
 $id = $_SESSION['id'];
 
-$reseave = [
+$reserve = [
     'user_id' => $id,
     'departure_time' => filter_input(INPUT_GET, 'date'),
     'departure_area_id' => $_SESSION['departure_area_id'],
@@ -30,11 +30,11 @@ $reseave = [
     'child_id' => $_SESSION['child_id']
 ];
 
-$reseave['destination_time'] = date('Y/m/d/H:i', strtotime($reseave['departure_time'] . '+ '. timeCalculationAtReseave($reseave['departure_area_id'], $reseave['destination_area_id'], $reseave['waypoint_1_area_id'], $reseave['waypoint_2_area_id']) . ' minute'));
+$reserve['destination_time'] = date('Y/m/d/H:i', strtotime($reserve['departure_time'] . '+ '. timeCalculationAtReserve($reserve['departure_area_id'], $reserve['destination_area_id'], $reserve['waypoint_1_area_id'], $reserve['waypoint_2_area_id']) . ' minute'));
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    insertReseave($reseave);
-    insertReseaveChildren($reseave);
+    insertReserve($reserve);
+    insertReserveChildren($reserve);
     
     unset($_SESSION['departure_area_id']);
     unset($_SESSION['departure_postal_code']);
@@ -66,7 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <?php include_once __DIR__ . '/../common/_header.php' ?>
 
 <article>
-    <div class="myPageParts adressPage wrapper">
+    <div class="myPageParts insertReserveComp wrapper">
         <h2 class="subPageH2">予約情報</h2>
         <section>
             <h3 class="subPageH3">予約情報を確認</h3>
@@ -74,62 +74,62 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <dl class="">
                     <dt>予約日時</dt>
                     <dd>
-                        <span>:</span><?= h(date('Y年m月d日', strtotime($reseave['departure_time']))) . "（" . h($arr_week[date('w', strtotime($reseave['departure_time']))]) . "）" . h(date(' H:i', strtotime($reseave['departure_time']))) ?>
+                        <span>:</span><?= h(date('Y年m月d日', strtotime($reserve['departure_time']))) . "（" . h($arr_week[date('w', strtotime($reserve['departure_time']))]) . "）" . h(date(' H:i', strtotime($reserve['departure_time']))) ?>
                     </dd>
                 </dl>
                 <dl class="">
                     <dt>出発地(郵便番号)</dt>
                     <dd>
-                        <span>:</span>〒<?= h(substr($reseave['departure_postal_code'], 0, 3) . "-" . substr($reseave['departure_postal_code'], 4)) ?>
+                        <span>:</span>〒<?= h(substr($reserve['departure_postal_code'], 0, 3) . "-" . substr($reserve['departure_postal_code'], 4)) ?>
                     </dd>
                 </dl>
                 <dl class="">
                     <dt>出発地(住所)</dt>
                     <dd>
-                        <span>:</span><?= h($reseave['departure_adress']) ?>
+                        <span>:</span><?= h($reserve['departure_adress']) ?>
                     </dd>
                 </dl>
                 <dl class="">
                     <dt>目的地(郵便番号)</dt>
                     <dd>
-                        <span>:</span>〒<?= h(substr($reseave['destination_postal_code'], 0, 3) . "-" . substr($reseave['destination_postal_code'], 4)) ?>
+                        <span>:</span>〒<?= h(substr($reserve['destination_postal_code'], 0, 3) . "-" . substr($reserve['destination_postal_code'], 4)) ?>
                     </dd>
                 </dl>
                 <dl class="">
                     <dt>目的地(住所)</dt>
                     <dd>
-                        <span>:</span><?= h($reseave['destination_adress']) ?>
+                        <span>:</span><?= h($reserve['destination_adress']) ?>
                     </dd>
                 </dl>
-                <?php if($reseave['waypoint_1_postal_code']): ?>
+                <?php if($reserve['waypoint_1_postal_code']): ?>
                     <dl class="">
                         <dt>経由地①(郵便番号)</dt>
                         <dd>
-                            <span>:</span>〒<?= h(substr($reseave['waypoint_1_postal_code'], 0, 3) . "-" . substr($reseave['waypoint_1_postal_code'], 4)) ?>
+                            <span>:</span>〒<?= h(substr($reserve['waypoint_1_postal_code'], 0, 3) . "-" . substr($reserve['waypoint_1_postal_code'], 4)) ?>
                         </dd>
                     </dl>
                     <dl class="">
                         <dt>経由地①(住所)</dt>
                         <dd>
-                            <span>:</span><?= h($reseave['waypoint_1_adress']) ?>
+                            <span>:</span><?= h($reserve['waypoint_1_adress']) ?>
                         </dd>
                     </dl>
                 <?php endif ?>
-                <?php if($reseave['waypoint_2_postal_code']): ?>
+                <?php if($reserve['waypoint_2_postal_code']): ?>
                     <dl class="">
                         <dt>経由地②(郵便番号)</dt>
                         <dd>
-                            <span>:</span>〒<?= h(substr($reseave['waypoint_2_postal_code'], 0, 3) . "-" . substr($reseave['waypoint_2_postal_code'], 4)) ?>
+                            <span>:</span>〒<?= h(substr($reserve['waypoint_2_postal_code'], 0, 3) . "-" . substr($reserve['waypoint_2_postal_code'], 4)) ?>
                         </dd>
                     </dl>
                     <dl class="">
                         <dt>経由地②(住所)</dt>
                         <dd>
-                            <span>:</span><?= h($reseave['waypoint_2_adress']) ?>
+                            <span>:</span><?= h($reserve['waypoint_2_adress']) ?>
                         </dd>
                     </dl>
                 <?php endif ?>
-                <?php foreach($reseave['child_id'] as $child_id): ?>
+                <?php foreach($reserve['child_id'] as $child_id): ?>
                 <dl class="">
                     <dt>ご利用園児</dt>
                     <dd>
@@ -139,7 +139,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <?php endforeach ?>
                 <form action="" method="post">
                     <input type="submit" value="予約登録">
-                    <a href="selectReseave.php">戻る</a>
+                    <a href="selectReserve.php">戻る</a>
                 </form>
             </div>
         </section>
