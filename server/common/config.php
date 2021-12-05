@@ -26,6 +26,7 @@ define('MSG_TEL_USED', '使用済みの電話番号です');
 define('MSG_TEL_LIMIT', '電話番号は10桁もしくは11桁で入力ください');
 define('MSG_POSTAL_CODE_REQUIRED', '郵便番号が未入力です');
 define('MSG_POSTAL_CODE_LIMIT', '郵便番号は3桁と4桁で入力ください');
+define('MSG_POSTAL_CODE_LEN_CHECK', '郵便番号はハイフン含め8文字で入力ください');
 define('MSG_ADRESS_REQUIRED', '住所が未入力です');
 define('MSG_DEPARTURE_POSTAL_CODE_REQUIRED', '出発地の郵便番号が未入力です');
 define('MSG_DEPARTURE_POSTAL_CODE_LIMIT', '出発地の郵便番号は3桁と4桁で入力ください');

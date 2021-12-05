@@ -182,11 +182,13 @@ header nav a {
 }
 .reserveParts{
     grid-area: indexC;
-    display: grid;
-    grid-template-columns: minmax(60px, 100px) 1fr;
     background-color: #FAF5B9;
     border-radius: 30px;
-    padding: 50px;
+    padding: 50px 100px;
+}
+.reserveArea {
+    display: grid;
+    grid-template-columns: minmax(60px, 100px) 1fr;
 }
 .reserveMSG {
     display: flex;
@@ -197,26 +199,24 @@ header nav a {
 }
 .indexReserveForm form {
     display: grid;
-    grid-template-columns: 2fr 2fr 1fr 80px;
+    grid-template-columns: 1fr 1fr 80px;
     grid-template-areas: 
-    "reserveFormA reserveFormB reserveFormE reserveFormF"
-    "reserveFormC reserveFormD reserveFormD reserveFormD";
+    "reserveFormA reserveFormB reserveFormE"
+    "reserveFormC reserveFormD reserveFormF";
     row-gap: 10px;
 }
-.indexReserveForm input[type="postal-code"],
-.indexReserveForm input[type="date"] {
+.indexReserveForm input[type="postal-code"] {
     background-color: #FFF;
     border-bottom: solid 3px transparent;
 }
-.indexReserveForm input[type="postal-code"]:focus,
-.indexReserveForm input[type="date"]:focus {
+.indexReserveForm input[type="postal-code"]:focus {
     outline: none;
     border-bottom: solid 3px #FAB2A0;
 }
 .indexReserveForm input[type="postal-code"] {
     padding-left: 10px;
 }
-.indexDeparturePC, .indexDestinationPC, .indexReserveDate, .indexReserveSubmit {
+.indexDeparturePC, .indexDestinationPC, .indexReserveSubmit {
     height: 60px;
 }
 .indexDeparturePC {
@@ -239,14 +239,10 @@ header nav a {
 }
 .indexWaypoint2PC {
     grid-area: reserveFormD;
-    width: calc((100% - 80px)*(2/3) - 20px);
-}
-.indexReserveDate {
-    grid-area: reserveFormE;
-    border-right: solid .5px #EEE;
+    width: calc(100% - 20px);
 }
 .indexReserveSubmit {
-    grid-area: reserveFormF;
+    grid-area: reserveFormE;
     border-radius: 0 5px 5px 0;
     background-color: #8D5C4A;
     color: #FFF;

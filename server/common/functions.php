@@ -647,6 +647,27 @@ function insertChildValidate($name, $sex, $birth, $adress_id, $adress_name, $tel
 
 // 予約情報
 
+function insertPostalCodeFromIndex($departure_postal_code, $destination_postal_code, $waypoint_1_postal_code, $waypoint_2_postal_code)
+{
+    $errors = [];
+    if (mb_strlen($departure_postal_code) != 8 || 
+    mb_strlen($destination_postal_code) != 8 || 
+    ($waypoint_1_postal_code && ((mb_strlen($waypoint_1_postal_code) != 8) || ($waypoint_2_postal_code && mb_strlen($waypoint_2_postal_code) != 8)))) {
+        $errors[] = MSG_POSTAL_CODE_LEN_CHECK;
+    }
+    if (empty($departure_postal_code)) {
+        $errors[] = MSG_DEPARTURE_POSTAL_CODE_REQUIRED;
+    }
+    if (empty($destination_postal_code)) {
+        $errors[] = MSG_DESTINATION_POSTAL_CODE_REQUIRED;
+    }
+    if (empty($waypoint_1_postal_code) && $waypoint_2_postal_code) {
+        $errors[] = MSG_WAYPOINT_1_POSTAL_CODE_REQUIRED;
+    }
+
+    return $errors;
+};
+
 function findReserveById($id)
 {
     $dbh = connectDb();
@@ -892,7 +913,7 @@ function timeCalculationAtReserve($departure_area_id, $destination_area_id, $way
         + timeCalculationByAreaId($waypoint_1_area_id, $waypoint_2_area_id) + 10 
         + timeCalculationByAreaId($waypoint_2_area_id, $destination_area_id);
     } elseif ($waypoint_1_area_id) {
-        $calc = timeCalculationByAreaId($departure_area_id, $waypoint_1_area_id) +10 
+        $calc = timeCalculationByAreaId($departure_area_id, $waypoint_1_area_id) + 10 
         + timeCalculationByAreaId($waypoint_1_area_id, $destination_area_id);
     } else {
         $calc = timeCalculationByAreaId($departure_area_id, $destination_area_id);
@@ -907,7 +928,7 @@ function timeCalculationByAreaId($area_1_id, $area_2_id) {
 
     $distance = floor(sqrt(abs(pow(($area_1['x_axis'] - $area_2['x_axis']), 2) + pow(($area_1['y_axis'] - $area_2['y_axis']), 2))));
 
-    return $distance * 10 + 5;
+    return $distance * 5 + 5;
 }
 
 function checkReserve($reserve, $departure_time)
@@ -927,17 +948,20 @@ function checkReserve($reserve, $departure_time)
     //     'waypoint_2_area_id' => 0,
     //     'waypoint_2_postal_code' => '0000000',
     //     'waypoint_2_adress' => 'asdfasdf',
+    //     'time' => '20'
     // ];
 
     $flg = false;
-    $reserve['time'] = timeCalculationAtReserve($reserve['departure_area_id'], $reserve['destination_area_id'], $reserve['waypoint_1_area_id'], $reserve['waypoint_2_area_id']);
     
     $dif = strtotime($departure_time) - strtotime(date('Y/m/d/H:i')) - 1800;
+    if ($dif <0 ) {
+        return $flg;
+    }
 
     $before_reserve_check = beforeReserveCheck($reserve, $departure_time);
     $after_reserve_check = afterReserveCheck($reserve, $departure_time);
     
-    if ($before_reserve_check && $after_reserve_check && $dif > 0) {
+    if ($before_reserve_check && $after_reserve_check) {
         $flg = true;
     }
     return $flg;
@@ -990,13 +1014,13 @@ function afterReserveCheck($reserve, $departure_time)
         FROM
             reserves
         WHERE
-            departure_time >= :destination_time
+            departure_time >= :departure_time
         ORDER BY
             departure_time
         ASC;
     EOM;
     $stmt = $dbh->prepare($sql);
-    $stmt ->bindParam(':destination_time', $destination_time, PDO::PARAM_STR);
+    $stmt ->bindParam(':departure_time', $departure_time, PDO::PARAM_STR);
     $stmt->execute();
 
     $afterReserve = $stmt->fetch(PDO::FETCH_ASSOC);

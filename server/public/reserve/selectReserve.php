@@ -27,6 +27,9 @@ $reserve = [
     'waypoint_2_postal_code' => $_SESSION['waypoint_2_postal_code'],
     'waypoint_2_adress' => $_SESSION['waypoint_2_adress']
 ];
+
+$reserve['time'] = timeCalculationAtReserve($reserve['departure_area_id'], $reserve['destination_area_id'], $reserve['waypoint_1_area_id'], $reserve['waypoint_2_area_id']);
+
 $page = intval(filter_input(INPUT_GET, 'p'));
 ?>
 

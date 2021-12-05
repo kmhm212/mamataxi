@@ -7,6 +7,28 @@ $id = $_SESSION['id'];
 $news = findNews();
 $thoughts = findThoughts();
 
+$errors = [];
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $departure_postal_code = filter_input(INPUT_POST,'departure_postal_code');
+    $destination_postal_code = filter_input(INPUT_POST, 'destination_postal_code');
+    $waypoint_1_postal_code = filter_input(INPUT_POST, 'waypoint_1_postal_code');
+    $waypoint_2_postal_code = filter_input(INPUT_POST, 'waypoint_2_postal_code');
+
+    $errors = insertPostalCodeFromIndex($departure_postal_code, $destination_postal_code, $waypoint_1_postal_code, $waypoint_2_postal_code);
+
+    if(empty($errors)) {
+
+    $_SESSION['departure_postal_code'] = $departure_postal_code;
+    $_SESSION['destination_postal_code'] = $destination_postal_code;
+    $_SESSION['waypoint_1_postal_code'] = $waypoint_1_postal_code;
+    $_SESSION['waypoint_2_postal_code'] = $waypoint_2_postal_code;
+    
+    header('Location: reserve/insertReserve.php?pp=fromIndex');
+    exit;
+    }
+}
+
 ?>
 
 <?php include_once __DIR__ . '/common/_head.php' ?>
@@ -49,18 +71,26 @@ $thoughts = findThoughts();
         </div>
     </section>
     <section class="reserveParts">
-        <div class="reserveMSG">
-            <p>予約する</p>
-        </div>
-        <div class="indexReserveForm">
-            <form action="">
-                <input type="postal-code" name="departurePC" id="departurePC" class="indexDeparturePC" placeholder="出発地〒000-0000" required>
-                <input type="postal-code" name="destinationPC" id="destinationPC" class="indexDestinationPC" placeholder="目的地〒000-0000" required>
-                <input type="postal-code" name="waypoint1PC" id="waypoint1PC" class="indexWaypoint1PC" placeholder="経由地①〒000-0000">
-                <input type="postal-code" name="waypoint2PC" id="waypoint2PC" class="indexWaypoint2PC" placeholder="経由地②〒000-0000">
-                <input type="date" name="reserveDate" id="reserveDate" class="indexReserveDate" placeholder="予約日" required>
-                <input type="submit" value="確認" class="indexReserveSubmit">
-            </form>
+        <?php if($errors): ?>
+            <ul class="error-list">
+                <?php foreach($errors as $error): ?>
+                    <li><?= h($error) ?></li>
+                <?php endforeach ?>
+            </ul>
+        <?php endif ?>
+        <div class="reserveArea">
+            <div class="reserveMSG">
+                <p>予約する</p>
+            </div>
+            <div class="indexReserveForm">
+                <form action="" method="post">
+                    <input type="postal-code" name="departure_postal_code" id="departure_postal_code" class="indexDeparturePC" placeholder="出発地〒000-0000" value="<?= h($departure_postal_code) ?>" required>
+                    <input type="postal-code" name="destination_postal_code" id="destination_postal_code" class="indexDestinationPC" placeholder="目的地〒000-0000" value="<?= h($destination_postal_code) ?>" required>
+                    <input type="postal-code" name="waypoint_1_postal_code" id="waypoint_1_postal_code" class="indexWaypoint1PC" placeholder="経由地①〒000-0000" value="<?= h($waypoint_1_postal_code) ?>">
+                    <input type="postal-code" name="waypoint_2_postal_code" id="waypoint_2_postal_code" class="indexWaypoint2PC" placeholder="経由地②〒000-0000" value="<?= h($waypoint_2_postal_code) ?>">
+                    <input type="submit" value="確認" class="indexReserveSubmit">
+                </form>
+            </div>
         </div>
         
     </section>

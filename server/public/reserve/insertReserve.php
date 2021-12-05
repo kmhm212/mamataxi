@@ -6,7 +6,7 @@ $title = ' | マイページ > 予約登録';
 
 session_start();
 if(empty($_SESSION['id'])) {
-    header('Location: ../index.php');
+    header('Location: ../common/login.php');
     exit;
 }
 
@@ -14,24 +14,20 @@ $id = $_SESSION['id'];
 $children = findChildrenByUserId($id);
 $adresses = findAdressByUserId($id);
 
-if (filter_input(INPUT_GET, 'pp') == 'fromHome') {
-    $departure_postal_code_1 = $_SESSION['departure_postal_code_1'];
-    $departure_postal_code_2 = $_SESSION['departure_postal_code_2'];
-    $destination_postal_code_1 = $_SESSION['destination_postal_code_1'];
-    $destination_postal_code_2 = $_SESSION['destination_postal_code_2'];
-    $waypoint_1_postal_code_1 = $_SESSION['waypoint_1_postal_code_1'];
-    $waypoint_1_postal_code_2 = $_SESSION['waypoint_1_postal_code_2'];
-    $waypoint_2_postal_code_1 = $_SESSION['waypoint_2_postal_code_1'];
-    $waypoint_2_postal_code_2 = $_SESSION['waypoint_2_postal_code_2'];
+if (filter_input(INPUT_GET, 'pp') == 'fromIndex') {
+    $departure_postal_code_1 = substr($_SESSION['departure_postal_code'], 0, 3);
+    $departure_postal_code_2 = substr($_SESSION['departure_postal_code'], 4);
+    $destination_postal_code_1 = substr($_SESSION['destination_postal_code'], 0, 3);
+    $destination_postal_code_2 = substr($_SESSION['destination_postal_code'], 4);
+    $waypoint_1_postal_code_1 = substr($_SESSION['waypoint_1_postal_code'], 0, 3);
+    $waypoint_1_postal_code_2 = substr($_SESSION['waypoint_1_postal_code'], 4);
+    $waypoint_2_postal_code_1 = substr($_SESSION['waypoint_2_postal_code'], 0, 3);
+    $waypoint_2_postal_code_2 = substr($_SESSION['waypoint_2_postal_code'], 4);
     
-    unset($_SESSION['departure_postal_code_1']);
-    unset($_SESSION['departure_postal_code_2']);
-    unset($_SESSION['destination_postal_code_1']);
-    unset($_SESSION['destination_postal_code_2']);
-    unset($_SESSION['waypoint_1_postal_code_1']);
-    unset($_SESSION['waypoint_1_postal_code_2']);
-    unset($_SESSION['waypoint_2_postal_code_1']);
-    unset($_SESSION['waypoint_2_postal_code_2']);
+    unset($_SESSION['departure_postal_code']);
+    unset($_SESSION['destination_postal_code']);
+    unset($_SESSION['waypoint_1_postal_code']);
+    unset($_SESSION['waypoint_2_postal_code']);
 }
 
 if (filter_input(INPUT_GET, 'pp') == 'back') {
