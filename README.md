@@ -157,53 +157,6 @@ CREATE TABLE reserve_children (
 ```
 ```sql
 
---運転手情報
-
-CREATE TABLE drivers (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    name VARCHAR(50) NOT NULL,
-    birth DATE NOT NULL,
-    sex TINYINT NOT NULL,
-    hire_date DATE NOT NULL,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-);
-
-```
-```sql
-
---勤務シフト情報
-
-CREATE TABLE shifts (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    driver_id INT NOT NULL,
-    commuting_time DATETIME NOT NULL,
-    leave_time DATETIME NOT NULL,
-    rest_time INT NOT NULL,
-    rest_timing DATETIME NOT NULL,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (driver_id) REFERENCES drivers (id) ON DELETE RESTRICT ON UPDATE RESTRICT
-);
-
-```
-```sql
-
---スケジュール情報
-
-CREATE TABLE schedules(
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    driver_id INT NOT NULL,
-    reserve_id INT NOT NULL,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (driver_id) REFERENCES drivers (id) ON DELETE RESTRICT ON UPDATE RESTRICT,
-    FOREIGN KEY (reserve_id) REFERENCES reserves (id) ON DELETE RESTRICT ON UPDATE RESTRICT
-);
-
-```
-```sql
-
 --感想情報
 
 CREATE TABLE thoughts(
@@ -274,10 +227,10 @@ INSERT INTO
     ('西区', '4', '-2', '0');
 
 INSERT INTO
-	users
-	(name, email, password, sex, birth, tel)
+    users
+    (name, email, password, sex, birth, tel)
 VALUE
-	('test', 'test@test', 'testtest', 1, '1980/01/01', '00000000000');
+    ('test', 'test@test', 'testtest', 1, '1980/01/01', '00000000000');
 
 INSERT INTO
     reserves
