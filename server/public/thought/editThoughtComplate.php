@@ -12,19 +12,19 @@ if(empty($_SESSION['id'])) {
 
 $id = $_SESSION['id'];
 
-$reserve = findReserveById($_SESSION['reserveId']);
+$reserve = findReserveById($_SESSION['reserve_id']);
 $thought_title = $_SESSION['title'];
 $body = $_SESSION['body'];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-    insertThoughts($id, $_SESSION['reserveId'], $_SESSION['title'], $_SESSION['body']);
+    changeThoughts($id, $_SESSION['reserve_id'], $_SESSION['title'], $_SESSION['body']);
 
-    unset($_SESSION['reserveId']);
+    unset($_SESSION['reserve_id']);
     unset($_SESSION['title']);
     unset($_SESSION['body']);
 
-    header('Location: ../mypage/mypage.php?pp=insertcomp');
+    header('Location: ../mypage/mypage.php?pp=changecomp');
     exit;
 
 }
@@ -44,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="myPageParts thoughtPage wrapper">
         <h2 class="subPageH2">感想情報</h2>
         <section>
-            <h3 class="subPageH3">以下の内容で投稿します</h3>
+            <h3 class="subPageH3">以下の内容に変更します</h3>
             <div class="checkUserData">
                 <dl class="">
                     <dt>予約日</dt>
@@ -65,8 +65,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </dd>
                 </dl>
                 <form action="" method="post">
-                    <input type="submit" value="投稿">
-                    <a href="insertThought.php?pp=back">戻る</a>
+                    <input type="submit" value="変更">
+                    <a href="editThought.php?pp=back">戻る</a>
                 </form>
             </div>
         </section>

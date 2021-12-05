@@ -10,6 +10,6 @@ if(empty($_SESSION['id'])) {
 
 $id = filter_input(INPUT_GET, 'id');
 
-deleteReseave($id);
+deleteReserve($id);
 header('Location: ../mypage/mypage.php?pp=delcomp');
 exit;

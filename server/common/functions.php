@@ -647,14 +647,14 @@ function insertChildValidate($name, $sex, $birth, $adress_id, $adress_name, $tel
 
 // 予約情報
 
-function findReseaveById($id)
+function findReserveById($id)
 {
     $dbh = connectDb();
     $sql = <<<EOM
         SELECT
             *
         FROM
-            reseaves
+            reserves
         WHERE
             id = :id
     EOM;
@@ -664,7 +664,7 @@ function findReseaveById($id)
     return $stmt->fetch(PDO::FETCH_ASSOC);
 }
 
-function findReseaveByUserId($user_id)
+function findReserveByUserId($user_id)
 {
     $now = date('Y/m/d/H:i');
 
@@ -673,7 +673,7 @@ function findReseaveByUserId($user_id)
         SELECT
             *
         FROM
-            reseaves
+            reserves
         WHERE
             user_id = :user_id
         AND
@@ -689,7 +689,7 @@ function findReseaveByUserId($user_id)
     return $stmt->fetchALL(PDO::FETCH_ASSOC);
 }
 
-function insertReseaveValidate($departure_postal_code_1, $departure_postal_code_2, $departure_adress, $destination_postal_code_1, $destination_postal_code_2, $destination_adress, $waypoint_1_postal_code_1, $waypoint_1_postal_code_2, $waypoint_1_adress, $waypoint_2_postal_code_1, $waypoint_2_postal_code_2, $waypoint_2_adress, $child_id)
+function insertReserveValidate($departure_postal_code_1, $departure_postal_code_2, $departure_adress, $destination_postal_code_1, $destination_postal_code_2, $destination_adress, $waypoint_1_postal_code_1, $waypoint_1_postal_code_2, $waypoint_1_adress, $waypoint_2_postal_code_1, $waypoint_2_postal_code_2, $waypoint_2_adress, $child_id)
 {
     $errors = [];
 
@@ -743,41 +743,41 @@ function insertReseaveValidate($departure_postal_code_1, $departure_postal_code_
     return $errors;
 }
 
-function insertReseave($reseave)
+function insertReserve($reserve)
 {
     $null = null;
     $dbh = connectDb();
     $sql = <<<EOM
         INSERT INTO
-            reseaves
+            reserves
             (user_id, departure_time, destination_time, departure_area_id, departure_postal_code, departure_adress, destination_area_id, destination_postal_code, destination_adress, waypoint_1_area_id, waypoint_1_postal_code, waypoint_1_adress, waypoint_2_area_id, waypoint_2_postal_code, waypoint_2_adress)
         VALUES
             (:user_id, :departure_time, :destination_time, :departure_area_id, :departure_postal_code, :departure_adress, :destination_area_id, :destination_postal_code, :destination_adress, :waypoint_1_area_id, :waypoint_1_postal_code, :waypoint_1_adress, :waypoint_2_area_id, :waypoint_2_postal_code, :waypoint_2_adress)
     EOM;
     $stmt = $dbh->prepare($sql);
-    $stmt->bindParam(':user_id',$reseave['user_id'], PDO::PARAM_INT);
-    $stmt->bindParam(':departure_time',$reseave['departure_time'], PDO::PARAM_STR);
-    $stmt->bindParam(':destination_time',$reseave['destination_time'], PDO::PARAM_STR);
-    $stmt->bindParam(':departure_area_id',$reseave['departure_area_id'], PDO::PARAM_INT);
-    $stmt->bindParam(':departure_postal_code',$reseave['departure_postal_code'], PDO::PARAM_STR);
-    $stmt->bindParam(':departure_adress',$reseave['departure_adress'], PDO::PARAM_STR);
-    $stmt->bindParam(':destination_area_id',$reseave['destination_area_id'], PDO::PARAM_INT);
-    $stmt->bindParam(':destination_postal_code',$reseave['destination_postal_code'], PDO::PARAM_STR);
-    $stmt->bindParam(':destination_adress',$reseave['destination_adress'], PDO::PARAM_STR);
+    $stmt->bindParam(':user_id',$reserve['user_id'], PDO::PARAM_INT);
+    $stmt->bindParam(':departure_time',$reserve['departure_time'], PDO::PARAM_STR);
+    $stmt->bindParam(':destination_time',$reserve['destination_time'], PDO::PARAM_STR);
+    $stmt->bindParam(':departure_area_id',$reserve['departure_area_id'], PDO::PARAM_INT);
+    $stmt->bindParam(':departure_postal_code',$reserve['departure_postal_code'], PDO::PARAM_STR);
+    $stmt->bindParam(':departure_adress',$reserve['departure_adress'], PDO::PARAM_STR);
+    $stmt->bindParam(':destination_area_id',$reserve['destination_area_id'], PDO::PARAM_INT);
+    $stmt->bindParam(':destination_postal_code',$reserve['destination_postal_code'], PDO::PARAM_STR);
+    $stmt->bindParam(':destination_adress',$reserve['destination_adress'], PDO::PARAM_STR);
 
-    if ($reseave['waypoint_1_area_id']) {
-        $stmt->bindParam(':waypoint_1_area_id',$reseave['waypoint_1_area_id'], PDO::PARAM_INT);
-        $stmt->bindParam(':waypoint_1_postal_code',$reseave['waypoint_1_postal_code'], PDO::PARAM_STR);
-        $stmt->bindParam(':waypoint_1_adress',$reseave['waypoint_1_adress'], PDO::PARAM_STR);
+    if ($reserve['waypoint_1_area_id']) {
+        $stmt->bindParam(':waypoint_1_area_id',$reserve['waypoint_1_area_id'], PDO::PARAM_INT);
+        $stmt->bindParam(':waypoint_1_postal_code',$reserve['waypoint_1_postal_code'], PDO::PARAM_STR);
+        $stmt->bindParam(':waypoint_1_adress',$reserve['waypoint_1_adress'], PDO::PARAM_STR);
     } else {
         $stmt->bindParam(':waypoint_1_area_id',$null, PDO::PARAM_NULL);
         $stmt->bindParam(':waypoint_1_postal_code',$null, PDO::PARAM_NULL);
         $stmt->bindParam(':waypoint_1_adress',$null, PDO::PARAM_NULL);
     }
-    if ($reseave['waypoint_2_area_id']) {
-        $stmt->bindParam(':waypoint_2_area_id',$reseave['waypoint_2_area_id'], PDO::PARAM_INT);
-        $stmt->bindParam(':waypoint_2_postal_code',$reseave['waypoint_2_postal_code'], PDO::PARAM_STR);
-        $stmt->bindParam(':waypoint_2_adress',$reseave['waypoint_2_adress'], PDO::PARAM_STR);
+    if ($reserve['waypoint_2_area_id']) {
+        $stmt->bindParam(':waypoint_2_area_id',$reserve['waypoint_2_area_id'], PDO::PARAM_INT);
+        $stmt->bindParam(':waypoint_2_postal_code',$reserve['waypoint_2_postal_code'], PDO::PARAM_STR);
+        $stmt->bindParam(':waypoint_2_adress',$reserve['waypoint_2_adress'], PDO::PARAM_STR);
     } else {
         $stmt->bindParam(':waypoint_2_area_id',$null, PDO::PARAM_NULL);
         $stmt->bindParam(':waypoint_2_postal_code',$null, PDO::PARAM_NULL);
@@ -786,27 +786,27 @@ function insertReseave($reseave)
     $stmt->execute();
 }
 
-function insertReseaveChildren($reseave)
+function insertReserveChildren($reserve)
 {
-    $reseave_id = findNewReseaveId($reseave);
+    $reserve_id = findNewReserveId($reserve);
 
-    foreach ($reseave['child_id'] as $child_id) {
+    foreach ($reserve['child_id'] as $child_id) {
         $dbh = connectDb();
         $sql = <<<EOM
             INSERT INTO
             reserve_children
-            (reseave_id,child_id)
+            (reserve_id,child_id)
             VALUES
-            (:reseave_id,:child_id);
+            (:reserve_id,:child_id);
         EOM;
         $stmt = $dbh->prepare($sql);
-        $stmt->bindParam(':reseave_id',$reseave_id, PDO::PARAM_INT);
+        $stmt->bindParam(':reserve_id',$reserve_id, PDO::PARAM_INT);
         $stmt->bindParam(':child_id',$child_id, PDO::PARAM_INT);
         $stmt->execute();
     }
 }
 
-function findNewReseaveId($reseave)
+function findNewReserveId($reserve)
 {
     $now = date('Y/m/d/H:i:s');
 
@@ -815,7 +815,7 @@ function findNewReseaveId($reseave)
         SELECT
             *
         FROM
-            reseaves
+            reserves
         WHERE
             user_id = :user_id
         AND
@@ -825,14 +825,14 @@ function findNewReseaveId($reseave)
         DESC;
     EOM;
     $stmt = $dbh->prepare($sql);
-    $stmt->bindParam(':user_id',$reseave['user_id'], PDO::PARAM_INT);
+    $stmt->bindParam(':user_id',$reserve['user_id'], PDO::PARAM_INT);
     $stmt->bindParam(':now',$now, PDO::PARAM_STR);
     $stmt->execute();
 
     return $stmt->fetch(PDO::FETCH_ASSOC)['id'];
 }
 
-function findBeforReseaveIdByUserId($user_id)
+function findBeforReserveIdByUserId($user_id)
 {
     $now = date('Y/m/d/H:i');
 
@@ -841,7 +841,7 @@ function findBeforReseaveIdByUserId($user_id)
         SELECT
             *
         FROM
-            reseaves
+            reserves
         WHERE
             user_id = :user_id
         AND
@@ -858,7 +858,7 @@ function findBeforReseaveIdByUserId($user_id)
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 }
-function findAfterReseaveIdByUserId($user_id)
+function findAfterReserveIdByUserId($user_id)
 {
     $now = date('Y/m/d/H:i:s');
 
@@ -867,7 +867,7 @@ function findAfterReseaveIdByUserId($user_id)
         SELECT
             *
         FROM
-            reseaves
+            reserves
         WHERE
             user_id = :user_id
         AND
@@ -885,7 +885,7 @@ function findAfterReseaveIdByUserId($user_id)
 
 }
 
-function timeCalculationAtReseave($departure_area_id, $destination_area_id, $waypoint_1_area_id, $waypoint_2_area_id)
+function timeCalculationAtReserve($departure_area_id, $destination_area_id, $waypoint_1_area_id, $waypoint_2_area_id)
 {
     if ($waypoint_2_area_id) {
         $calc = timeCalculationByAreaId($departure_area_id, $waypoint_1_area_id) + 10 
@@ -910,10 +910,10 @@ function timeCalculationByAreaId($area_1_id, $area_2_id) {
     return $distance * 10 + 5;
 }
 
-function checkReseave($reseave, $departure_time)
+function checkReserve($reserve, $departure_time)
 {
-    // $reseave 一例
-    // $reseave = [
+    // $reserve 一例
+    // $reserve = [
     //     'user_id' => 1,
     //     'departure_area_id' => 0,
     //     'departure_postal_code' => '0000000',
@@ -930,20 +930,20 @@ function checkReseave($reseave, $departure_time)
     // ];
 
     $flg = false;
-    $reseave['time'] = timeCalculationAtReseave($reseave['departure_area_id'], $reseave['destination_area_id'], $reseave['waypoint_1_area_id'], $reseave['waypoint_2_area_id']);
+    $reserve['time'] = timeCalculationAtReserve($reserve['departure_area_id'], $reserve['destination_area_id'], $reserve['waypoint_1_area_id'], $reserve['waypoint_2_area_id']);
     
     $dif = strtotime($departure_time) - strtotime(date('Y/m/d/H:i')) - 1800;
 
-    $before_reseave_check = beforeReseaveCheck($reseave, $departure_time);
-    $after_reseave_check = afterReseaveCheck($reseave, $departure_time);
+    $before_reserve_check = beforeReserveCheck($reserve, $departure_time);
+    $after_reserve_check = afterReserveCheck($reserve, $departure_time);
     
-    if ($before_reseave_check && $after_reseave_check && $dif > 0) {
+    if ($before_reserve_check && $after_reserve_check && $dif > 0) {
         $flg = true;
     }
     return $flg;
 }
 
-function beforeReseaveCheck($reseave, $departure_time)
+function beforeReserveCheck($reserve, $departure_time)
 {
     $flg = false;
 
@@ -952,7 +952,7 @@ function beforeReseaveCheck($reseave, $departure_time)
         SELECT
             *
         FROM
-            reseaves
+            reserves
         WHERE
             departure_time <= :departure_time
         ORDER BY
@@ -963,12 +963,12 @@ function beforeReseaveCheck($reseave, $departure_time)
     $stmt ->bindParam(':departure_time', $departure_time, PDO::PARAM_STR);
     $stmt->execute();
 
-    $beforReseave = $stmt->fetch(PDO::FETCH_ASSOC);
+    $beforReserve = $stmt->fetch(PDO::FETCH_ASSOC);
     
-    $calc = timeCalculationByAreaId($beforReseave['destination_area_id'], $reseave['departure_area_id']);
+    $calc = timeCalculationByAreaId($beforReserve['destination_area_id'], $reserve['departure_area_id']);
     
     $time1 = strtotime($departure_time);
-    $time2 = strtotime($beforReseave['destination_time']);
+    $time2 = strtotime($beforReserve['destination_time']);
     $check = $time1 - $time2 - ($calc * 60);
 
     
@@ -978,17 +978,17 @@ function beforeReseaveCheck($reseave, $departure_time)
     return $flg;
 }
 
-function afterReseaveCheck($reseave, $departure_time)
+function afterReserveCheck($reserve, $departure_time)
 {
     $flg = true;
-    $destination_time = date('Y/m/d/H:i', strtotime($departure_time . '+ ' . $reseave['time'] . ' minute'));
+    $destination_time = date('Y/m/d/H:i', strtotime($departure_time . '+ ' . $reserve['time'] . ' minute'));
 
     $dbh = connectDb();
     $sql = <<<EOM
         SELECT
             *
         FROM
-            reseaves
+            reserves
         WHERE
             departure_time >= :destination_time
         ORDER BY
@@ -999,11 +999,11 @@ function afterReseaveCheck($reseave, $departure_time)
     $stmt ->bindParam(':destination_time', $destination_time, PDO::PARAM_STR);
     $stmt->execute();
 
-    $afterReseave = $stmt->fetch(PDO::FETCH_ASSOC);
+    $afterReserve = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    $calc = timeCalculationByAreaId($afterReseave['departure_area_id'], $reseave['destination_area_id']);
+    $calc = timeCalculationByAreaId($afterReserve['departure_area_id'], $reserve['destination_area_id']);
     
-    $time1 = strtotime($afterReseave['departure_time']);
+    $time1 = strtotime($afterReserve['departure_time']);
     $time2 = strtotime($destination_time);
     $check = $time1 - $time2 - ($calc * 60);
 
@@ -1012,14 +1012,14 @@ function afterReseaveCheck($reseave, $departure_time)
     }
     return $flg;
 }
-function deleteReseave($id)
+function deleteReserve($id)
 {
-    deleteReseaveChildrenByReseaveId($id);
+    deleteReserveChildrenByReserveId($id);
 
     $dbh = connectDb();
     $sql = <<<EOM
         DELETE FROM
-            reseaves
+            reserves
         WHERE
             id = :id;
     EOM;
@@ -1028,17 +1028,17 @@ function deleteReseave($id)
     $stmt->execute();
 }
 
-function deleteReseaveChildrenByReseaveId($reseave_id)
+function deleteReserveChildrenByReserveId($reserve_id)
 {
     $dbh = connectDb();
     $sql = <<<EOM
         DELETE FROM
             reserve_children
         WHERE
-            reseave_id = :reseave_id;
+            reserve_id = :reserve_id;
     EOM;
     $stmt = $dbh->prepare($sql);
-    $stmt->bindParam(':reseave_id', $reseave_id, PDO::PARAM_INT);
+    $stmt->bindParam(':reserve_id', $reserve_id, PDO::PARAM_INT);
     $stmt->execute();
 }
 
@@ -1091,6 +1091,22 @@ function insertNews()
     $stmt->bindParam(':title', $title, PDO::PARAM_STR);
     $stmt->bindParam(':body', $body, PDO::PARAM_STR);
     $stmt->execute();
+}
+function findCategoryById($id)
+{
+    $dbh = connectDb();
+    $sql = <<<EOM
+        SELECT
+            *
+        FROM
+            categorys
+        WHERE
+            id = :id;
+    EOM;
+    $stmt = $dbh->prepare($sql);
+    $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+    $stmt->execute();
+    return $stmt->fetch(PDO::FETCH_ASSOC);
 }
 
 // 
@@ -1146,7 +1162,7 @@ function findThoughtsByUserId($user_id)
     $stmt->execute();
     return $stmt->fetchALL(PDO::FETCH_ASSOC);
 }
-function insertThoughts($user_id, $reseave_id, $title, $body)
+function insertThoughts($user_id, $reserve_id, $title, $body)
 {
     $dbh = connectDb();
     $sql = <<<EOM
@@ -1158,7 +1174,7 @@ function insertThoughts($user_id, $reseave_id, $title, $body)
     EOM;
     $stmt = $dbh->prepare($sql);
     $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
-    $stmt->bindParam(':reseave_id', $reseave_id, PDO::PARAM_INT);
+    $stmt->bindParam(':reserve_id', $reserve_id, PDO::PARAM_INT);
     $stmt->bindParam(':title', $title, PDO::PARAM_STR);
     $stmt->bindParam(':body', $body, PDO::PARAM_STR);
     $stmt->execute();
@@ -1170,7 +1186,7 @@ function LimitStrlen($str, $limit)
     }
     return $str;
 }
-function findThoughtByReseaveId($reseave_id)
+function findThoughtByReserveId($reserve_id)
 {
     $dbh = connectDb();
     $sql = <<<EOM
@@ -1179,12 +1195,12 @@ function findThoughtByReseaveId($reseave_id)
         FROM
             thoughts
         WHERE
-            reseave_id = :reseave_id;
+            reserve_id = :reserve_id;
     EOM;
     $stmt = $dbh->prepare($sql);
-    $stmt->bindParam(':reseave_id', $reseave_id, PDO::PARAM_INT);
+    $stmt->bindParam(':reserve_id', $reserve_id, PDO::PARAM_INT);
     $stmt->execute();
-    return $stmt->fetchALL(PDO::FETCH_ASSOC);
+    return $stmt->fetch(PDO::FETCH_ASSOC);
 }
 function deleteThought($id)
 {
@@ -1199,18 +1215,52 @@ function deleteThought($id)
     $stmt->bindParam(':id', $id, PDO::PARAM_INT);
     $stmt->execute();
 }
-function insertThoughtValidate($reseaveId, $title, $body)
+function insertThoughtValidate($reserveId, $title, $body)
 {
     $errors = [];
-    $check = findThoughtByReseaveId($reseaveId);
+    $check = findThoughtByReserveId($reserveId);
     if ($check) {
-        $errors[] = 'すでに感想は投稿されています。マイページより編集ください。';
+        $errors[] = MSG_ALREADY_THOUGHT;
     }
     if (empty($title)) {
-        $errors[] = 'タイトルを入力してください';
+        $errors[] = MSG_TITLE_REQUIRED;
     };
     if (empty($body)) {
-        $errors[] = '本文を入力してください';
+        $errors[] = MSG_BODY_REQUIRED;
     };
     return $errors;
+}
+function editThoughtValidate($thought, $title, $body)
+{
+    $errors = [];
+    if ($thought['title'] == $title && $thought['body'] == $body) {
+        $errors[] = MSG_NO_CHANGE;
+    }
+    if (empty($title)) {
+        $errors[] = MSG_TITLE_REQUIRED;
+    };
+    if (empty($body)) {
+        $errors[] = MSG_BODY_REQUIRED;
+    };
+    return $errors;
+}
+function changeThoughts($id, $reserve_id, $title, $body)
+{
+    $dbh = connectDb();
+    $sql = <<<EOM
+        UPDATE
+            thoughts
+        SET
+            reserve_id = :reserve_id,
+            title = :title,
+            body = :body
+        WHERE
+            id = :id;
+    EOM;
+    $stmt = $dbh->prepare($sql);
+    $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+    $stmt->bindParam(':reserve_id', $reserve_id, PDO::PARAM_INT);
+    $stmt->bindParam(':title', $title, PDO::PARAM_STR);
+    $stmt->bindParam(':body', $body, PDO::PARAM_STR);
+    $stmt->execute();
 }

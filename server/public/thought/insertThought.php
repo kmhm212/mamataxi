@@ -10,32 +10,37 @@ if(empty($_SESSION['id'])) {
     exit;
 }
 
+if (filter_input(INPUT_GET, 'pp') == 'back') {
+    $thought_title = $_SESSION['title'];
+    $body = $_SESSION['body'];
+}
+
 $id = $_SESSION['id'];
-$reseave_id = filter_input(INPUT_GET, 'id');
-if ($reseave_id) {
-    $reseaves[0] = findReseaveById($reseave_id);
+$reserve_id = filter_input(INPUT_GET, 'id');
+if ($reserve_id) {
+    $reserves[0] = findReserveById($reserve_id);
 } else {
-$reseaves = findAfterReseaveIdByUserId($id);
+$reserves = findAfterReserveIdByUserId($id);
+$thoufhts = findThoughtsById($id);
 }
 
 $errors = [];
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
-    $reseaveId = filter_input(INPUT_POST, 'reseaveId');
-    $thoughtTitle = filter_input(INPUT_POST, 'title');
+    $reserve_id = filter_input(INPUT_POST, 'reserveId');
+    $thought_title = filter_input(INPUT_POST, 'title');
     $body = filter_input(INPUT_POST, 'body');
 
-    $errors = insertThoughtValidate($reseaveId, $thoughtTitle, $body);
+    $errors = insertThoughtValidate($reserve_id, $thought_title, $body);
 
     if (empty($errors)) {
-        $_SESSION['reseaveId'] = $reseaveId;
-        $_SESSION['title'] = $thoughtTitle;
+        $_SESSION['reserveId'] = $reserve_id;
+        $_SESSION['title'] = $thought_title;
         $_SESSION['body'] = $body;
         header('Location: insertThoughtComplate.php');
         exit;
     }
 }
-
 
 ?>
 
@@ -61,16 +66,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </ul>
             <?php endif ?>
             <form action="" method="post">
-                <label for="reseaveId" class="label1">予約日時</label>
-                <select name="reseaveId" id="reseaveId" class="input1">
-                    <?php foreach($reseaves as $reseave): ?>
-                        <option value="<?= h($reseave['id'])?>"><?= h(date('Y年m月d日 H:i', strtotime($reseave['departure_time'])))?></option> 
+                <label for="reserveId" class="label1">予約日時</label>
+                <select name="reserveId" id="reserveId" class="input1">
+                    <?php foreach($reserves as $reserve): ?>
+                        <option value="<?= h($reserve['id'])?>"><?= h(date('Y年m月d日 H:i', strtotime($reserve['departure_time'])))?></option> 
                     <?php endforeach ?>
                 </select>
                 <label for="title" class="label2">タイトル</label>
-                <input type="text" name="title" id="title" class="input2" value="<?= h($thoughtTitle) ?>">
+                <input type="text" name="title" id="title" class="input2" value="<?= h($thought_title) ?>">
                 <label for="body" class="label3">本文</label>
-                <textarea name="body" id="body" class="input3" cols="80" rows="20" value="<?= nl2br(h($body)) ?>"></textarea>
+                <textarea name="body" id="body" class="input3" cols="80" rows="20"><?= h($body) ?></textarea>
                 <input type="submit" value="確認">
             </form>
         </section>

@@ -12,7 +12,7 @@ if(empty($_SESSION['id'])) {
 
 $id = $_SESSION['id'];
 
-$reseave = [
+$reserve = [
     'user_id' => $id,
     'departure_area_id' => $_SESSION['departure_area_id'],
     'departure_postal_code' => $_SESSION['departure_postal_code'],
@@ -40,7 +40,7 @@ $page = intval(filter_input(INPUT_GET, 'p'));
 <?php include_once __DIR__ . '/../common/_header.php' ?>
 
 <article>
-    <div class="selectReseave wrapper">
+    <div class="selectReserve wrapper">
         <h2 class="subPageH2">予約情報</h2>
         <section>
             <h3 class="subPageH3">以下から予約を登録</h3>
@@ -49,7 +49,7 @@ $page = intval(filter_input(INPUT_GET, 'p'));
                     <thead>
                         <tr>
                             <th rowspan="2" class="weekPaging">
-                                <a href="selectReseave.php?p=<?= $page - 1 ?>" title="前の一週間" class="arrowPagingWeekR jscCalNavi">
+                                <a href="selectReserve.php?p=<?= $page - 1 ?>" title="前の一週間" class="arrowPagingWeekR jscCalNavi">
                                     <span class="">前の一週間</span>
                                 </a>
                             </th>
@@ -57,7 +57,7 @@ $page = intval(filter_input(INPUT_GET, 'p'));
                                 <?= date('Y年m月', strtotime('+' . ($page * 7) . 'day')) ?>
                             </th>
                             <th rowspan="2" class="weekPaging">
-                                <a href="selectReseave.php?p=<?= $page + 1 ?>" title="次の一週間" class="arrowPagingWeekR jscCalNavi">
+                                <a href="selectReserve.php?p=<?= $page + 1 ?>" title="次の一週間" class="arrowPagingWeekR jscCalNavi">
                                     <span>次の一週間</span>
                                 </a>
                         </th>
@@ -90,10 +90,10 @@ $page = intval(filter_input(INPUT_GET, 'p'));
                                             <?php for ($j=0; $j < 28; $j++): ?>
                                                 <tr>
                                                 <?php $departure_time = date('Y/m/d/', strtotime('+' . ($i + $page * 7) . 'day ')) . date('H:i', strtotime(floor(($j / 2) + 6) . ':' . (($j % 2) * 30))) ?>
-                                                <?php $check = checkReseave($reseave, $departure_time) ?>
+                                                <?php $check = checkReserve($reserve, $departure_time) ?>
                                                 <?php if($check): ?>
                                                     <td class="closeCell timeSharpLine isDisabled">
-                                                        <a href="insertReseaveComplate.php?date=<?= $departure_time ?>"><span class="icnClose">○</span></a>
+                                                        <a href="insertReserveComplate.php?date=<?= $departure_time ?>"><span class="icnClose">○</span></a>
                                                     </td>
                                                 <?php else: ?>
                                                     <td class="closeCell timeSharpLine isDisabled">

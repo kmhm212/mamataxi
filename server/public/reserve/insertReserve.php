@@ -109,7 +109,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $waypoint_2_adress = $select_adress['adress'];
     }
 
-    $errors = insertReseaveValidate($departure_postal_code_1, $departure_postal_code_2, $departure_adress, $destination_postal_code_1, $destination_postal_code_2, $destination_adress, $waypoint_1_postal_code_1, $waypoint_1_postal_code_2, $waypoint_1_adress, $waypoint_2_postal_code_1, $waypoint_2_postal_code_2, $waypoint_2_adress, $child_id);
+    $errors = insertReserveValidate($departure_postal_code_1, $departure_postal_code_2, $departure_adress, $destination_postal_code_1, $destination_postal_code_2, $destination_adress, $waypoint_1_postal_code_1, $waypoint_1_postal_code_2, $waypoint_1_adress, $waypoint_2_postal_code_1, $waypoint_2_postal_code_2, $waypoint_2_adress, $child_id);
 
     if (empty($errors)) {
         $departure_postal_code = $departure_postal_code_1 . "-" . $departure_postal_code_2;
@@ -140,7 +140,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_SESSION['waypoint_2_adress'] = $waypoint_2_adress;
         $_SESSION['child_id'] = $child_id;
 
-        header('Location: selectReseave.php');
+        header('Location: selectReserve.php');
         exit;
     }
 }
@@ -157,7 +157,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <?php include_once __DIR__ . '/../common/_header.php' ?>
 
 <article>
-    <div class="formParts insertReseave wrapper">
+    <div class="formParts insertReserve wrapper">
         <h2 class="subPageH2">予約登録</h2>
         <section>
             <h3 class="subPageH3">予約情報を登録</h3>
@@ -171,7 +171,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             <form action="" method="post">
 
-                <div class="reseaveAdress adress1">
+                <div class="reserveAdress adress1">
                     <h4>出発地</h4>
                     <label for="select_departure label1">登録済み住所から選ぶ</label>
                     <select name="select_departure" id="select_departure" class="input1">
@@ -190,7 +190,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <input type="text" name="departure_adress" id="departure_adress" class="input3" placeholder="〇〇県〇〇市〇〇町1−2−3 〇〇マンション101号室" value="<?= h($departure_adress) ?>">
                 </div>
                 
-                <div class="reseaveAdress adress2">
+                <div class="reserveAdress adress2">
                     <h4>目的地</h4>
                     <label for="select_destination label1">登録済み住所から選ぶ</label>
                     <select name="select_destination" id="select_destination" class="input1">
@@ -209,7 +209,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <input type="text" name="destination_adress" id="destination_adress" class="input3" placeholder="〇〇県〇〇市〇〇町1−2−3 〇〇マンション101号室" value="<?= h($destination_adress) ?>">
                 </div>
 
-                <div class="reseaveAdress adress3">
+                <div class="reserveAdress adress3">
                     <h4>経由地①</h4>
                     <label for="select_waypoint_1 label1">登録済み住所から選ぶ</label>
                     <select name="select_waypoint_1" id="select_waypoint_1" class="input1">
@@ -228,7 +228,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <input type="text" name="waypoint_1_adress" id="waypoint_1_adress" class="input3" placeholder="〇〇県〇〇市〇〇町1−2−3 〇〇マンション101号室" value="<?= h($waypoint_1_adress) ?>">
                 </div>
 
-                <div class="reseaveAdress adress4">
+                <div class="reserveAdress adress4">
                     <h4>経由地②</h4>
                     <label for="select_waypoint_2 label1">登録済み住所から選ぶ</label>
                     <select name="select_waypoint_2" id="select_waypoint_2" class="input1">
@@ -246,7 +246,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <label for="waypoint_2_adress" class="label3">住所</label>
                     <input type="text" name="waypoint_2_adress" id="waypoint_2_adress" class="input3" placeholder="〇〇県〇〇市〇〇町1−2−3 〇〇マンション101号室" value="<?= h($waypoint_2_adress) ?>">
                 </div>
-                <div class="reseaveChildren">
+                <div class="reserveChildren">
                     <h4>ご利用のお子様</h4>
                     <?php foreach($children as $child): ?>
                         <input type="checkbox" name="child_id[]" value="<?= h($child['id']) ?>" id="child<?= h($child['id']) ?>">
